@@ -1,0 +1,130 @@
+{
+  "scope": "SCOPED_SYNTHETIC_BOOTSTRAP_COMMIT_READBACK_CLEANUP_NOT_G0_ACCEPTANCE",
+  "sql_trial": {
+    "unit": "aipof-bootstrap-commit-73b824d4",
+    "exit_code": 0,
+    "result": {
+      "scope": "SYNTHETIC_BOOTSTRAP_COMMIT_READBACK_NOT_REAL_OWNER_INSTALLATION",
+      "company_commit": true,
+      "start_exit": 0,
+      "original_guard_rejected": true,
+      "clock_load_probe": {
+        "backend_pid": 452,
+        "observation": {
+          "utc_ns": 1794344545677730980,
+          "profile": "LINUX_ADJTIMEX_DB_LOCAL_V1",
+          "backend_pid": 452,
+          "esterror_us": 1,
+          "maxerror_us": 2506,
+          "host_boot_id": "5c57a7f4-571f-48b0-a3c8-815e02c388ea",
+          "kernel_status": 0,
+          "boottime_after_ns": 165652581696,
+          "source_sync_state": "SYNC",
+          "boottime_before_ns": 165652561689,
+          "tolerance_scaled_ppm": 32768000
+        }
+      },
+      "clock_preflight_observations": [
+        {
+          "utc_ns": 1794344545677730980,
+          "profile": "LINUX_ADJTIMEX_DB_LOCAL_V1",
+          "backend_pid": 452,
+          "esterror_us": 1,
+          "maxerror_us": 2506,
+          "host_boot_id": "5c57a7f4-571f-48b0-a3c8-815e02c388ea",
+          "kernel_status": 0,
+          "boottime_after_ns": 165652581696,
+          "source_sync_state": "SYNC",
+          "boottime_before_ns": 165652561689,
+          "tolerance_scaled_ppm": 32768000
+        }
+      ],
+      "wrong_symbol_rejected": true,
+      "preflight": {
+        "existing_schemas": 0,
+        "existing_roles": 0
+      },
+      "catalog_json": [
+        {
+          "registry_count": 48,
+          "inactive_required": 9,
+          "public_clock_execute": false
+        },
+        {
+          "bootstrap_roots": 0,
+          "installation_controls": 0,
+          "principals": 0,
+          "sessions": 0,
+          "grants": 0
+        },
+        {
+          "scope": "SYNTHETIC_ROOT_SHAPE_ONLY",
+          "root_rows": 1,
+          "duplicate_rejected": true
+        },
+        {
+          "setup_hmac_abi": "MATCH",
+          "enter_hmac_abi": "MATCH",
+          "scope": "PUBLIC_SYNTHETIC_TEST_VECTOR_NOT_ENROLLED_SECRET"
+        },
+        {
+          "synthetic_bootstrap_receipts": 1,
+          "synthetic_objectives": 1,
+          "synthetic_plans": 1,
+          "synthetic_arm_rows": 0,
+          "scope": "CONDITIONAL_TRANSPORT_SYNTHETIC_NOT_REAL_INSTALLATION"
+        }
+      ],
+      "compile_exit": 0,
+      "compile_stderr": "",
+      "compile_stdout_tail": "EATE TRIGGER\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nGRANT\nCREATE POLICY\nCREATE TRIGGER\nGRANT\nCREATE POLICY\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nGRANT\nCREATE POLICY\nCREATE POLICY\nGRANT\nCREATE POLICY\nCREATE POLICY\nCREATE FUNCTION\nCREATE TRIGGER\nCREATE TRIGGER\nCREATE TRIGGER\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nGRANT\nREVOKE\nGRANT\nCREATE POLICY\nGRANT\nCREATE POLICY\nREVOKE\nCREATE TABLE\nCREATE TABLE\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nCREATE TRIGGER\nALTER FUNCTION\nREVOKE\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nCREATE POLICY\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nCREATE TRIGGER\nALTER FUNCTION\nREVOKE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nCREATE POLICY\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nDO\nCREATE FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nCREATE FUNCTION\nALTER FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nGRANT\nGRANT\nGRANT\nCREATE FUNCTION\nCREATE FUNCTION\nALTER FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\n{\"registry_count\" : 48, \"inactive_required\" : 9, \"public_clock_execute\" : false}\n{\"bootstrap_roots\" : 0, \"installation_controls\" : 0, \"principals\" : 0, \"sessions\" : 0, \"grants\" : 0}\nINSERT 0 1\nINSERT 0 1\nDO\n{\"scope\" : \"SYNTHETIC_ROOT_SHAPE_ONLY\", \"root_rows\" : 1, \"duplicate_rejected\" : true}\nDO\n{\"setup_hmac_abi\" : \"MATCH\", \"enter_hmac_abi\" : \"MATCH\", \"scope\" : \"PUBLIC_SYNTHETIC_TEST_VECTOR_NOT_ENROLLED_SECRET\"}\nCREATE ROLE\nGRANT\nGRANT ROLE\nGRANT\nDO\n{\"synthetic_bootstrap_receipts\" : 1, \"synthetic_objectives\" : 1, \"synthetic_plans\" : 1, \"synthetic_arm_rows\" : 0, \"scope\" : \"CONDITIONAL_TRANSPORT_SYNTHETIC_NOT_REAL_INSTALLATION\"}\nCOMMIT\n",
+      "independent_committed_readback": {
+        "bootstrap_receipts": 1,
+        "objectives": 1,
+        "plans": 1,
+        "consumed": 1,
+        "audit_events": 1,
+        "outbox_events": 1,
+        "project_grants": 1,
+        "exact_receipt_witnesses": 1
+      },
+      "session_probe_exit": 0,
+      "session_probe_stdout": "{\"scope\": \"SYNTHETIC_SESSION_COMMIT_READBACK_NOT_OWNER_LOGIN_ACCEPTANCE\", \"missing_project_clock_rejected\": true, \"session_hash_match\": true, \"session_epoch\": 0, \"lock_rank\": 2, \"new_grants\": 0}\n",
+      "session_probe_stderr": "",
+      "cleanup_exit": 0,
+      "cleanup_stderr": "function company_private.r56_bootstrap_initial_write(uuid,uuid)\ndrop cascades to function company_private.r56_bootstrap_finish(uuid,uuid)\ndrop cascades to function company_private.r56_bootstrap_invariant()\ndrop cascades to function company_private.r56_bootstrap_consume(uuid,bigint,bytea,bytea,bytea,bytea,uuid)\ndrop cascades to function company_private.r57_replay_command(uuid)\ndrop cascades to table company_private.r57_clock_policy_authority\ndrop cascades to table company_private.r57_clock_policy_consents\ndrop cascades to table company_private.r57_clock_policy_receipts\ndrop cascades to function company_private.r57_clock_policy_write(uuid,bytea,bytea,bytea)\ndrop cascades to table company_private.r58_key_material\ndrop cascades to table company_private.r58_attestations\ndrop cascades to table company_private.r58_lease_policies\ndrop cascades to table company_private.r58_controller_heads\ndrop cascades to table company_private.r58_workspace_heads\ndrop cascades to table company_private.r58_launch_capabilities\ndrop cascades to table company_private.r58_execution_receipts\ndrop cascades to table company_private.r58_patch_receipts\ndrop cascades to table company_private.r58_verification_seals\ndrop cascades to table company_private.r58_verification_profiles\ndrop cascades to table company_private.r58_evidence_provenance\ndrop cascades to function company_private.r58_metadata_immutable()\ndrop cascades to function company_private.r58_context(text)\nand 59 other objects (see server log for list)\n",
+      "after_rollback": {
+        "company_exists": false,
+        "company_private_exists": false,
+        "smoke_rows": 1
+      },
+      "compile_pass": true,
+      "cleanup_verified": true,
+      "rollback_verified": false,
+      "stop_exit": 0,
+      "db_stopped": true
+    },
+    "stderr": "Running as unit: aipof-bootstrap-commit-73b824d4.service; invocation ID: 86fe75bcd5d948a581de9d9d81beeea6\n          Finished with result: success\nMain processes terminated with: code=exited, status=0/SUCCESS\n               Service runtime: 8.539s\n             CPU time consumed: 3.126s\n                   Memory peak: 162.2M (swap: 0B)\n",
+    "source_sha256": "d3525990c253c3a47859cf39bb31c7a08f229d18fbf25131bd6458e68b30439c",
+    "properties": [
+      "User=aipof-dbtest",
+      "Group=aipof-dbtest",
+      "MemoryMax=512M",
+      "MemorySwapMax=0",
+      "CPUQuota=50%",
+      "TasksMax=64",
+      "RuntimeMaxSec=90",
+      "TimeoutStopSec=15",
+      "LimitNOFILE=256",
+      "LimitCORE=0",
+      "NoNewPrivileges=yes",
+      "PrivateNetwork=yes",
+      "ProtectSystem=strict",
+      "ProtectHome=yes",
+      "ReadWritePaths=/var/lib/ai-proje-ofisi-dbtest/storage",
+      "OOMPolicy=stop",
+      "KillMode=control-group"
+    ]
+  },
+  "unmount_exit": 0
+}

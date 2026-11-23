@@ -1,0 +1,180 @@
+{
+  "source": "GUNCEL/dokumanlar/hedef-mimari-v1/PROJE_TASARIM_DOKUMANI.md",
+  "section": 15,
+  "note": "Kaynak eşlemesi; ayrı servis/klasör veya runtime kabulü anlamına gelmez. Güncel ilerleme progress/ILERLEME_TABLOSU.json içindedir.",
+  "modules": [
+    {
+      "id": "MOD-001",
+      "title": "MOD-001 — Kimlik, Policy ve Command Host",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | company_os/command_host.py; company_os/kernel_adapters.py |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "product/backend/company_os/kernel/command_host.py",
+        "product/backend/company_os/kernel/session_provisioning.py"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-002",
+      "title": "MOD-002 — Hedef, Plan ve Ajan CEO",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | packages/contracts/company.py; packages/contracts/models.py |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "contracts/source/python/packages/contracts/company.py",
+        "contracts/source/python/packages/contracts/models.py"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-003",
+      "title": "MOD-003 — Scheduler ve Qualification",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | packages/contracts/execution.py; company_os/kernel_adapters.py |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "product/backend/company_os/kernel/kernel_adapters.py"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-004",
+      "title": "MOD-004 — Launch Controller ve Isolation",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | company_os/launch_controller.py; company_os/r65_spawn_linux.c |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "product/backend/company_os/runtime/launch/launch_controller.py",
+        "product/backend/native/linux/r65_spawn_linux.c"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-005",
+      "title": "MOD-005 — Engine ve Provider Adapter",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | company_os/engine_bridge.py; company_os/composition.py |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "product/backend/company_os/engine/engine_bridge.py"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-006",
+      "title": "MOD-006 — Tool Broker ve Etki Sınırı",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | company_os/tool_broker.py; company_os/tool_executor.py |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "product/backend/company_os/broker/tool_broker.py",
+        "product/backend/company_os/broker/tool_executor.py"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-007",
+      "title": "MOD-007 — Workspace, Patch ve Artifact",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | company_os/patch_pipeline.py; packages/contracts/lifecycle.py |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "product/backend/company_os/workspace/patch_pipeline.py"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-008",
+      "title": "MOD-008 — Bağımsız Verifier",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | packages/contracts/execution.py; packages/contracts/lifecycle.py |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "verifier/src/independent_verifier/verifier_runner.py",
+        "product/backend/company_os/verification/runtime_verification.py"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-009",
+      "title": "MOD-009 — Acceptance ve Release Kontrolü",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | company_os/command_host.py; sql/assembly.json |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "product/backend/company_os/kernel/command_host.py"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-010",
+      "title": "MOD-010 — Event ve Projection",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | packages/contracts/models.py; ÖNERİLEN company_os/projections.py |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "product/backend/company_os/projections/preview_generator.py",
+        "contracts/source/python/packages/contracts/models.py"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-011",
+      "title": "MOD-011 — Yönetim ve Ofis Sunumu",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | ÖNERİLEN presentation/; compatibility/prototype yalnız referans |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "product/frontend/pages/tasks/index.html",
+        "product/backend/company_os/api/http/task_http.py",
+        "product/frontend/office/scenes/dashboard.html"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-012",
+      "title": "MOD-012 — Katalog ve Hafıza",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | packages/contracts/company.py; ÖNERİLEN company_os/knowledge.py |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "contracts/source/python/packages/contracts/company.py"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-013",
+      "title": "MOD-013 — WorkType Uygulamaları",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | packages/contracts/company.py; fixtures/mgt01/ |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "contracts/source/python/packages/contracts/company.py",
+        "tests/fixtures/producer/mgt01/task_title.py"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-014",
+      "title": "MOD-014 — Bütçe, Ticari Kayıt ve Dış Etki",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | packages/contracts/company.py; packages/contracts/execution.py; ÖNERİLEN company_os/effects.py |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "contracts/source/python/packages/contracts/company.py",
+        "contracts/source/python/packages/contracts/execution.py"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-015",
+      "title": "MOD-015 — Operasyon, Recovery ve Backup",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | tools/history_store.py; ÖNERİLEN operasyon runbook’ları |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "scripts/database/local_postgres.py",
+        "product/backend/company_os/runtime/supervisor/supervisor_service.py"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    },
+    {
+      "id": "MOD-016",
+      "title": "MOD-016 — Teslimat, ADR ve Kalite Yönetişimi",
+      "architecture_source_paths": "| Kaynak / önerilen dosyalar | tools/; dokumanlar/; DOGRULA.py |",
+      "implementation_status": "SOURCE_PARTIAL_NOT_RUNTIME_ACCEPTED",
+      "current_source_paths": [
+        "scripts/verification/verify_source.py",
+        "scripts/verification/verify_layout.py"
+      ],
+      "runtime_acceptance": "NOT_VERIFIED"
+    }
+  ],
+  "path_base": "CANONICAL_WORKSPACE"
+}

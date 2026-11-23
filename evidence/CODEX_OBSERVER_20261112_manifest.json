@@ -1,0 +1,25 @@
+{
+  "scope": "SOURCE_AND_BOUNDED_LINUX_SENSOR_NOT_RUNTIME_QUALIFICATION",
+  "files": {
+    "company_os/observer_profile.py": "238334e4ef52ffb66b6b750d9bbd06eb98893bbba6f4929e6007361190694f6c",
+    "company_os/linux_observer.py": "0d9513ec402d330b93378109e4b66d21fe2ca446df490fe981dcd6b47f2fb7ba",
+    "company_os/workflow.py": "61e6f37996523729d7b900b56d8d6e7267df857662f03484bab639f52115924b",
+    "config/README.md": "4b95043d94ad799bbc8c2e2d92cc2d6c449184086f7171339bf31e93678e5e4f",
+    "tools/workflow_preflight.py": "abe7af947c1752e3648897bf6967e960885e5209316f92e16dcc0a85879b91ef",
+    "tests/unit/test_linux_observer.py": "236e6f3181cad617360b9f12ef9953a87977239fdd21ed75945383ccb53adcd5",
+    "tests/unit/test_workflow.py": "63f65e654117e9001f0b993f51349e77e4903859e26d782ccdf0f345a6a3e60d",
+    "tests/unit/test_workflow_preflight.py": "2b0903b9d553dfb05c8317a94b03bc084cd442dee39c10e6d0ab957ba2aaa2d1",
+    "CODEX_OBSERVER_OLCUM_20261112.md": "cacd91921b3c2ee020212457d560a835a0f1c29f20d38ec160749f6776b45234",
+    "PLAN.md": "891ebc2305da4e32502c2850d6ad8325307ca38afb395cbbbdb4cf2080ad1663",
+    "UYGULAMA_DURUM_MATRISI.md": "72b4d1d0e359e125c1f5f0cbcacedd0f1eee7a6694bd86ad203672fa6e3345ee",
+    "ILERLEME_TAKIBI_20261112.md": "e4ed01d0aa7285bcd3e948d836b691448a92de5bf0ba7b1d2ffe21262ebd2987",
+    "evidence/CODEX_OBSERVER_20261112_linux_tests.log": "a79d76c7b86870265fa3159f2e99e45a8b29e9c886e1f64a55cc6f22ffd22033",
+    "evidence/CODEX_OBSERVER_20261112_preflight.json": "9406e07d3eb3a24f1ccb8bd24f26af6246f253124f3bbebcb7d8f1ad9ed760a7",
+    "evidence/CODEX_OBSERVER_20261112_windows_tests.log": "85c25bd16f62061ee761e2e98f3db99190fe91d4fd7487af5ae244318d58031b",
+    "evidence/CODEX_OBSERVER_20261112_BACKUP/company_os__workflow.py": "d0968112eb4f885663a0c125c3a20f54e529b09053654d2f8464b4803a2890f9",
+    "evidence/CODEX_OBSERVER_20261112_BACKUP/config__README.md": "85f2b027782feb3ff2e7d3e28a9d01860935624248cd86f1f18e90c4f7447317",
+    "evidence/CODEX_OBSERVER_20261112_BACKUP/tests__unit__test_workflow.py": "9886a4072c6124e8e455a01b73c78f611869e9a015ffd8c3921bea9be244c472",
+    "evidence/CODEX_OBSERVER_20261112_BACKUP/tests__unit__test_workflow_preflight.py": "ea211c5c9e5cc9bce5d1f7bb1c524a1530d86e69a593ea51b9bca649a42a094a",
+    "evidence/CODEX_OBSERVER_20261112_BACKUP/tools__workflow_preflight.py": "f112ebbef319e78bfe88a2fb3ef336248d26e8e9bc92d59f5401939b90b83c0b"
+  }
+}

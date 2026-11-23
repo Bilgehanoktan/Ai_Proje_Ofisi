@@ -1,0 +1,2 @@
+product\backend\company_os\kernel\session_provisioning.py:191: error: Incompatible types in assignment (expression has type "tuple[Any, Any, Any, Any]", variable has type "tuple[Any, Any]")  [assignment]
+Found 1 error in 1 file (checked 1 source file)

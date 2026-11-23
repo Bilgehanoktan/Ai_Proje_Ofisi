@@ -1,0 +1,37 @@
+name: AI Proje Ofisi CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  verify-source-and-native:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run unit and security test suite
+        run: python3 -B scripts/development/run.py verify
+
+      - name: Verify repository layout and SHA256 manifest
+        run: python3 -B scripts/verification/verify_layout.py
+
+      - name: Compile native C launcher (r65_spawn_linux.c)
+        run: |
+          gcc -Wall -Wextra -Werror -O2 -shared -fPIC \
+            -o /tmp/r65_spawn_linux.so \
+            product/backend/native/linux/r65_spawn_linux.c
+
+      - name: Optional static lint (ruff)
+        run: |
+          python3 -m pip install --quiet ruff
+          ruff check product/backend/company_os/runtime/worker_daemon.py \
+            product/backend/company_os/catalog/extensions_store.py \
+            tests/unit/test_worker_daemon_and_087_api.py

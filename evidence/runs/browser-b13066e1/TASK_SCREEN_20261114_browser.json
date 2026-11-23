@@ -1,0 +1,10 @@
+{
+  "scope": "LIVE_UNCONFIGURED_UI_AND_MOCK_HTTP_NOT_RUNTIME_ACCEPTANCE",
+  "live_unconfigured_desktop_mobile": "PASS",
+  "existing_office_navigation_and_script": "PASS",
+  "mock_unknown_commit_reload_no_resubmit": "PASS",
+  "mock_receipt_does_not_claim_agent_execution": "PASS",
+  "mock_record_plain_language_and_escaped_text": "PASS",
+  "browser_page_errors": [],
+  "status": "PASS"
+}

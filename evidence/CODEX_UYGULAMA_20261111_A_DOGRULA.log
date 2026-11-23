@@ -1,0 +1,10 @@
+
+STDERR
+Traceback (most recent call last):
+  File "E:\Projeler\Ai_Proje_Ofisi\GUNCEL\DOGRULA.py", line 66, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "E:\Projeler\Ai_Proje_Ofisi\GUNCEL\DOGRULA.py", line 61, in main
+    for n,h in json.loads(source_manifest.read_text('utf-8'))['files'].items():assert sha(ROOT/n)==h,n;verified+=1
+                                                                                      ^^^^^^^^^^^^^^
+AssertionError: dokumanlar/hedef-mimari-v1/CALISMA_DURUMU.md

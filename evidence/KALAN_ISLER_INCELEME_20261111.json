@@ -1,0 +1,252 @@
+{
+  "date": "2026-11-11",
+  "scope": "BOUNDED_LOCAL_NEGATIVES_NOT_PRODUCT_ACCEPTANCE",
+  "safety_watchdog_seconds": 3,
+  "test_child_encoding": "utf-8",
+  "tests": {
+    "passed": 89,
+    "skipped": 4,
+    "subtests_passed": 97
+  },
+  "source_read_attack": {
+    "source": "import sys,os,json,__main__\nfrom pathlib import Path\nsource=(Path(__main__.__file__).resolve().parent/'verifier_runner.py').read_text(encoding='utf-8')\ncase_source=source.split('CASES = ',1)[1].split('EXPECTED_CASE_IDS',1)[0]\nexpected={c[0]:c for c in eval(case_source)}\nprint('READY',flush=True)\nfor line in sys.stdin:\n if line.strip()=='DONE': os._exit(0)\n req=json.loads(line);c=expected[req['id']]\n resp={'status':'ERROR','error_type':c[3]} if c[3] else {'status':'SUCCESS','value':c[2]}\n print(json.dumps(resp,ensure_ascii=True),flush=True)\nos._exit(0)\n",
+    "defines_normalize_title": false,
+    "report": {
+      "oracle_id": "mgt01.check_title.13cases.v1",
+      "candidate_sha256": "31f5bce379b84e0c3cb47d45c40e39a70459c76feeeefc789919a922a89e3126",
+      "oracle_sha256": "f43559258b69a6e0a502def4475d0ebd8832de8c185d3bb8ab841bc91d3e6c75",
+      "checks": [
+        {
+          "id": "plain",
+          "result": "PASS"
+        },
+        {
+          "id": "trim",
+          "result": "PASS"
+        },
+        {
+          "id": "collapse",
+          "result": "PASS"
+        },
+        {
+          "id": "mixed",
+          "result": "PASS"
+        },
+        {
+          "id": "unicode",
+          "result": "PASS"
+        },
+        {
+          "id": "nbsp",
+          "result": "PASS"
+        },
+        {
+          "id": "empty",
+          "result": "PASS"
+        },
+        {
+          "id": "only_space",
+          "result": "PASS"
+        },
+        {
+          "id": "wrong_type",
+          "result": "PASS"
+        },
+        {
+          "id": "numeric",
+          "result": "PASS"
+        },
+        {
+          "id": "boundary",
+          "result": "PASS"
+        },
+        {
+          "id": "too_long",
+          "result": "PASS"
+        },
+        {
+          "id": "normalized_length",
+          "result": "PASS"
+        }
+      ],
+      "passed": 13,
+      "total": 13,
+      "outcome": "PASS",
+      "report_digest": "42f1be62a9e882893233678e4e9287f861518734a502beea40fc53fa30ce7ce4"
+    },
+    "elapsed": 0.103
+  },
+  "ready_deadline": {
+    "limit_seconds": 0.1,
+    "sleep_seconds": 0.5,
+    "elapsed_seconds": 0.565,
+    "outcome": "FAIL"
+  },
+  "modules": [
+    {
+      "id": "MOD-001",
+      "name": "Kimlik, Policy ve Command Host",
+      "phase": "PH-01, PH-04",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "KISMEN_DOGRULANDI; F01 execute/enter/emit düzeltmesi doğrulandı; gerçek auth/DB kabulü ve P0-2 açık.",
+      "notes": "Engel: tools/disposable_e2e_workflow_trial.py içinde eski/uyumsuz sembol çağrıları (P0-2); G0 kapısı açık (OPEN), gerçek DB ortamında tam native E2E yürütme izni bekleniyor"
+    },
+    {
+      "id": "MOD-002",
+      "name": "Hedef, Plan ve Ajan CEO",
+      "phase": "PH-00, PH-01",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "KISMEN_DOGRULANDI; F01 gerçek DTO isimleri doğrulandı; gerçek CEO/plan ve kalıcı zincir kabulü yok.",
+      "notes": "Canlı ortamda çok adımlı plan dallanması ve LLM tabanlı plan üreticisi bağlanmadı; şema ve model seviyesinde doğrulandı"
+    },
+    {
+      "id": "MOD-003",
+      "name": "Scheduler ve Qualification",
+      "phase": "PH-02",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "DUZELTME_GEREKLI; R2-04: AttemptAdmission/FencedAttempt owning source içinde yok.",
+      "notes": "Worker claim mekanizmasının gerçek eşzamanlı multi-worker yarış testleri henüz yapılmadı"
+    },
+    {
+      "id": "MOD-004",
+      "name": "Launch Controller ve Isolation",
+      "phase": "PH-02",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01 (Windows'ta Linux testleri SKIP)",
+      "codex": "DUZELTME_GEREKLI; F05/F07: kaynak hashleri doğrulandı; 4 SKIP rootless/cgroup testleri değil. Native isolation kabulü bu koşumda yapılmadı.",
+      "notes": "Windows geliştirme ortamında Linux native syscall/cgroup testleri çalıştırılamıyor (4 test SKIP); Linux derleme ve koşum ortamı gereklidir"
+    },
+    {
+      "id": "MOD-005",
+      "name": "Engine ve Provider Adapter",
+      "phase": "PH-02",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "DUZELTME_GEREKLI; F05/F06: socketpair ve pipe/ownership ayrı SKIP; doğrudan egress/paid kapalılığı eksik sayılmamalı. Gerçek model koşumu yok.",
+      "notes": "Socketpair testlerinden ikisi Windows soket sınırlaması nedeniyle Linux platformuna şartlı (SKIP)"
+    },
+    {
+      "id": "MOD-006",
+      "name": "Tool Broker ve Etki Sınırı",
+      "phase": "PH-02",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "KISMEN_DOGRULANDI; Hashler ve mevcut Windows regresyonu doğrulandı; tam broker/DB/FS izolasyon AC seti incelenmedi. F06: genel shell/egress kapalılığı eksik değildir.",
+      "notes": "Etki sınırları unit testlerde kanıtlandı; gerçek fs sandbox izolasyonu henüz E2E bağlanmadı"
+    },
+    {
+      "id": "MOD-007",
+      "name": "Workspace, Patch ve Artifact",
+      "phase": "PH-03",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "KISMEN_DOGRULANDI; Hashler ve mevcut Windows regresyonu doğrulandı; canlı CAS/immutable artifact/bağımsız readback kabulü bu tur yok.",
+      "notes": "Patch staging mekanizması birim testlerde doğrulandı; verifier'a aktarımı test pipeline seviyesinde hazır"
+    },
+    {
+      "id": "MOD-008",
+      "name": "Bağımsız Verifier",
+      "phase": "PH-03",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "DUZELTME_GEREKLI; R2-01..03: eski vektör FAIL, fakat CASES okuyan/protokol taklit eden fonksiyonsuz aday PASS13; pinlenmemiş oracle PASS13; READY timeout aşımı; stale hash.",
+      "notes": "Codex bulgusu P0-1: subprocess oracle çalıştırmasında aday kodun stdout manipülasyonu ve erken exit riski verifier_runner'da sertleştirildi; tam OS-level timeout ve cgroup kısıtı eklenecek"
+    },
+    {
+      "id": "MOD-009",
+      "name": "Acceptance ve Release Kontrolü",
+      "phase": "PH-03",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "DUZELTME_GEREKLI; R2-01/02/04: verifier sahte PASS açık, acceptance kabulü yok; kaynaklanmamış dual custody şartı duruyor.",
+      "notes": "G0 kapısı ve First13 ara kabul kapısı açık (OPEN / 0/13). Antigravity kendi kendine kabul veremez"
+    },
+    {
+      "id": "MOD-010",
+      "name": "Event ve Projection",
+      "phase": "PH-04",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "DUZELTME_GEREKLI; F05: presentation.app içinde consumer/checkpoint/dedup/resync uygulanmış olduğu gösterilmedi. SQL event mapping gerçek stream testi değil.",
+      "notes": "Bağımsız company_os/projections.py dosyası henüz açılmadı; mantık şu anda presentation/app.py ve SQL event map içinde yer alıyor"
+    },
+    {
+      "id": "MOD-011",
+      "name": "Yönetim ve Ofis Sunumu",
+      "phase": "PH-04",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "DUZELTME_GEREKLI; R2-04/05: preview sabit iddialar gösteriyor, matris okunmuyor; HTTP/ASGI kart iddiaları sürüyor. Görsel denetim NOT_VERIFIED.",
+      "notes": "UI animasyonları kanıt sayılmaz kuralı gereği yalnız salt okunur veri sunumu ve yetki doğrulaması test edildi"
+    },
+    {
+      "id": "MOD-012",
+      "name": "Katalog ve Hafıza",
+      "phase": "PH-01, PH-06",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "DUZELTME_GEREKLI; F04/F06/F07: operation registry ile skill/role katalog ve tenant hafıza kabulü ayrılmalı; ayrı knowledge servisi zorunluluğu kaynaklanmamış.",
+      "notes": "Bağımsız knowledge/hafıza servisi henüz kodlanmadı; şema ve sabit registry tanımları mevcut"
+    },
+    {
+      "id": "MOD-013",
+      "name": "WorkType Uygulamaları",
+      "phase": "PH-06",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "DUZELTME_GEREKLI; F02 dört hatalı fixture yolu giderildi; yalnız yol doğrulandı. F03 açık; PH06 kapsam dışı ifadesi sürüyor.",
+      "notes": "Yalnız SOFTWARE MGT01 hazır; diğer iş türleri (Research, Spreadsheet vb.) mimari faz sırasına göre PH-06 geliştirme kuyruğundadır"
+    },
+    {
+      "id": "MOD-014",
+      "name": "Bütçe, Ticari Kayıt ve Dış Etki",
+      "phase": "PH-02, PH-05",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "KISMEN_DOGRULANDI; Dosya/hash ve sözleşme varlığı doğrulandı; rezervasyon/UNKNOWN/ticari AC seti bağımsız test edilmedi. Paid kapalılığı eksik değildir; F04/F07.",
+      "notes": "Otomatik ücretli fallback ve harici faturalandırma kapalıdır; bütçe aşımında iş reddi kuralı şemada mevcuttur"
+    },
+    {
+      "id": "MOD-015",
+      "name": "Operasyon, Recovery ve Backup",
+      "phase": "PH-05",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "KISMEN_DOGRULANDI; Dosya/hash varlığı doğrulandı; gerçek fenced restore/witness/backup/stop kabulü bu tur yok; F04/F07 görev detayları gerekli.",
+      "notes": "Geri yüklenen veride eski yetkilerin canlanmaması kuralı SQL katmanında tanımlı; operasyonel felaket tatbikatı henüz yapılmadı"
+    },
+    {
+      "id": "MOD-016",
+      "name": "Teslimat, ADR ve Kalite Yönetişimi",
+      "phase": "PH-00, PH-01, PH-03",
+      "status": "KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01",
+      "codex": "DUZELTME_GEREKLI; R2-04/06: kanıt/görev/AC-test izleri eksik; DOGRULA exit1 sürüyor. Windows85PASS4SKIP97subtest tekrarlandı.",
+      "notes": "GUNCEL/DOGRULA.py kök düzeyinde CALISMA_DURUMU.md hash uyuşmazlığı nedeniyle hata vermektedir (A tabanı sabit pini). AiProjeOfisi iç testleri 85 PASS, 4 SKIP vermektedir"
+    }
+  ],
+  "e2e_static_import_gaps": [],
+  "source_hashes": {
+    "company_os\\verifier_runner.py": "35a9eb63a7d73ede86c0f68de37e5dcf68505a667ce1885537be6a1a5c3f8aeb",
+    "company_os\\candidate_runner.py": "81842ea2f902b0e44099cc0fc3c22943e48ee158d58be44d8e72f52c20e26a86",
+    "presentation\\app.py": "bd583a97c58bb349151623f78fd779460ff1ad0983b13c09c23c91fdc85c59cf",
+    "presentation\\preview_generator.py": "a14eed80e84635895c36e2f9d32a7610e71685985d03fd0f8264cda4597a3ce2",
+    "UYGULAMA_DURUM_MATRISI.md": "f71bd2141380cbde37add485f24b6f4d02b0f38f8cef7ffdb61699cdd04e9035",
+    "tools\\disposable_e2e_workflow_trial.py": "562108c0813dfef0b01c830dac50576e97c094fd29a07eda69e0099ebda9bd5a"
+  },
+  "e2e_signature_preflight": [
+    {
+      "symbol": "LinuxLauncher",
+      "signature": "(library_path, library_digest, cgroup_fd, workspace_paths, executable_path, namespace_inodes, uid, boot_id, resource_limits, lease_registry)",
+      "bind_result": "missing a required argument: 'library_digest'"
+    },
+    {
+      "symbol": "PipeTransport",
+      "signature": "(*, stdout_fd, stdin_fd, stderr_fd, max_stderr_bytes=16384)",
+      "bind_result": "missing a required keyword-only argument: 'stdout_fd'"
+    },
+    {
+      "symbol": "EngineReplyGuard",
+      "signature": "(*, scope, binding)",
+      "bind_result": "too many positional arguments"
+    },
+    {
+      "symbol": "EnginePump",
+      "signature": "(*, transport, handler, emission_guard, stop_request, lease_remaining, timeout, max_frames=16, clock=<built-in function monotonic>)",
+      "bind_result": "missing a required argument: 'emission_guard'"
+    }
+  ],
+  "launcher_launch_exists": false,
+  "baseline_manifest": {
+    "path": "dokumanlar/hedef-mimari-v1/CALISMA_DURUMU.md",
+    "expected": "061f96f5cff767e1158041f8a64f19bd35b8f59e747ba5dd21119b3daeb9f4e6",
+    "actual": "fb9f4e0ab4af1294cf4f30b31d4831157ffc8c6769e599567e570526d935b2bf"
+  }
+}

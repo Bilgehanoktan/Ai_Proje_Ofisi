@@ -1,0 +1,3 @@
+# Windows kaynak kontrollerinde doğrulanan sürüm.
+pydantic==2.12.5
+# Gerçek DB bağlantısı için ayrıca: python -m pip install '.[database]'

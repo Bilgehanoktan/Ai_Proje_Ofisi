@@ -1,0 +1,147 @@
+{
+  "canonical_workspace": "E:\\Projeler\\Ai_Proje_Ofisi",
+  "date": "2026-11-14",
+  "scope": "STATIC_ACTIVE_SOURCE_LAUNCHER_CONFIG_DOC_SCAN_NOT_PROCESS_OR_RUNTIME_ACCEPTANCE",
+  "status": "FINDINGS_OPEN",
+  "source_manifest_sha256": "490061928eaf31fd7b3ee25d96426061dc9a61ca0e2142821914d0d6f72bcbb4",
+  "manifest_files": 329,
+  "python_files_scanned": 127,
+  "legacy_imports": [],
+  "direct_legacy_root_string_paths": [],
+  "old_application_files": [],
+  "layout_verification": {
+    "status": "PASS",
+    "mapped_files": 441,
+    "unique_targets": 440,
+    "manifest_files": 329,
+    "imported_modules": 60,
+    "parsed_python_files": 135,
+    "failures": [],
+    "scope": "LAYOUT_SOURCE_INTEGRITY_NOT_RUNTIME_ACCEPTANCE",
+    "G0": "OPEN",
+    "first13": "0/13"
+  },
+  "findings": [
+    {
+      "id": "LEG-001",
+      "priority": "P2",
+      "file": "database/README.md",
+      "line": 11,
+      "kind": "BROKEN_CURRENT_COMMAND",
+      "detail": "Kaynak kontrolü komutu kaldırılan AiProjeOfisi/tools/verify_source.py yolunu kullanıyor.",
+      "recommendation": "scripts/development/run.py verify komutuna güncelle."
+    },
+    {
+      "id": "LEG-002",
+      "priority": "P2",
+      "file": "config/README.md",
+      "line": 14,
+      "related_lines": [
+        17
+      ],
+      "kind": "STALE_MAINTENANCE_PATHS",
+      "detail": "tools/probe_peer_rpc_identity.py ve presentation/kernel_binding.py yolları güncel kökte yok.",
+      "recommendation": "scripts/verification/probe_peer_rpc_identity.py ve product/backend/company_os/api/http/kernel_binding.py yollarını kullan."
+    },
+    {
+      "id": "LEG-003",
+      "priority": "P2",
+      "file": "GUNCEL_DURUM.json",
+      "line": 15,
+      "kind": "STALE_CURRENT_VALIDATION_POINTER",
+      "detail": "effective_source_root=product olduğu halde current_validation=GUNCEL/VERIFICATION.json; eski A kanıtı güncel ürün doğrulaması sanılabilir.",
+      "recommendation": "A referans doğrulamasını ayrı alanla koru; güncel doğrulama alanını güncel koşum kanıtına bağla."
+    },
+    {
+      "id": "LEG-004",
+      "priority": "P2",
+      "file": "product/backend/company_os/projections/preview_generator.py",
+      "line": 14,
+      "related_lines": [
+        23,
+        56,
+        74
+      ],
+      "kind": "LIVE_PROJECTION_OF_HISTORICAL_STATUS",
+      "detail": "Üretici tarihsel matris kartlarının ilk eşleşen durumlarını okuyor; yeniden üretilen HTML halen 85 PASS ve tools/disposable_e2e_workflow_trial.py bilgisi içeriyor. Dosya kalıntısı değil; /office için de kullanılan üretici davranışı.",
+      "recommendation": "Güncel ilerleme/katalog bilgisini kaynak olarak kullan veya tarihsel kart görünümünü açıkça tarihsel olarak etiketle; eski kanıtları yeniden yazma.",
+      "reproduced": {
+        "contains_85_PASS": true,
+        "contains_old_trial_path": true
+      }
+    },
+    {
+      "id": "LEG-005",
+      "priority": "P2",
+      "file": "docs/implementation-plan/PLAN.md",
+      "line": 10,
+      "kind": "MOVED_PLAN_WITH_BROKEN_LINKS",
+      "detail": "Tarihli plan eski uygulama kökünü anlatıyor; yeni konumuna göre 17 Markdown bağlantısı çözülemiyor.",
+      "broken_links": [
+        "UYGULAMA_DURUM_MATRISI.md",
+        "CODEX_MATRIS_KONTROL_20261110.md",
+        "ANTIGRAVITY_KONTROL_SONRASI_GOREV_20261110.md",
+        "CODEX_UYGULAMA_20261111.md",
+        "CODEX_PILOT_BAGLANTISI_20261111_02.md",
+        "CODEX_GUVEN_GIRDILERI_20261112.md",
+        "CODEX_KANONIK_AKIS_20261112.md",
+        "CODEX_LINUX_SUPERVISOR_20261112.md",
+        "CODEX_OBSERVER_OLCUM_20261112.md",
+        "CODEX_SERVIS_VERIFIER_20261112.md",
+        "CODEX_YETKI_ADAPTERLERI_20261113.md",
+        "CODEX_POSTGRES_READER_20261113.md",
+        "CODEX_NATIVE_READBACK_ACL_20261113.md",
+        "CODEX_ROOT_READER_20261113.md",
+        "CODEX_CURRENT_WINDOW_20261113.md",
+        "CODEX_GOREV_EKRANI_20261114.md",
+        "CODEX_YEREL_POSTGRES_20261114.md"
+      ],
+      "recommendation": "Tarihsel metni koruyarak konum/devir notu ekle; bağları eşlemeyle düzelt veya belgeyi açıkça tarihsel devir olarak ayır."
+    },
+    {
+      "id": "LEG-006",
+      "priority": "P3",
+      "file": "AGENTS.md",
+      "line": 16,
+      "kind": "AMBIGUOUS_REFERENCE_TOOL_PATH",
+      "detail": "tools/refresh_source.py --docs workspace kökünde yok; gerçek A referans aracı GUNCEL/tools/refresh_source.py altında.",
+      "recommendation": "A referansına ait komutun konumunu ve çalışma dizinini açık yaz; mevcut hash hatasını körlemesine manifest yenileyerek kapatma."
+    }
+  ],
+  "exclusions": [
+    "GUNCEL/ARSIV içeriği genel olarak taranmadı; referans ve tarihsel kaynak olarak korundu.",
+    "Ham evidence/handover geçmişi ve migration source mapping eski yolları bilerek içerir; aktif bağımlılık sayılmadı.",
+    "Çalışan süreçler, Windows Task Scheduler, gizli profiller, runtime verisi ve mevcut paket kurulumları taranmadı.",
+    "Uygulama test grubu yeniden çalıştırılmadı; verify_layout bağımsız yeniden çalıştırıldı."
+  ],
+  "source_modifications": false,
+  "old_name_candidates": [
+    {
+      "file": "tests/unit/test_composition.py",
+      "line": 13,
+      "module": "company_os.composition"
+    },
+    {
+      "file": "tests/unit/test_workflow.py",
+      "line": 12,
+      "module": "company_os.composition"
+    }
+  ],
+  "resolved_current_package_imports": [
+    {
+      "file": "tests/unit/test_composition.py",
+      "line": 13,
+      "module": "company_os.composition",
+      "resolution": "CURRENT_PACKAGE_NOT_OLD_FLAT_MODULE",
+      "current_file": "product/backend/company_os/composition/__init__.py"
+    },
+    {
+      "file": "tests/unit/test_workflow.py",
+      "line": 12,
+      "module": "company_os.composition",
+      "resolution": "CURRENT_PACKAGE_NOT_OLD_FLAT_MODULE",
+      "current_file": "product/backend/company_os/composition/__init__.py"
+    }
+  ],
+  "method_note": "MODULE_MOVES içindeki eski company_os.composition modül adı yeni company_os.composition paket adıyla çakışır; iki test importu mevcut paket __init__.py ve alt modüllere çözülür, eski bağımlılık değildir."
+}

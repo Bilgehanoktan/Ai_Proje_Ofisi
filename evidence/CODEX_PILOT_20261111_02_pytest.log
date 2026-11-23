@@ -1,0 +1,10 @@
+..............................................s.... [ 41%]
+..s..............................................ss......................                                                     [100%]
+=========================== short test summary info ===========================
+SKIPPED [1] AiProjeOfisi\tests\unit\test_engine_bridge.py:69: Windows sandbox socketpair setup stalled; actual local-wire acceptance not verified
+SKIPPED [1] AiProjeOfisi\tests\unit\test_engine_bridge.py:101: Linux FIFO/selectors acceptance cannot run on Windows
+SKIPPED [1] AiProjeOfisi\tests\unit\test_secret_adapter.py:38: Linux fd/owner/mode checks
+SKIPPED [1] AiProjeOfisi\tests\unit\test_secret_adapter.py:42: Linux fd/owner/mode checks
+120 passed, 4 skipped, 112 subtests passed in 7.77s
+
+STDERR

@@ -1,0 +1,42 @@
+{
+  "DRAFT": [
+    "CANCELLED",
+    "READY"
+  ],
+  "READY": [
+    "BLOCKED",
+    "CANCELLED",
+    "RUNNING"
+  ],
+  "RUNNING": [
+    "BLOCKED",
+    "CANCELLED",
+    "FAILED",
+    "VERIFYING",
+    "WAITING_APPROVAL"
+  ],
+  "WAITING_APPROVAL": [
+    "BLOCKED",
+    "CANCELLED",
+    "READY"
+  ],
+  "VERIFYING": [
+    "ACCEPTED",
+    "BLOCKED",
+    "CANCELLED",
+    "CHANGES_REQUIRED",
+    "FAILED"
+  ],
+  "CHANGES_REQUIRED": [
+    "CANCELLED",
+    "READY"
+  ],
+  "BLOCKED": [
+    "CANCELLED",
+    "FAILED",
+    "READY"
+  ],
+  "ACCEPTED": [],
+  "FAILED": [],
+  "CANCELLED": []
+}

@@ -1,0 +1,133 @@
+{
+  "scope": "LOCAL_EVALUATION_CLUSTER_PANEL_PERSISTENCE_NOT_G0_RATIFICATION",
+  "kernel_binding_profile": "/mnt/e/Projeler/Ai_Proje_Ofisi/.runtime/trials/live-flow-20261120/http_kernel_profile.json",
+  "kernel_binding_sha256": "0992e0fc2fe6660cfd4462fa860efe5a582019ed5820d3d44d340638b7e7c2da",
+  "connection_check": {
+    "configured": true,
+    "execution_verified": false,
+    "can_create_objective": true,
+    "create_operations": [
+      "objectives.create",
+      "plans.create",
+      "tasks.create"
+    ],
+    "detail_resources": [
+      "acceptance_decisions",
+      "agent_runs",
+      "attempts",
+      "evidence",
+      "qualifications",
+      "tool_requests"
+    ]
+  },
+  "created": {
+    "objective_id": "a512097a-fa5f-49e8-9aab-7793315b78ff",
+    "objective_command_id": "f2d5f26d-9df6-4103-b779-8ace1dc16a31",
+    "objective_request_id": "aaa87f79-fcf0-47d2-a144-0638b231667f",
+    "plan_id": "441f32d5-a668-4ac9-be5d-f90c726ec218",
+    "plan_command_id": "b3bf33e1-c8f6-40b0-aac0-ae02b788f16a",
+    "plan_request_id": "3311efcc-cfef-4042-936e-0429e4dd5913",
+    "plan_project_revision": 34,
+    "task_id": "e35baa88-e5b1-471d-9662-861247fd7612",
+    "task_command_id": "2381cf42-9ffc-4388-ac0d-500ba9c2de04",
+    "task_request_id": "6fb20b76-cc9d-4bb0-8f43-c1a5cf51cd98"
+  },
+  "receipt_reconciliations": {
+    "objectives.create": {
+      "state": "SUCCEEDED",
+      "command_id": "f2d5f26d-9df6-4103-b779-8ace1dc16a31",
+      "result_ref": "a512097a-fa5f-49e8-9aab-7793315b78ff",
+      "correlation_id": "aaa87f79-fcf0-47d2-a144-0638b231667f"
+    },
+    "plans.create": {
+      "state": "SUCCEEDED",
+      "command_id": "b3bf33e1-c8f6-40b0-aac0-ae02b788f16a",
+      "result_ref": "441f32d5-a668-4ac9-be5d-f90c726ec218",
+      "correlation_id": "3311efcc-cfef-4042-936e-0429e4dd5913"
+    },
+    "tasks.create": {
+      "state": "SUCCEEDED",
+      "command_id": "2381cf42-9ffc-4388-ac0d-500ba9c2de04",
+      "result_ref": "e35baa88-e5b1-471d-9662-861247fd7612",
+      "correlation_id": "6fb20b76-cc9d-4bb0-8f43-c1a5cf51cd98"
+    }
+  },
+  "negative_http_checks": {
+    "receipt_correlation_mismatch": {
+      "status": 403,
+      "body": {
+        "error": "ACCESS_OR_COMMAND_REJECTED"
+      }
+    },
+    "foreign_origin_rejected": {
+      "status": 403,
+      "body": {
+        "error": "ORIGIN_REJECTED"
+      }
+    },
+    "revoked_owner_session_rejected": {
+      "status": 403,
+      "body": {
+        "error": "ACCESS_OR_COMMAND_REJECTED"
+      }
+    }
+  },
+  "separate_connection_readback": {
+    "objective": {
+      "id": "a512097a-fa5f-49e8-9aab-7793315b78ff",
+      "goal": "MGT-TITLE-NORMALIZATION-01 gorevini canli panel ve PostgreSQL uzerinden ucuca dogrulamak"
+    },
+    "plan": {
+      "id": "441f32d5-a668-4ac9-be5d-f90c726ec218",
+      "objective_id": "a512097a-fa5f-49e8-9aab-7793315b78ff"
+    },
+    "task": {
+      "id": "e35baa88-e5b1-471d-9662-861247fd7612",
+      "plan_id": "441f32d5-a668-4ac9-be5d-f90c726ec218",
+      "title": "MGT-TITLE-NORMALIZATION-01",
+      "role_id": "EXP-01",
+      "state": "DRAFT",
+      "revision": 0
+    },
+    "commands": [
+      {
+        "command_id": "f2d5f26d-9df6-4103-b779-8ace1dc16a31",
+        "operation": "objectives.create",
+        "state": "SUCCEEDED",
+        "correlation_id": "aaa87f79-fcf0-47d2-a144-0638b231667f",
+        "result_ref": "a512097a-fa5f-49e8-9aab-7793315b78ff"
+      },
+      {
+        "command_id": "b3bf33e1-c8f6-40b0-aac0-ae02b788f16a",
+        "operation": "plans.create",
+        "state": "SUCCEEDED",
+        "correlation_id": "3311efcc-cfef-4042-936e-0429e4dd5913",
+        "result_ref": "441f32d5-a668-4ac9-be5d-f90c726ec218"
+      },
+      {
+        "command_id": "2381cf42-9ffc-4388-ac0d-500ba9c2de04",
+        "operation": "tasks.create",
+        "state": "SUCCEEDED",
+        "correlation_id": "6fb20b76-cc9d-4bb0-8f43-c1a5cf51cd98",
+        "result_ref": "e35baa88-e5b1-471d-9662-861247fd7612"
+      }
+    ],
+    "outbox": [
+      {
+        "event_id": 81,
+        "kind": "ObjectiveCreated",
+        "aggregate_id": "a512097a-fa5f-49e8-9aab-7793315b78ff"
+      },
+      {
+        "event_id": 82,
+        "kind": "PlanCreated",
+        "aggregate_id": "441f32d5-a668-4ac9-be5d-f90c726ec218"
+      },
+      {
+        "event_id": 83,
+        "kind": "TaskCreated",
+        "aggregate_id": "e35baa88-e5b1-471d-9662-861247fd7612"
+      }
+    ]
+  }
+}

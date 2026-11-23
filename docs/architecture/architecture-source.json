@@ -1,0 +1,18 @@
+{
+  "source": "../../GUNCEL/dokumanlar/hedef-mimari-v1/PROJE_TASARIM_DOKUMANI.md",
+  "sha256": "b0495856786d1cc8c5106b9466467fd44e689319bb888ced094b021c21f0357b",
+  "sections": [
+    12,
+    15,
+    16,
+    26,
+    27
+  ],
+  "implementation_status": "SQL_AND_COMMAND_HOST_ADAPTED_NOT_RUNTIME_ACCEPTED",
+  "environment": "SOURCE_ONLY",
+  "G0": "OPEN",
+  "runtime": "NOT_RUN",
+  "first13": "0/13",
+  "previous_sha256": "67c2dd44a689b29bf35a409cacd44afd006acce2782911e625a0dc8a1a423384",
+  "pin_update_reason": "2026-11-08 kullanÄ±cÄ± onaylÄ± uygulama kÃ¶kÃ¼ ve Ã§alÄ±ÅŸma yÃ¶ntemi belge eÅŸlemesi; teknik sÃ¶zleÅŸmeler deÄŸiÅŸtirilmedi"
+}

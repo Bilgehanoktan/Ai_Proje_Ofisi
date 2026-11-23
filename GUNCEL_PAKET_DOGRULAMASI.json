@@ -1,0 +1,16 @@
+{
+  "result": "PASS",
+  "path": "GUNCEL_PAKET.zip",
+  "sha256": "c834e2725d4c3fb3c002cd13c06015a86a2a35171fd2f51e7fd6dc431beb05ac",
+  "bytes": 280907776,
+  "entries": 4383,
+  "file_hashes_verified": 4382,
+  "CRC": "PASS",
+  "tests_discovered": 440,
+  "tests_passed": 437,
+  "tests_skipped": 3,
+  "external_legacy_source_access": "BLOCKED_IN_TESTS",
+  "G0": "OPEN",
+  "runtime": "NOT_RUN",
+  "first13": "0/13"
+}

@@ -1,0 +1,298 @@
+{
+  "WorkspaceRevision": {
+    "$defs": {
+      "SourceFingerprint": {
+        "additionalProperties": false,
+        "properties": {
+          "build_digest": {
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Build Digest",
+            "type": "string"
+          },
+          "commit": {
+            "pattern": "^(?:[a-f0-9]{40}|UNCOMMITTED)$",
+            "title": "Commit",
+            "type": "string"
+          },
+          "dirty_digest": {
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Dirty Digest",
+            "type": "string"
+          }
+        },
+        "required": [
+          "build_digest",
+          "commit",
+          "dirty_digest"
+        ],
+        "title": "SourceFingerprint",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "workspace_id": {
+        "format": "uuid",
+        "title": "Workspace Id",
+        "type": "string"
+      },
+      "attempt_id": {
+        "format": "uuid",
+        "title": "Attempt Id",
+        "type": "string"
+      },
+      "fencing_epoch": {
+        "exclusiveMinimum": 0,
+        "title": "Fencing Epoch",
+        "type": "integer"
+      },
+      "revision": {
+        "minimum": 0,
+        "title": "Revision",
+        "type": "integer"
+      },
+      "source": {
+        "$ref": "#/$defs/SourceFingerprint"
+      },
+      "candidate_digest": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Candidate Digest",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspace_id",
+      "attempt_id",
+      "fencing_epoch",
+      "revision",
+      "source",
+      "candidate_digest"
+    ],
+    "title": "WorkspaceRevision",
+    "type": "object"
+  },
+  "CandidateSnapshot": {
+    "$defs": {
+      "SourceFingerprint": {
+        "additionalProperties": false,
+        "properties": {
+          "build_digest": {
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Build Digest",
+            "type": "string"
+          },
+          "commit": {
+            "pattern": "^(?:[a-f0-9]{40}|UNCOMMITTED)$",
+            "title": "Commit",
+            "type": "string"
+          },
+          "dirty_digest": {
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Dirty Digest",
+            "type": "string"
+          }
+        },
+        "required": [
+          "build_digest",
+          "commit",
+          "dirty_digest"
+        ],
+        "title": "SourceFingerprint",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "workspace_id": {
+        "format": "uuid",
+        "title": "Workspace Id",
+        "type": "string"
+      },
+      "attempt_id": {
+        "format": "uuid",
+        "title": "Attempt Id",
+        "type": "string"
+      },
+      "fencing_epoch": {
+        "exclusiveMinimum": 0,
+        "title": "Fencing Epoch",
+        "type": "integer"
+      },
+      "revision": {
+        "minimum": 0,
+        "title": "Revision",
+        "type": "integer"
+      },
+      "source": {
+        "$ref": "#/$defs/SourceFingerprint"
+      },
+      "candidate_digest": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Candidate Digest",
+        "type": "string"
+      },
+      "manifest_artifact_id": {
+        "format": "uuid",
+        "title": "Manifest Artifact Id",
+        "type": "string"
+      },
+      "immutable": {
+        "const": true,
+        "title": "Immutable",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "workspace_id",
+      "attempt_id",
+      "fencing_epoch",
+      "revision",
+      "source",
+      "candidate_digest",
+      "manifest_artifact_id",
+      "immutable"
+    ],
+    "title": "CandidateSnapshot",
+    "type": "object"
+  },
+  "PatchReceipt": {
+    "additionalProperties": false,
+    "properties": {
+      "receipt_id": {
+        "format": "uuid",
+        "title": "Receipt Id",
+        "type": "string"
+      },
+      "request_id": {
+        "format": "uuid",
+        "title": "Request Id",
+        "type": "string"
+      },
+      "workspace_id": {
+        "format": "uuid",
+        "title": "Workspace Id",
+        "type": "string"
+      },
+      "attempt_id": {
+        "format": "uuid",
+        "title": "Attempt Id",
+        "type": "string"
+      },
+      "fencing_epoch": {
+        "exclusiveMinimum": 0,
+        "title": "Fencing Epoch",
+        "type": "integer"
+      },
+      "before_revision": {
+        "minimum": 0,
+        "title": "Before Revision",
+        "type": "integer"
+      },
+      "after_revision": {
+        "minimum": 0,
+        "title": "After Revision",
+        "type": "integer"
+      },
+      "before_digest": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Before Digest",
+        "type": "string"
+      },
+      "after_digest": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "After Digest",
+        "type": "string"
+      },
+      "patch_artifact_id": {
+        "format": "uuid",
+        "title": "Patch Artifact Id",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "APPLIED",
+          "REJECTED",
+          "RECOVERY_REQUIRED"
+        ],
+        "title": "Status",
+        "type": "string"
+      }
+    },
+    "required": [
+      "receipt_id",
+      "request_id",
+      "workspace_id",
+      "attempt_id",
+      "fencing_epoch",
+      "before_revision",
+      "after_revision",
+      "before_digest",
+      "after_digest",
+      "patch_artifact_id",
+      "status"
+    ],
+    "title": "PatchReceipt",
+    "type": "object"
+  },
+  "SignerEnrollment": {
+    "additionalProperties": false,
+    "properties": {
+      "key_id": {
+        "format": "uuid",
+        "title": "Key Id",
+        "type": "string"
+      },
+      "verifier_id": {
+        "format": "uuid",
+        "title": "Verifier Id",
+        "type": "string"
+      },
+      "tenant_id": {
+        "format": "uuid",
+        "title": "Tenant Id",
+        "type": "string"
+      },
+      "project_id": {
+        "format": "uuid",
+        "title": "Project Id",
+        "type": "string"
+      },
+      "worker_image_digest": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Worker Image Digest",
+        "type": "string"
+      },
+      "valid_from": {
+        "format": "date-time",
+        "title": "Valid From",
+        "type": "string"
+      },
+      "valid_until": {
+        "format": "date-time",
+        "title": "Valid Until",
+        "type": "string"
+      },
+      "state": {
+        "enum": [
+          "ACTIVE",
+          "REVOKED",
+          "SUSPENDED"
+        ],
+        "title": "State",
+        "type": "string"
+      }
+    },
+    "required": [
+      "key_id",
+      "verifier_id",
+      "tenant_id",
+      "project_id",
+      "worker_image_digest",
+      "valid_from",
+      "valid_until",
+      "state"
+    ],
+    "title": "SignerEnrollment",
+    "type": "object"
+  }
+}

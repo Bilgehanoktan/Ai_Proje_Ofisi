@@ -1,0 +1,36 @@
+{
+  "scope": "PG18_ROLLBACK_ONLY_COMPILE_AUDIT_NOT_LIVE_MIGRATION",
+  "status": "PASS",
+  "before_counts": {
+    "tables": 72,
+    "roles": 19,
+    "functions": 151,
+    "sessions": 33,
+    "grants": 14
+  },
+  "in_tx_counts": {
+    "tables": 73,
+    "roles": 22,
+    "functions": 153,
+    "sessions": 33,
+    "grants": 14
+  },
+  "after_counts": {
+    "tables": 72,
+    "roles": 19,
+    "functions": 151,
+    "sessions": 33,
+    "grants": 14
+  },
+  "counts_unchanged": true,
+  "roles_least_privilege_ok": true,
+  "rls_forced": true,
+  "immutability_trigger_enabled": true,
+  "functions_secdef_search_path_no_public": true,
+  "negative_superuser_execute": "OWNER_AUTH_TRANSPORT_REQUIRED",
+  "negative_superuser_readback": "OWNER_AUTH_TRANSPORT_REQUIRED",
+  "probe_9table_readback": "OWNER_AUTH_READBACK_WITNESS_MISMATCH",
+  "probe_least_privilege_execute": "OWNER_AUTH_CONTEXT_MISMATCH",
+  "post_rollback_table_absent": true,
+  "post_rollback_roles_absent": true
+}

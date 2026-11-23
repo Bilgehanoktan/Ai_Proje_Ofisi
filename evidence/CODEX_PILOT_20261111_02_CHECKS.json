@@ -1,0 +1,28 @@
+[
+  {
+    "name": "pytest",
+    "command": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "AiProjeOfisi/tests",
+      "-q",
+      "-rs"
+    ],
+    "exit": 0,
+    "log": "AiProjeOfisi\\evidence\\CODEX_PILOT_20261111_02_pytest.log",
+    "sha256": "4e9995721001058fe7dffc1e5ec9f77081bd961e21fead9601e5c591e4a6a42f"
+  },
+  {
+    "name": "preflight",
+    "command": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "AiProjeOfisi/tools/workflow_preflight.py"
+    ],
+    "exit": 2,
+    "log": "AiProjeOfisi\\evidence\\CODEX_PILOT_20261111_02_preflight.log",
+    "sha256": "6b2fb171cc09627252d0a12f8d7a8a52bafbd6fc9309620a3b1a9f9d1ea6842e"
+  }
+]

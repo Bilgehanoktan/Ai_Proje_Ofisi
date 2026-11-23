@@ -1,0 +1,22 @@
+{
+  "canonical_workspace": "E:\\Projeler\\Ai_Proje_Ofisi",
+  "effective_source_root": "product",
+  "architecture_version": "0.16.2",
+  "document_revision": "0.16.2-r68-compact-master",
+  "source_base": "r65",
+  "G0": "OPEN",
+  "human_G0": "0/12",
+  "first13": "0/13",
+  "runtime": "NOT_RUN",
+  "FIRST_RUN_READY": false,
+  "compatibility_scope": "Historical regression/design fixtures, not current runtime modules",
+  "physical_acceptance": "NOT_RUN",
+  "current_master": "GUNCEL/dokumanlar/AI_PROJE_OFISI_ANA_MIMARI_DOKUMANI_v0.16.2-r68.md",
+  "current_validation": "GUNCEL/VERIFICATION.json",
+  "history_archive": "ARSIV/HISTORY_STORE.sqlite3",
+  "project_name": "AI Proje Ofisi",
+  "previous_effective_source_root": "GUNCEL",
+  "reference_source_root": "GUNCEL",
+  "source_manifest": "SOURCE_MANIFEST.json",
+  "layout_migration": "docs/migration/SOURCE_TO_TARGET.json"
+}

@@ -1,0 +1,82 @@
+{
+  "status": "IMPLEMENTATION_LABEL_CHOICES_NOT_POLICY_APPROVAL",
+  "initial_policy_revision": 0,
+  "approved_policy_digest": null,
+  "grant_issuance": false,
+  "rows": [
+    {
+      "operation_id": "CAP-017.revoke",
+      "permission": "cap-017.revoke",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND"
+    },
+    {
+      "operation_id": "e0.setup_mandate_consume",
+      "permission": "e0.setup_mandate_consume",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND"
+    },
+    {
+      "operation_id": "e0.qualification_candidate_issue",
+      "permission": "e0.qualification_candidate_issue",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND"
+    },
+    {
+      "operation_id": "e0.evaluation_artifact_record",
+      "permission": "e0.evaluation_artifact_record",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND"
+    },
+    {
+      "operation_id": "qualification.activate",
+      "permission": "qualification.activate",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND"
+    },
+    {
+      "operation_id": "qualification.revoke",
+      "permission": "qualification.revoke",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND"
+    },
+    {
+      "operation_id": "objectives.create",
+      "permission": "objectives.create",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND"
+    },
+    {
+      "operation_id": "plans.create",
+      "permission": "plans.create",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND"
+    },
+    {
+      "operation_id": "tasks.create",
+      "permission": "tasks.create",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND"
+    }
+  ],
+  "bootstrap_internal_rows": [
+    {
+      "operation_id": "projects.read",
+      "permission": "projects.read",
+      "scope_kind": "PROJECT",
+      "execution_class": "QUERY"
+    },
+    {
+      "operation_id": "projects.create",
+      "permission": "projects.create",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND"
+    },
+    {
+      "operation_id": "e0.evaluation_attempt_create",
+      "permission": "e0.evaluation_attempt_create",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "version": "0.16.2",
+  "architecture_version": "0.16.2",
+  "document_revision": "0.16.2-r68-compact-master",
+  "current_master_document": "../GUNCEL/dokumanlar/AI_PROJE_OFISI_ANA_MIMARI_DOKUMANI_v0.16.2-r68.md",
+  "current_master_text": "../GUNCEL/dokumanlar/AI_PROJE_OFISI_ANA_MIMARI_DOKUMANI_v0.16.2-r68.txt",
+  "current_design_package": "../GUNCEL_PAKET.zip",
+  "current_company_status": "CONSOLIDATED_SOURCE_NATIVE_ACCEPTANCE_NOT_RUN",
+  "current_design_source_index": "../GUNCEL/SOURCE_MANIFEST.json",
+  "current_cap_validation": "../GUNCEL/VERIFICATION.json",
+  "current_native_assembly": "../GUNCEL/sql/assembly.json",
+  "G0": "OPEN",
+  "human_G0": "0/12",
+  "S0_MIN_runtime": "NOT_RUN",
+  "FIRST_RUN_READY": false,
+  "complete_test_steps": 0,
+  "total_test_steps": 13,
+  "first_run_freeze_allowed": false,
+  "project_name": "AI Proje Ofisi"
+}

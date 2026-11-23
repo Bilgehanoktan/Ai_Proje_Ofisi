@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-23",
+  "host": "WSL2 Ubuntu-E (systemd running)",
+  "worker_service": {
+    "unit": "aipof-worker-daemon.service",
+    "state": "active",
+    "user": "aipof-dbtest",
+    "delegate_cgroup_v2": true,
+    "log_event": "WorkerDaemonStarted"
+  },
+  "backup_timer": {
+    "unit": "aipof-pg-backup.timer",
+    "state": "active",
+    "schedule": "daily"
+  },
+  "backup_run": {
+    "unit": "aipof-pg-backup.service",
+    "backup_verified": true,
+    "target": "/var/lib/ai-proje-ofisi-local/backups/basebackup-20261123T162844Z",
+    "timestamp": "20261123T162844Z"
+  }
+}

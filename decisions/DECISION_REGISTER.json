@@ -1,0 +1,9 @@
+{
+  "decisions": [
+    {
+      "id": "ADR-20261114-KLASOR-DUZENI",
+      "status": "USER_APPROVED_LAYOUT",
+      "path": "adr/ADR-20261114-KLASOR-DUZENI.md"
+    }
+  ]
+}

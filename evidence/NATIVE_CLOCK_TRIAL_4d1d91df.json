@@ -1,0 +1,95 @@
+{
+  "scope": "SCOPED_NATIVE_BUILD_AND_ROLLBACK_COMPILE_NOT_G0_ACCEPTANCE",
+  "sql_trial": {
+    "unit": "aipof-newtree-sql-dac7fb15",
+    "exit_code": 0,
+    "result": {
+      "scope": "NEW_TREE_REAL_DDL_ROLLBACK_NOT_AUTHORIZATION_ACCEPTANCE",
+      "company_commit": false,
+      "start_exit": 0,
+      "original_guard_rejected": true,
+      "clock_load_probe": {
+        "backend_pid": 414,
+        "observation": {
+          "utc_ns": 1794166757758573643,
+          "profile": "LINUX_ADJTIMEX_DB_LOCAL_V1",
+          "backend_pid": 414,
+          "esterror_us": 4,
+          "maxerror_us": 3513,
+          "host_boot_id": "fa0e67b7-4f91-4786-b002-ee777526318a",
+          "kernel_status": 0,
+          "boottime_after_ns": 160481879140,
+          "source_sync_state": "SYNC",
+          "boottime_before_ns": 160481850151,
+          "tolerance_scaled_ppm": 32768000
+        }
+      },
+      "wrong_symbol_rejected": true,
+      "catalog_json": [
+        {
+          "registry_count": 48,
+          "inactive_required": 9,
+          "public_clock_execute": false
+        },
+        {
+          "bootstrap_roots": 0,
+          "installation_controls": 0,
+          "principals": 0,
+          "sessions": 0,
+          "grants": 0
+        },
+        {
+          "scope": "SYNTHETIC_ROOT_SHAPE_ONLY",
+          "root_rows": 1,
+          "duplicate_rejected": true
+        },
+        {
+          "setup_hmac_abi": "MATCH",
+          "enter_hmac_abi": "MATCH",
+          "scope": "PUBLIC_SYNTHETIC_TEST_VECTOR_NOT_ENROLLED_SECRET"
+        },
+        {
+          "synthetic_bootstrap_receipts": 1,
+          "synthetic_objectives": 1,
+          "synthetic_plans": 1,
+          "synthetic_arm_rows": 0,
+          "scope": "CONDITIONAL_TRANSPORT_SYNTHETIC_NOT_REAL_INSTALLATION"
+        }
+      ],
+      "compile_exit": 0,
+      "compile_stderr": "",
+      "compile_stdout_tail": "TE TRIGGER\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nGRANT\nCREATE POLICY\nCREATE TRIGGER\nGRANT\nCREATE POLICY\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nGRANT\nCREATE POLICY\nCREATE POLICY\nGRANT\nCREATE POLICY\nCREATE POLICY\nCREATE FUNCTION\nCREATE TRIGGER\nCREATE TRIGGER\nCREATE TRIGGER\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nGRANT\nREVOKE\nGRANT\nCREATE POLICY\nGRANT\nCREATE POLICY\nREVOKE\nCREATE TABLE\nCREATE TABLE\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nCREATE TRIGGER\nALTER FUNCTION\nREVOKE\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nCREATE POLICY\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nCREATE TRIGGER\nALTER FUNCTION\nREVOKE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nCREATE POLICY\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nDO\nCREATE FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nCREATE FUNCTION\nALTER FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nGRANT\nGRANT\nGRANT\nCREATE FUNCTION\nCREATE FUNCTION\nALTER FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\n{\"registry_count\" : 48, \"inactive_required\" : 9, \"public_clock_execute\" : false}\n{\"bootstrap_roots\" : 0, \"installation_controls\" : 0, \"principals\" : 0, \"sessions\" : 0, \"grants\" : 0}\nINSERT 0 1\nINSERT 0 1\nDO\n{\"scope\" : \"SYNTHETIC_ROOT_SHAPE_ONLY\", \"root_rows\" : 1, \"duplicate_rejected\" : true}\nDO\n{\"setup_hmac_abi\" : \"MATCH\", \"enter_hmac_abi\" : \"MATCH\", \"scope\" : \"PUBLIC_SYNTHETIC_TEST_VECTOR_NOT_ENROLLED_SECRET\"}\nCREATE ROLE\nGRANT\nGRANT ROLE\nGRANT\nDO\n{\"synthetic_bootstrap_receipts\" : 1, \"synthetic_objectives\" : 1, \"synthetic_plans\" : 1, \"synthetic_arm_rows\" : 0, \"scope\" : \"CONDITIONAL_TRANSPORT_SYNTHETIC_NOT_REAL_INSTALLATION\"}\nROLLBACK\n",
+      "after_rollback": {
+        "company_exists": false,
+        "company_private_exists": false,
+        "smoke_rows": 1
+      },
+      "compile_pass": true,
+      "rollback_verified": true,
+      "stop_exit": 0,
+      "db_stopped": true
+    },
+    "stderr": "Running as unit: aipof-newtree-sql-dac7fb15.service; invocation ID: e51ee1a9b5d4404fb4dc00b0250005f6\n          Finished with result: success\nMain processes terminated with: code=exited, status=0/SUCCESS\n               Service runtime: 4.493s\n             CPU time consumed: 2.024s\n                   Memory peak: 124.2M (swap: 0B)\n",
+    "source_sha256": "1bc01f15b9c4325fadee6f1eafa554736e58de2083c2abace908b04a1cf729d6",
+    "properties": [
+      "User=aipof-dbtest",
+      "Group=aipof-dbtest",
+      "MemoryMax=512M",
+      "MemorySwapMax=0",
+      "CPUQuota=50%",
+      "TasksMax=64",
+      "RuntimeMaxSec=90",
+      "TimeoutStopSec=15",
+      "LimitNOFILE=256",
+      "LimitCORE=0",
+      "NoNewPrivileges=yes",
+      "PrivateNetwork=yes",
+      "ProtectSystem=strict",
+      "ProtectHome=yes",
+      "ReadWritePaths=/var/lib/ai-proje-ofisi-dbtest/storage",
+      "OOMPolicy=stop",
+      "KillMode=control-group"
+    ]
+  },
+  "unmount_exit": 0
+}

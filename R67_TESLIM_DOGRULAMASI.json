@@ -1,0 +1,16 @@
+{
+  "result": "PASS",
+  "package_sha256": "0580e3387d9f8933d79b8ee57c69fe171ff5540ec00b0892fbcf2fbb59abcba8",
+  "old_package_physical_restore_sha256": "745e1a3cffe33f604c04e61a36fda6a3f2f9c0056c32a878d1e8e7bca1e5076f",
+  "tests_passed": 437,
+  "tests_skipped": 3,
+  "source_files": 4377,
+  "master_sha256": "31c2604ac820628198ea6d41cdca8c8a626166c7dd14b77dcab8ca82acb22c2d",
+  "source_manifest_sha256": "7ec91a59705e094928f884c3f08c4913ed13de0fc82e872f23a685b401420c11",
+  "Python_legacy_reads": "AUDIT_HOOK_BLOCKED",
+  "physically_absent_legacy_environment": "NOT_TESTED",
+  "power_loss": "NOT_TESTED",
+  "runtime": "NOT_RUN",
+  "G0": "OPEN",
+  "first13": "0/13"
+}

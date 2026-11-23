@@ -1,0 +1,14 @@
+{
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "AiProjeOfisi/tests",
+    "-q",
+    "-rs"
+  ],
+  "exit": 0,
+  "log": "AiProjeOfisi\\evidence\\CODEX_PILOT_20261111_02_pytest_FINAL.log",
+  "sha256": "4247c1b650fa432cf7b64820df30cc4fdfade9c7ee1fae1a6c676fef88fdc36c"
+}

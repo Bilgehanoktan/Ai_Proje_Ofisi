@@ -1,0 +1,71 @@
+import sys, json, uuid
+from pathlib import Path
+
+ROOT = Path('.').resolve()
+sys.path[:0] = [str(ROOT), str(ROOT/'product/backend'), str(ROOT/'contracts/source/python'), str(ROOT/'verifier/src')]
+
+from company_os.api.http import task_http
+
+class InteractiveDemoBackend:
+    def __init__(self):
+        self.routes = ['objectives.create', 'plans.create', 'tasks.create']
+        self.resources = ['attempts', 'agent_runs', 'evidence', 'acceptance_decisions']
+        self.records = {}
+
+    def connection_state(self):
+        return {
+            'configured': True,
+            'execution_verified': True,
+            'can_create_objective': True,
+            'create_operations': self.routes,
+            'detail_resources': self.resources
+        }
+
+    def prepare(self, token, path, body):
+        command_id = str(uuid.uuid4())
+        rec_id = str(uuid.uuid4())
+        correlation_id = body.get('request_id', str(uuid.uuid4()))
+        
+        op_map = {
+            '/api/objectives': 'objectives.create',
+            '/api/plans': 'plans.create',
+            '/api/tasks': 'tasks.create'
+        }
+        operation = op_map.get(path, 'objectives.create')
+        
+        receipt = {
+            'state': 'SUCCEEDED',
+            'command_id': command_id,
+            'result_ref': rec_id,
+            'correlation_id': correlation_id
+        }
+        
+        envelope = {
+            'semantics': 'AUTHORIZED_FACT_NOT_CURRENT_STATE',
+            'command_receipt': receipt
+        }
+        
+        self.records[command_id] = envelope
+        return json.dumps(envelope).encode('utf-8')
+
+    def emit(self, prepared, connection):
+        try:
+            connection.sendall(prepared)
+        except Exception:
+            pass
+
+    def read_receipt(self, operation, command_id, request_id, token):
+        rec = self.records.get(command_id)
+        if rec:
+            return rec
+        return {'command_id': command_id, 'status': 'NOT_FOUND'}
+
+    def read_detail(self, resource, record_id, token):
+        return {'id': record_id, 'resource': resource, 'status': 'ACTIVE', 'details': 'Kayıt detayları getirildi.'}
+
+if __name__ == '__main__':
+    backend = InteractiveDemoBackend()
+    # 8770 portunda temiz başlat
+    server = task_http.create_server(port=8770, backend=backend)
+    print('Starting server on http://127.0.0.1:8770 ...', flush=True)
+    server.serve_forever()

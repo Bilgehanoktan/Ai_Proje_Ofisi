@@ -1,0 +1,20 @@
+{
+  "presentation/task_http.py": "737b55bb0c1dd64cd69557ae9961e54f738cc132245282c872a593733662be7c",
+  "presentation/tasks.html": "7a7d3f843eef7736efe684ed8a2e43d2fca22af6bd7cb164346c08479f510697",
+  "presentation/tasks.css": "67e3fdc1e0804811610b02504f65d7c6d22ea6ad59da6265ee6f0d597ff1e576",
+  "presentation/tasks.js": "c9c882b40a8f6dbedbaff384cba15947f1205f5c67f10b8c33fd9fb8c1baa992",
+  "presentation/TASK_SCREEN.md": "0dde2494e48a1d9bf2a75cd851dcd8710865d0fcc26201bff81776a0d7b2ff87",
+  "tests/unit/test_task_http.py": "76a82e228c6df839f39d98f0ff4436a32bd6096bd46bbab182a82ed395fb45ed",
+  "tools/check_task_screen.py": "1b4b86d18df3cf060f86f1dd4adf25ea929b88e168e4bd10916449eaa9eb3f96",
+  "CODEX_GOREV_EKRANI_20261114.md": "277a76e88432c4b18717381b8e64a961e0cd34978c2bf2eca9557eac96e2567c",
+  "README.md": "0eb8e657cd5e9fcd5a8236da9612b4433df8f296a0dd3a1506a7e0130cb17eff",
+  "PLAN.md": "be09877745b5f2099a2b3415aefbf3449c359f9cdc5828e7e16a9da8acd9a648",
+  "UYGULAMA_DURUM_MATRISI.md": "0db38459e9b60af8cf2e170a7baa9859b70aee174386d8f10ab6b3737196a482",
+  "ILERLEME_TAKIBI_20261112.md": "3e97a6c951eff2544bd43aae0e4ada93e5db5b2df4391e7e50aa097a0c8ba7b5",
+  "KALAN_ISLER_20261113.md": "e671c60a8feb719dc528852ada171e32115472fdc7202d07b6c9c0affa38c6db",
+  "evidence/TASK_SCREEN_20261114_browser.json": "17b1f2192ec7369054278e5ff64cfa3b68593dffc406e953ff9d10a687a2f1d4",
+  "evidence/TASK_SCREEN_20261114_desktop.png": "6d806d52fd38f820d102efc6b77bac86dabdab7dc1a704a37997c10a45a3dce1",
+  "evidence/TASK_SCREEN_20261114_linux.log": "363ddcffb2a7ed37c98c45586c27bb8366b1b7cb583e95c375eeaa8b7ea695f2",
+  "evidence/TASK_SCREEN_20261114_mobile.png": "78abd63fe2f18d1eb35efb24c9b85e4ab70a1c167d434f0cb21ed6ed52a74c03",
+  "evidence/TASK_SCREEN_20261114_windows.log": "92f0f8ad065b0f40ee8dae4734e224ea5f05d39bfd81e75e22188b6f71f8ab27"
+}

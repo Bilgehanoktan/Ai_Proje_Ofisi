@@ -1,0 +1,166 @@
+{
+  "CommitAuthority": {
+    "additionalProperties": false,
+    "properties": {
+      "workspace_id": {
+        "format": "uuid",
+        "title": "Workspace Id",
+        "type": "string"
+      },
+      "attempt_id": {
+        "format": "uuid",
+        "title": "Attempt Id",
+        "type": "string"
+      },
+      "fencing_epoch": {
+        "exclusiveMinimum": 0,
+        "title": "Fencing Epoch",
+        "type": "integer"
+      },
+      "revision": {
+        "minimum": 0,
+        "title": "Revision",
+        "type": "integer"
+      },
+      "candidate_digest": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Candidate Digest",
+        "type": "string"
+      },
+      "lease_expires_at": {
+        "format": "date-time",
+        "title": "Lease Expires At",
+        "type": "string"
+      },
+      "attempt_state": {
+        "enum": [
+          "RUNNING",
+          "CANCELLED",
+          "EXPIRED",
+          "FAILED"
+        ],
+        "title": "Attempt State",
+        "type": "string"
+      },
+      "policy_digest": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Policy Digest",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspace_id",
+      "attempt_id",
+      "fencing_epoch",
+      "revision",
+      "candidate_digest",
+      "lease_expires_at",
+      "attempt_state",
+      "policy_digest"
+    ],
+    "title": "CommitAuthority",
+    "type": "object"
+  },
+  "QualificationClaim": {
+    "additionalProperties": false,
+    "properties": {
+      "qualification_id": {
+        "format": "uuid",
+        "title": "Qualification Id",
+        "type": "string"
+      },
+      "attempt_id": {
+        "format": "uuid",
+        "title": "Attempt Id",
+        "type": "string"
+      },
+      "binding_digest": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Binding Digest",
+        "type": "string"
+      },
+      "policy_digest": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Policy Digest",
+        "type": "string"
+      },
+      "valid_from": {
+        "format": "date-time",
+        "title": "Valid From",
+        "type": "string"
+      },
+      "valid_until": {
+        "format": "date-time",
+        "title": "Valid Until",
+        "type": "string"
+      },
+      "claimed_at": {
+        "format": "date-time",
+        "title": "Claimed At",
+        "type": "string"
+      },
+      "completion_deadline": {
+        "format": "date-time",
+        "title": "Completion Deadline",
+        "type": "string"
+      }
+    },
+    "required": [
+      "qualification_id",
+      "attempt_id",
+      "binding_digest",
+      "policy_digest",
+      "valid_from",
+      "valid_until",
+      "claimed_at",
+      "completion_deadline"
+    ],
+    "title": "QualificationClaim",
+    "type": "object"
+  },
+  "VerificationIdentity": {
+    "additionalProperties": false,
+    "properties": {
+      "base_snapshot_digest": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Base Snapshot Digest",
+        "type": "string"
+      },
+      "candidate_revision": {
+        "minimum": 0,
+        "title": "Candidate Revision",
+        "type": "integer"
+      },
+      "candidate_digest": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Candidate Digest",
+        "type": "string"
+      },
+      "runtime_image_digest": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Runtime Image Digest",
+        "type": "string"
+      },
+      "dependencies_digest": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Dependencies Digest",
+        "type": "string"
+      },
+      "test_profile_digest": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Test Profile Digest",
+        "type": "string"
+      }
+    },
+    "required": [
+      "base_snapshot_digest",
+      "candidate_revision",
+      "candidate_digest",
+      "runtime_image_digest",
+      "dependencies_digest",
+      "test_profile_digest"
+    ],
+    "title": "VerificationIdentity",
+    "type": "object"
+  }
+}

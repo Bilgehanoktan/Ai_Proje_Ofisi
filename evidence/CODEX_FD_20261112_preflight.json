@@ -1,0 +1,33 @@
+{
+  "status": "SOURCE_CALLS_COMPATIBLE",
+  "scope": "AST_SIGNATURE_ONLY_NOT_RUNTIME_ACCEPTANCE",
+  "checked_calls": 6,
+  "scanned_files": [
+    "tools\\disposable_e2e_workflow_trial.py",
+    "company_os\\workflow.py",
+    "company_os\\workflow_trust.py"
+  ],
+  "coverage_limits": [
+    "INSTANCE_METHODS_AND_DYNAMIC_ARGUMENT_VALUES_REQUIRE_BEHAVIOR_TESTS"
+  ],
+  "skipped_dynamic_calls": 2,
+  "findings": [],
+  "source_sha256": {
+    "tools\\disposable_e2e_workflow_trial.py": "2a5cce954d83e4b98d41d40607b8ff66a197ce3298d90a12c834bc20ec76e54e",
+    "company_os\\workflow.py": "d0968112eb4f885663a0c125c3a20f54e529b09053654d2f8464b4803a2890f9",
+    "company_os\\workflow_trust.py": "5214086177a82017200278defcb5318b0f072fdce64bf9507fe18bbee2a1c6d4",
+    "company_os\\execution_protocol.py": "df5e5dee7d55af19cf8c64f870a6a24d3668e36ada232699022ad1cb7486cca3",
+    "company_os\\__init__.py": "db81c1fb6236ba06e524c14e6c96b28369aed76aaaf6df7239061072554b050a",
+    "company_os\\composition.py": "c4dce352fffd4e51c614ff247dd30dd4902d5850cb3ce9925707fffa163f7252",
+    "company_os\\supervisor_handles.py": "e83308fb30c0f8f03dac1a1961009ccd9bc364c3f1b64a16ced0306ae8c068f0",
+    "company_os\\consent_binding.py": "63677fbf71ceea722e7ae677ab44b0f28c6c40a4d02d5dee02ffcfb97982bf24",
+    "company_os\\provisioning.py": "04188a95b106f380e1f6c828a57a7dcc92e0e392549193a15d0c36b50538b606",
+    "company_os\\secret_adapter.py": "7a087bba850f3b410b25ec1697e7b92fdc8075854a7a68e051fd5cd6922ef816"
+  },
+  "uninspectable_calls": 29,
+  "runtime_ready": false,
+  "runtime_blockers": [
+    "ENROLLED_ISOLATED_VERIFIER_REQUIRED",
+    "TRUSTED_OWNER_CLOCK_AND_PROFILE_BINDINGS_NOT_VERIFIED"
+  ]
+}

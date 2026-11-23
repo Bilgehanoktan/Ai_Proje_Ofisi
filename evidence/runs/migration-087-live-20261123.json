@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-23",
+  "cluster": "/var/lib/ai-proje-ofisi-local",
+  "port": 55490,
+  "database": "ai_proje_ofisi",
+  "migration": "database/sources/087_MOD012_MOD014_EXTENSIONS_CANDIDATE.sql",
+  "sha256": "3d1aacf8254a5e01af77ab69a2b27633b0a9b05b2c7cf9be9d2e0f6fec6c4f69",
+  "assembly_index": 87,
+  "clean_cluster_verify": {
+    "migration_087_applied": true,
+    "force_rls_tables": 4,
+    "sod_check_enforced": true
+  },
+  "live_cluster_verify": {
+    "tables": [
+      "catalog_entries",
+      "external_effect_ledger",
+      "memory_promotions",
+      "work_template_validations"
+    ],
+    "disabled_user_triggers": 0
+  }
+}

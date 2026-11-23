@@ -1,0 +1,25 @@
+{
+  "canonical_workspace": "E:\\Projeler\\Ai_Proje_Ofisi",
+  "files": {
+    "company_os/composition.py": {
+      "sha256": "026263aee062e62def4022c8192461a2e69fceb40e942e8371c94c3e14c73e0f",
+      "backup": "AiProjeOfisi\\evidence\\CODEX_PILOT_20261111_02_BACKUP\\company_os__composition.py.before"
+    },
+    "company_os/patch_pipeline.py": {
+      "sha256": "9ad57e3a931ef44da34280cb1dd9402af32672953199fff48ad1c7140a96c624",
+      "backup": "AiProjeOfisi\\evidence\\CODEX_PILOT_20261111_02_BACKUP\\company_os__patch_pipeline.py.before"
+    },
+    "tests/unit/test_pipeline.py": {
+      "sha256": "3ccc7c35ae4e9d88f55a1fead7f5a7e987593ff6bef3763f29e7a5bec34aeac9",
+      "backup": "AiProjeOfisi\\evidence\\CODEX_PILOT_20261111_02_BACKUP\\tests__unit__test_pipeline.py.before"
+    },
+    "PLAN.md": {
+      "sha256": "147ad75b5a82371ca822763acd764fed9ae72ae4cc268336481ba42acc86a2d6",
+      "backup": "AiProjeOfisi\\evidence\\CODEX_PILOT_20261111_02_BACKUP\\PLAN.md.before"
+    },
+    "UYGULAMA_DURUM_MATRISI.md": {
+      "sha256": "a8ff80e032d6cbd94ea8bda7072a4857fa491237adcfe242a783ed5e889757ae",
+      "backup": "AiProjeOfisi\\evidence\\CODEX_PILOT_20261111_02_BACKUP\\UYGULAMA_DURUM_MATRISI.md.before"
+    }
+  }
+}

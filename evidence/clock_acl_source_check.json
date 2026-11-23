@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-08",
+  "scope": "SOURCE_REGRESSION_NOT_POSTGRESQL_ACL_ACCEPTANCE",
+  "baseline_regression": "EXPECTED_FAIL",
+  "adapted_tests": "2_PASS",
+  "unchanged_sql_files": 82,
+  "changed_sql_files": 1,
+  "exact_diff": "one PUBLIC revoke statement",
+  "runtime_validation": "NOT_RUN",
+  "first13": "0/13",
+  "G0": "OPEN"
+}

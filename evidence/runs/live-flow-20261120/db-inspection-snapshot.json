@@ -1,0 +1,1195 @@
+{
+  "roles": [
+    {
+      "rolname": "aipof-dbtest",
+      "rolcanlogin": true,
+      "rolsuper": true,
+      "rolbypassrls": true,
+      "rolinherit": true,
+      "rolcreaterole": true
+    },
+    {
+      "rolname": "company_atomic_functions_r55",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_attestation_functions_r58",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_bootstrap_functions_r56",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_bootstrap_transport_r56",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_clock_policy_owner_r57",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_clock_policy_transport_r57",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_clock_runtime_r55",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_context_owner",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": true,
+      "rolinherit": true,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_e0_process_functions_r55",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_event_functions_r54",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_execution_functions_r58",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_first_run_functions_r53",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_provisioning_runtime_r55",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": true,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_readback_functions_r54",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_receipt_functions_r55",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_receipt_ingest_r55",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_revoke_functions_r53",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_transport_r53",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    },
+    {
+      "rolname": "company_transport_r54",
+      "rolcanlogin": false,
+      "rolsuper": false,
+      "rolbypassrls": false,
+      "rolinherit": false,
+      "rolcreaterole": false
+    }
+  ],
+  "pg_hba": [
+    {
+      "line_number": 113,
+      "type": "local",
+      "database": [
+        "all"
+      ],
+      "user_name": [
+        "all"
+      ],
+      "auth_method": "peer",
+      "options": null,
+      "error": null
+    },
+    {
+      "line_number": 115,
+      "type": "host",
+      "database": [
+        "all"
+      ],
+      "user_name": [
+        "all"
+      ],
+      "auth_method": "reject",
+      "options": null,
+      "error": null
+    },
+    {
+      "line_number": 117,
+      "type": "host",
+      "database": [
+        "all"
+      ],
+      "user_name": [
+        "all"
+      ],
+      "auth_method": "reject",
+      "options": null,
+      "error": null
+    },
+    {
+      "line_number": 120,
+      "type": "local",
+      "database": [
+        "replication"
+      ],
+      "user_name": [
+        "all"
+      ],
+      "auth_method": "peer",
+      "options": null,
+      "error": null
+    },
+    {
+      "line_number": 121,
+      "type": "host",
+      "database": [
+        "replication"
+      ],
+      "user_name": [
+        "all"
+      ],
+      "auth_method": "reject",
+      "options": null,
+      "error": null
+    },
+    {
+      "line_number": 122,
+      "type": "host",
+      "database": [
+        "replication"
+      ],
+      "user_name": [
+        "all"
+      ],
+      "auth_method": "reject",
+      "options": null,
+      "error": null
+    }
+  ],
+  "root_enrollments": [
+    {
+      "installation_id": "00000000-0000-4000-8000-000000000001",
+      "generation": 1,
+      "enrollment_revision": 1,
+      "issuer_id": "00000000-0000-4000-8000-000000000002",
+      "key_id": "00000000-0000-4000-8000-000000000003",
+      "actual_human_id": "00000000-0000-4000-8000-000000000004",
+      "host_boot_id": "dc7ca67d-35e7-478f-a781-2d1ffa4e7e25",
+      "not_before": "2026-11-14 15:26:08.423727+03:00",
+      "not_after": "2026-11-14 23:39:15.679594+03:00",
+      "not_after_boottime_ns": "30140424888526",
+      "r56_anchor_boottime_ns": "12140424888526",
+      "revoked_at": null,
+      "compromised_at": null
+    }
+  ],
+  "bootstrap_control": [
+    {
+      "installation_id": "00000000-0000-4000-8000-000000000001",
+      "generation": 1,
+      "state": "CONSUMED",
+      "expected_tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "expected_project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "expected_human_id": "00000000-0000-4000-8000-000000000004",
+      "expires_at": "2026-11-14 23:39:15.680363+03:00",
+      "r55_not_after_boottime_ns": "30140424888526"
+    }
+  ],
+  "bootstrap_receipts": [
+    {
+      "installation_id": "00000000-0000-4000-8000-000000000001",
+      "generation": 1,
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "accepted_human_id": "00000000-0000-4000-8000-000000000004",
+      "command_id": "bdeff2a2-777c-4476-8db0-5b663d0eacae",
+      "e0_valid_until": "2026-11-14 18:27:10.858340+03:00",
+      "r56_result_digest": "2242ffd8e067c1d342e90e34b27a32059beb312b1cce07f8a26e0da6f0d670a6"
+    }
+  ],
+  "tenants_projects": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "workspace_id": "602fa094-5a5e-4e83-a095-aeae4eeb3409",
+      "host_registration_id": "00000000-0000-4000-8000-000000000020",
+      "host_registration_revision": 1,
+      "instance_generation": 1
+    }
+  ],
+  "host_registrations": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "id": "00000000-0000-4000-8000-000000000020",
+      "revision": 1,
+      "state": "BOUND_NOT_LEASED",
+      "bound_generation": 1
+    }
+  ],
+  "principals": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "id": "00000000-0000-4000-8000-000000000004",
+      "name": "Synthetic human",
+      "kind": "HUMAN"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "id": "00000000-0000-4000-8000-000000000099",
+      "name": "QA Auditor",
+      "kind": "VERIFIER"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "id": "0dbcf646-76c6-4a45-8c50-b3acb5e3a630",
+      "name": "Evidence Ingest",
+      "kind": "VERIFIER"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "id": "bfa2d98f-a7f8-4808-8c7e-992c8f184ec2",
+      "name": "Independent Verifier",
+      "kind": "VERIFIER"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "id": "159a6a0f-5a1a-4bc0-8b4a-c823b964b888",
+      "name": "Patch Controller",
+      "kind": "WORKER"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "id": "6dfbf51c-2dbb-4d0a-af37-f19cba42a415",
+      "name": "Synthetic worker",
+      "kind": "WORKER"
+    }
+  ],
+  "memberships": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "principal_id": "00000000-0000-4000-8000-000000000004",
+      "role": "OWNER"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "principal_id": "00000000-0000-4000-8000-000000000099",
+      "role": "VERIFIER"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "principal_id": "0dbcf646-76c6-4a45-8c50-b3acb5e3a630",
+      "role": "VERIFIER"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "principal_id": "bfa2d98f-a7f8-4808-8c7e-992c8f184ec2",
+      "role": "VERIFIER"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "principal_id": "159a6a0f-5a1a-4bc0-8b4a-c823b964b888",
+      "role": "WORKER"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "principal_id": "6dfbf51c-2dbb-4d0a-af37-f19cba42a415",
+      "role": "WORKER"
+    }
+  ],
+  "signer_enrollments": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "issuer_id": "6dfbf51c-2dbb-4d0a-af37-f19cba42a415",
+      "key_id": "fad1a321-cb45-4a49-87a7-211452836674",
+      "purpose": "CLOCK_OBSERVATION",
+      "profile_id": "R55_CLOCK_V1_RAW_JSON",
+      "enrollment_revision": 1,
+      "valid_from": "2026-11-14 17:23:40.890053+03:00",
+      "valid_until": "2026-11-15 23:01:22.033129+03:00",
+      "revoked_at": null,
+      "approved_by": "00000000-0000-4000-8000-000000000004",
+      "r55_project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "r55_host_id": "00000000-0000-4000-8000-000000000020",
+      "r55_host_boot_id": "dc7ca67d-35e7-478f-a781-2d1ffa4e7e25"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "issuer_id": "0dbcf646-76c6-4a45-8c50-b3acb5e3a630",
+      "key_id": "61c729fe-4137-4d7e-a001-63166fe2a7f3",
+      "purpose": "TASK_VERIFICATION",
+      "profile_id": "r58.evidence.v1",
+      "enrollment_revision": 1,
+      "valid_from": "2026-11-14 22:21:03.392148+03:00",
+      "valid_until": "2026-11-15 23:21:03.392148+03:00",
+      "revoked_at": null,
+      "approved_by": "00000000-0000-4000-8000-000000000004",
+      "r55_project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "r55_host_id": "00000000-0000-4000-8000-000000000020",
+      "r55_host_boot_id": "dc7ca67d-35e7-478f-a781-2d1ffa4e7e25"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "issuer_id": "159a6a0f-5a1a-4bc0-8b4a-c823b964b888",
+      "key_id": "1f27712f-8b6e-4dd2-9683-731ce2bce2a3",
+      "purpose": "TASK_VERIFICATION",
+      "profile_id": "r58.patch.v1",
+      "enrollment_revision": 1,
+      "valid_from": "2026-11-14 22:21:03.392148+03:00",
+      "valid_until": "2026-11-15 23:21:03.392148+03:00",
+      "revoked_at": null,
+      "approved_by": "00000000-0000-4000-8000-000000000004",
+      "r55_project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "r55_host_id": "00000000-0000-4000-8000-000000000020",
+      "r55_host_boot_id": "dc7ca67d-35e7-478f-a781-2d1ffa4e7e25"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "issuer_id": "bfa2d98f-a7f8-4808-8c7e-992c8f184ec2",
+      "key_id": "5061936d-d4dc-4085-880b-546ff2769525",
+      "purpose": "TASK_VERIFICATION",
+      "profile_id": "r58.verification.v1",
+      "enrollment_revision": 1,
+      "valid_from": "2026-11-14 22:21:03.392148+03:00",
+      "valid_until": "2026-11-15 23:21:03.392148+03:00",
+      "revoked_at": null,
+      "approved_by": "00000000-0000-4000-8000-000000000004",
+      "r55_project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "r55_host_id": "00000000-0000-4000-8000-000000000020",
+      "r55_host_boot_id": "dc7ca67d-35e7-478f-a781-2d1ffa4e7e25"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "issuer_id": "6dfbf51c-2dbb-4d0a-af37-f19cba42a415",
+      "key_id": "f1079b50-5583-406f-8f28-35035bd861f5",
+      "purpose": "TASK_VERIFICATION",
+      "profile_id": "r58.workspace.v1",
+      "enrollment_revision": 1,
+      "valid_from": "2026-11-14 18:19:43.636894+03:00",
+      "valid_until": "2026-11-15 23:01:22.033129+03:00",
+      "revoked_at": null,
+      "approved_by": "00000000-0000-4000-8000-000000000004",
+      "r55_project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "r55_host_id": "00000000-0000-4000-8000-000000000020",
+      "r55_host_boot_id": "dc7ca67d-35e7-478f-a781-2d1ffa4e7e25"
+    }
+  ],
+  "key_material": [
+    {
+      "key_id": "00000000-0000-4000-8000-000000000003",
+      "purpose": "CLOCK_POLICY",
+      "fingerprint": "c62e4615bd39e222572f3a1bf7c2132ea1e65b17ec805047bd6b2842c593493f",
+      "revoked": false
+    },
+    {
+      "key_id": "1f27712f-8b6e-4dd2-9683-731ce2bce2a3",
+      "purpose": "EXECUTION_ATTESTATION",
+      "fingerprint": "5e318f8cf9cbe249a30812b8ca132d691ded7a91991413558db5758575f5e01f",
+      "revoked": false
+    },
+    {
+      "key_id": "5061936d-d4dc-4085-880b-546ff2769525",
+      "purpose": "EXECUTION_ATTESTATION",
+      "fingerprint": "5e318f8cf9cbe249a30812b8ca132d691ded7a91991413558db5758575f5e01f",
+      "revoked": false
+    },
+    {
+      "key_id": "61c729fe-4137-4d7e-a001-63166fe2a7f3",
+      "purpose": "EXECUTION_ATTESTATION",
+      "fingerprint": "5e318f8cf9cbe249a30812b8ca132d691ded7a91991413558db5758575f5e01f",
+      "revoked": false
+    },
+    {
+      "key_id": "f1079b50-5583-406f-8f28-35035bd861f5",
+      "purpose": "EXECUTION_ATTESTATION",
+      "fingerprint": "e29442e61ad354e5cb0831e2e8359e8fb50cf024ad5a8f407c8f9de63bdf7371",
+      "revoked": false
+    }
+  ],
+  "clock_policies": [
+    {
+      "consent_id": "d1a93c6d-c745-4f22-bf0e-882021394bed",
+      "installation_id": "00000000-0000-4000-8000-000000000001",
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "human_id": "00000000-0000-4000-8000-000000000004",
+      "revision": 1,
+      "action": "ACTIVATE",
+      "statement_digest": "43f8b86edf9e30f64524a74ce332db5672c946ee2113919e1a63c15da9c33862",
+      "policy_digest": "048af25efe6e55d034048786e158111dab093fff8a9bf42a1a019e92d2d315ec",
+      "policy": {
+        "poll_ms": 1000,
+        "max_drift_ms": 5000,
+        "owner_ack_ms": 2000,
+        "first_alert_ms": 1000,
+        "max_clock_jump_ms": 5000,
+        "max_sample_age_ms": 60000,
+        "max_uncertainty_ms": 5000,
+        "manual_reconcile_ms": 3000,
+        "bounded_handoff_duration_ms": 5000
+      },
+      "final_proof": {
+        "db_login": "company_clock_policy_transport_r57",
+        "utc_lower": "2026-11-14T17:24:37.126795+03:00",
+        "utc_upper": "2026-11-14T17:24:44.642302+03:00",
+        "generation": 1,
+        "backend_pid": 3109,
+        "boottime_ns": 7665630809518,
+        "host_boot_id": "dc7ca67d-35e7-478f-a781-2d1ffa4e7e25",
+        "transaction_id": "806",
+        "installation_id": "00000000-0000-4000-8000-000000000001"
+      },
+      "receipt_digest": "58e20335844c402ee4e0a837161d39b42caa70077adb7ad100b14c2383246e03",
+      "audit_id": 3
+    }
+  ],
+  "clock_epochs": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "epoch_id": "9f96a514-8fb4-4bed-8e8b-5f13b3e6c55a",
+      "supervisor_id": "6dfbf51c-2dbb-4d0a-af37-f19cba42a415",
+      "host_boot_id": "dc7ca67d-35e7-478f-a781-2d1ffa4e7e25",
+      "writer_generation": 54,
+      "policy_digest": "048af25efe6e55d034048786e158111dab093fff8a9bf42a1a019e92d2d315ec",
+      "invalidated_at": null,
+      "r55_project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "r55_host_registration_id": "00000000-0000-4000-8000-000000000020",
+      "r55_host_registration_revision": 1,
+      "r55_host_generation": 1,
+      "r55_policy": {
+        "poll_ms": 1000,
+        "max_drift_ms": 5000,
+        "owner_ack_ms": 2000,
+        "first_alert_ms": 1000,
+        "max_clock_jump_ms": 5000,
+        "max_sample_age_ms": 60000,
+        "max_uncertainty_ms": 5000,
+        "manual_reconcile_ms": 3000,
+        "bounded_handoff_duration_ms": 5000
+      }
+    }
+  ],
+  "clock_samples_max": [
+    {
+      "epoch_id": "9f96a514-8fb4-4bed-8e8b-5f13b3e6c55a",
+      "max_seq": 570,
+      "max_bt": "33298469397823",
+      "count": 570
+    }
+  ],
+  "operation_permissions": [
+    {
+      "operation_id": "CAP-017.revoke",
+      "permission": "cap-017.revoke",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "candidate.r54.acceptance_decisions.read",
+      "permission": "acceptance_decisions.read",
+      "scope_kind": "PROJECT",
+      "execution_class": "QUERY",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "candidate.r54.agent_runs.read",
+      "permission": "agent_runs.read",
+      "scope_kind": "PROJECT",
+      "execution_class": "QUERY",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "candidate.r54.attempts.read",
+      "permission": "attempts.read",
+      "scope_kind": "PROJECT",
+      "execution_class": "QUERY",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "candidate.r54.evidence.read",
+      "permission": "evidence.read",
+      "scope_kind": "PROJECT",
+      "execution_class": "QUERY",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "candidate.r54.qualifications.read",
+      "permission": "qualifications.read",
+      "scope_kind": "PROJECT",
+      "execution_class": "QUERY",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "candidate.r54.tool_requests.read",
+      "permission": "tool_requests.read",
+      "scope_kind": "PROJECT",
+      "execution_class": "QUERY",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "candidate.r58.artifacts.read",
+      "permission": "artifacts.read",
+      "scope_kind": "PROJECT",
+      "execution_class": "QUERY",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "clock.policy.activate",
+      "permission": "clock.policy.activate",
+      "scope_kind": "SPECIAL",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "e0.evaluation_artifact_record",
+      "permission": "e0.evaluation_artifact_record",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "e0.evaluation_attempt_create",
+      "permission": "e0.evaluation_attempt_create",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "e0.evaluation_envelope_persist",
+      "permission": "e0.evaluation_envelope_persist",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "e0.process_admit",
+      "permission": "e0.process_admit",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "e0.process_proof_persist",
+      "permission": "e0.process_proof_persist",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "e0.process_reconcile",
+      "permission": "e0.process_reconcile",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "e0.process_release",
+      "permission": "e0.process_release",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "e0.process_stop_confirm",
+      "permission": "e0.process_stop_confirm",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "e0.qualification_candidate_issue",
+      "permission": "e0.qualification_candidate_issue",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "e0.setup_mandate_consume",
+      "permission": "e0.setup_mandate_consume",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "engine.bind",
+      "permission": "engine.bind",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "evidence.attestation_ingest",
+      "permission": "evidence.attestation_ingest",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "evidence.provenance",
+      "permission": "evidence.provenance",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "objectives.create",
+      "permission": "objectives.create",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": true
+    },
+    {
+      "operation_id": "patch.receipt",
+      "permission": "patch.receipt",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "plans.create",
+      "permission": "plans.create",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": true
+    },
+    {
+      "operation_id": "process.launch_callback",
+      "permission": "process.launch_callback",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "process.launch_consume",
+      "permission": "process.launch_consume",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "process.launch_delivery",
+      "permission": "process.launch_delivery",
+      "scope_kind": "PROJECT",
+      "execution_class": "QUERY",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "process.launch_reserve",
+      "permission": "process.launch_reserve",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "process.lease_activate",
+      "permission": "process.lease_activate",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "process.lease_commit",
+      "permission": "process.lease_commit",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "process.lease_prepare",
+      "permission": "process.lease_prepare",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "process.lease_read",
+      "permission": "process.lease_read",
+      "scope_kind": "PROJECT",
+      "execution_class": "QUERY",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "process.reconcile",
+      "permission": "process.reconcile",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "process.stop_release",
+      "permission": "process.stop_release",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "projects.create",
+      "permission": "projects.create",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "projects.read",
+      "permission": "projects.read",
+      "scope_kind": "PROJECT",
+      "execution_class": "QUERY",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "qualification.activate",
+      "permission": "qualification.activate",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "qualification.revoke",
+      "permission": "qualification.revoke",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "tasks.create",
+      "permission": "tasks.create",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "tasks.ready",
+      "permission": "tasks.ready",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "tool.authorize_final",
+      "permission": "tool.authorize_final",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "tool.consume",
+      "permission": "tool.consume",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "tool.effect",
+      "permission": "tool.effect",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "verification.accept",
+      "permission": "verification.accept",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "verification.final_seal",
+      "permission": "verification.final_seal",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "worker.claim",
+      "permission": "worker.claim",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    },
+    {
+      "operation_id": "worker.heartbeat",
+      "permission": "worker.heartbeat",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 0,
+      "has_digest": false
+    },
+    {
+      "operation_id": "workspace.current_head",
+      "permission": "workspace.current_head",
+      "scope_kind": "PROJECT",
+      "execution_class": "COMMAND",
+      "policy_revision": 1,
+      "has_digest": true
+    }
+  ],
+  "project_grants": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "00000000-0000-4000-8000-000000000004",
+      "permission": "acceptance_decisions.read",
+      "revision": 1,
+      "valid_from": "2026-11-14 22:35:32.662806+03:00",
+      "valid_until": "2026-11-15 09:35:32.662806+03:00",
+      "revoked_at": null,
+      "grant_id": "6683adb3-e158-41ce-89be-f51991c6e13c",
+      "base_permission": null
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "00000000-0000-4000-8000-000000000004",
+      "permission": "e0.setup_mandate_consume",
+      "revision": 0,
+      "valid_from": "2026-11-14 16:22:01.078432+03:00",
+      "valid_until": "2026-11-14 16:23:02.068842+03:00",
+      "revoked_at": null,
+      "grant_id": "4f36943c-04cf-431d-b6eb-ca54dcd5b7db",
+      "base_permission": "e0.setup_mandate_consume"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "6dfbf51c-2dbb-4d0a-af37-f19cba42a415",
+      "permission": "evidence.attestation_ingest",
+      "revision": 0,
+      "valid_from": "2026-11-14 18:19:43.642219+03:00",
+      "valid_until": "2026-11-15 23:01:22.033129+03:00",
+      "revoked_at": null,
+      "grant_id": "156850f4-546f-4674-9db6-77ee6de6373c",
+      "base_permission": "evidence.attestation_ingest"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "bfa2d98f-a7f8-4808-8c7e-992c8f184ec2",
+      "permission": "evidence.attestation_ingest",
+      "revision": 0,
+      "valid_from": "2026-11-14 18:19:43.642487+03:00",
+      "valid_until": "2026-11-15 23:01:22.033129+03:00",
+      "revoked_at": null,
+      "grant_id": "b7ddee3d-f186-4a2d-8109-cd02df576d7c",
+      "base_permission": "evidence.attestation_ingest"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "00000000-0000-4000-8000-000000000004",
+      "permission": "objectives.create",
+      "revision": 0,
+      "valid_from": "2026-11-14 16:26:34.039018+03:00",
+      "valid_until": "2026-11-15 23:01:22.033129+03:00",
+      "revoked_at": null,
+      "grant_id": "11111111-0000-4000-8000-000000000001",
+      "base_permission": "objectives.create"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "00000000-0000-4000-8000-000000000004",
+      "permission": "plans.create",
+      "revision": 1,
+      "valid_from": "2026-11-14 23:07:40.171048+03:00",
+      "valid_until": "2026-11-15 23:07:40.171048+03:00",
+      "revoked_at": null,
+      "grant_id": "b29a67b0-f25c-4cb6-b52f-3fee77ac54ce",
+      "base_permission": null
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "00000000-0000-4000-8000-000000000004",
+      "permission": "tasks.create",
+      "revision": 0,
+      "valid_from": "2026-11-14 17:24:08.038498+03:00",
+      "valid_until": "2026-11-15 23:01:22.033129+03:00",
+      "revoked_at": null,
+      "grant_id": "c90d2927-599e-4123-99ff-3fd167985924",
+      "base_permission": "tasks.create"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "00000000-0000-4000-8000-000000000004",
+      "permission": "tasks.read",
+      "revision": 1,
+      "valid_from": "2026-11-14 22:33:18.686009+03:00",
+      "valid_until": "2026-11-15 09:33:18.686009+03:00",
+      "revoked_at": null,
+      "grant_id": "00b8be3c-0327-4db5-902e-42ee6e525b38",
+      "base_permission": null
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "00000000-0000-4000-8000-000000000004",
+      "permission": "tasks.ready",
+      "revision": 0,
+      "valid_from": "2026-11-14 18:19:43.640704+03:00",
+      "valid_until": "2026-11-15 23:01:22.033129+03:00",
+      "revoked_at": null,
+      "grant_id": "56dd381d-7239-4d62-a9e3-e4275e512f48",
+      "base_permission": "tasks.ready"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "00000000-0000-4000-8000-000000000004",
+      "permission": "verification.accept",
+      "revision": 0,
+      "valid_from": "2026-11-14 18:19:43.643067+03:00",
+      "valid_until": "2026-11-15 23:01:22.033129+03:00",
+      "revoked_at": null,
+      "grant_id": "1b5b26de-e6af-4455-a970-61d8209ed491",
+      "base_permission": "verification.accept"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "00000000-0000-4000-8000-000000000099",
+      "permission": "verification.accept",
+      "revision": 1,
+      "valid_from": "2026-11-14 23:22:30.050922+03:00",
+      "valid_until": "2026-11-15 23:22:30.050922+03:00",
+      "revoked_at": null,
+      "grant_id": "c9c3593e-1a80-48e0-a088-4415feff2a04",
+      "base_permission": null
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "bfa2d98f-a7f8-4808-8c7e-992c8f184ec2",
+      "permission": "verification.accept",
+      "revision": 1,
+      "valid_from": "2026-11-14 23:21:46.021361+03:00",
+      "valid_until": "2026-11-15 23:21:46.021361+03:00",
+      "revoked_at": null,
+      "grant_id": "955e3fb1-3ddd-4995-ade2-5660ebe07386",
+      "base_permission": null
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "6dfbf51c-2dbb-4d0a-af37-f19cba42a415",
+      "permission": "worker.claim",
+      "revision": 0,
+      "valid_from": "2026-11-14 18:19:43.642794+03:00",
+      "valid_until": "2026-11-15 23:01:22.033129+03:00",
+      "revoked_at": null,
+      "grant_id": "d77c5e80-d54e-4bce-a880-91e88c513c16",
+      "base_permission": "worker.claim"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "6dfbf51c-2dbb-4d0a-af37-f19cba42a415",
+      "permission": "workspace.current_head",
+      "revision": 0,
+      "valid_from": "2026-11-14 18:19:43.641944+03:00",
+      "valid_until": "2026-11-15 23:01:22.033129+03:00",
+      "revoked_at": null,
+      "grant_id": "895c3bd4-c00e-4964-b39f-792d79986805",
+      "base_permission": "workspace.current_head"
+    }
+  ],
+  "lease_policies": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "revision": 1,
+      "duration_ms": 3600000,
+      "enabled": true,
+      "allowed_tools": [
+        "tool.patch"
+      ],
+      "verification_profile_digest": "1617fbfdb015974c7e5124929b3786cd4ee94fa88eea156c467412a35e9bb771",
+      "valid_until": "2026-11-15 23:11:02.369825+03:00",
+      "approved_by": "00000000-0000-4000-8000-000000000004"
+    }
+  ],
+  "verification_profiles": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "profile_digest": "1617fbfdb015974c7e5124929b3786cd4ee94fa88eea156c467412a35e9bb771",
+      "oracle_ids": [
+        "mgt01_check_title"
+      ],
+      "enabled": true,
+      "approved_by": "00000000-0000-4000-8000-000000000004"
+    }
+  ],
+  "controller_heads": [],
+  "tool_manifests": [],
+  "budget_versions": [],
+  "resource_slots": [],
+  "qualifications": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "id": "c78fa373-8701-48ef-935c-28b42beda2e7",
+      "role_id": "EXP-01",
+      "subject_principal_id": "6dfbf51c-2dbb-4d0a-af37-f19cba42a415",
+      "execution_binding_digest": "d7eb1e41ec52806c75880bfc31527bf0cd6e338834a48f4e3ae8e7abf28456ba",
+      "valid_until": "2026-11-15 23:16:12.961725+03:00"
+    }
+  ],
+  "scope_heads": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "scope_kind": "PROJECT",
+      "scope_ref": "37434287-b083-46ef-97fd-7577ee394509",
+      "epoch": 0,
+      "revision": 0,
+      "lock_id": 3
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "scope_kind": "TENANT",
+      "scope_ref": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "epoch": 0,
+      "revision": 0,
+      "lock_id": 2
+    }
+  ],
+  "clock_observe_local": [
+    {
+      "obs": {
+        "utc_ns": 1795124653318724931,
+        "profile": "LINUX_ADJTIMEX_DB_LOCAL_V1",
+        "backend_pid": 437,
+        "esterror_us": 4,
+        "maxerror_us": 1512,
+        "host_boot_id": "fd7d34b0-490a-4724-9c64-95a38142eaa2",
+        "kernel_status": 0,
+        "boottime_after_ns": 123927995148,
+        "source_sync_state": "SYNC",
+        "boottime_before_ns": 123927978013,
+        "tolerance_scaled_ppm": 32768000
+      }
+    }
+  ]
+}

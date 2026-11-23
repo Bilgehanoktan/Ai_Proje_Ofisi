@@ -1,0 +1,185 @@
+{
+  "tasks": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "id": "cd1e0648-3908-421e-ac9a-3ae02d44f1a1",
+      "plan_id": "2864c622-e69d-4f6c-87cc-4d615d7637e6",
+      "title": "Normalize task titles with strict 13 cases",
+      "role_id": "EXP-01",
+      "state": "READY",
+      "revision": "1",
+      "fencing_epoch": "0",
+      "active_attempt_id": null,
+      "created_at": "2026-11-14 17:33:52.748081+03:00",
+      "acceptance_criteria": "['13 test cases must pass']",
+      "execution_kind": "ORDINARY"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "id": "326be497-6dd1-4494-9eb0-1131c5a973e7",
+      "plan_id": "22ab2660-6b82-45f1-b1f6-a85261c21d5f",
+      "title": "EXP-01 Evaluation Task",
+      "role_id": "EXP-01",
+      "state": "ACCEPTED",
+      "revision": "1",
+      "fencing_epoch": "1",
+      "active_attempt_id": null,
+      "created_at": "2026-11-14 23:16:12.961725+03:00",
+      "acceptance_criteria": "['eval criteria']",
+      "execution_kind": "EVALUATION"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "id": "0d565578-c702-4d53-aa4b-4396e3807d78",
+      "plan_id": "22ab2660-6b82-45f1-b1f6-a85261c21d5f",
+      "title": "MGT01 Title Normalization Implementation",
+      "role_id": "EXP-01",
+      "state": "ACCEPTED",
+      "revision": "4",
+      "fencing_epoch": "1",
+      "active_attempt_id": "36c9021d-dead-4cc3-99b8-0a4532fab254",
+      "created_at": "2026-11-14 23:08:17.758660+03:00",
+      "acceptance_criteria": "['Must satisfy all 13 test cases in independent verifier']",
+      "execution_kind": "ORDINARY"
+    }
+  ],
+  "attempts": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "task_id": "326be497-6dd1-4494-9eb0-1131c5a973e7",
+      "id": "38b1d54a-b078-4e6d-b427-40ff960cc907",
+      "attempt_no": "1",
+      "fencing_epoch": "1",
+      "worker_id": "6dfbf51c-2dbb-4d0a-af37-f19cba42a415",
+      "state": "PRODUCED",
+      "lease_expires_at": "2026-11-15 23:16:12.961725+03:00",
+      "ended_at": null,
+      "admission_qualification_id": null,
+      "handoff_source_attempt_id": null,
+      "handoff_artifact_id": null,
+      "handoff_digest": null,
+      "e0_evaluation_run_id": "63e96402-0df5-4d10-a0c9-82d6917afa7a",
+      "r58_binding_digest": null,
+      "r58_head_digest": null,
+      "r58_policy_revision": null,
+      "r58_verification_profile_digest": null
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "task_id": "0d565578-c702-4d53-aa4b-4396e3807d78",
+      "id": "36c9021d-dead-4cc3-99b8-0a4532fab254",
+      "attempt_no": "1",
+      "fencing_epoch": "1",
+      "worker_id": "6dfbf51c-2dbb-4d0a-af37-f19cba42a415",
+      "state": "PRODUCED",
+      "lease_expires_at": "2026-11-15 00:16:29.421874+03:00",
+      "ended_at": null,
+      "admission_qualification_id": "c78fa373-8701-48ef-935c-28b42beda2e7",
+      "handoff_source_attempt_id": null,
+      "handoff_artifact_id": null,
+      "handoff_digest": null,
+      "e0_evaluation_run_id": null,
+      "r58_binding_digest": "d7eb1e41ec52806c75880bfc31527bf0cd6e338834a48f4e3ae8e7abf28456ba",
+      "r58_head_digest": "a0298e9d256b4149d36a86cbc96ed75c3f7cd9801b7f0d0d3c45e35425bf52ec",
+      "r58_policy_revision": "1",
+      "r58_verification_profile_digest": "1617fbfdb015974c7e5124929b3786cd4ee94fa88eea156c467412a35e9bb771"
+    }
+  ],
+  "acceptance_records": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "task_id": "0d565578-c702-4d53-aa4b-4396e3807d78",
+      "attempt_id": "36c9021d-dead-4cc3-99b8-0a4532fab254",
+      "id": "14d80db5-e4ff-41fb-9860-2c5efc04381a",
+      "verification_run_id": "f386db23-36a4-43a4-8e29-43af7fe35175",
+      "evidence_id": "0726d6f7-5901-4f05-aed7-b0f103d4ff6d",
+      "accepted_by": "00000000-0000-4000-8000-000000000099",
+      "build_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+      "dirty_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "created_at": "2026-11-14 23:22:40.490579+03:00"
+    }
+  ],
+  "verification_runs": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "task_id": "0d565578-c702-4d53-aa4b-4396e3807d78",
+      "attempt_id": "36c9021d-dead-4cc3-99b8-0a4532fab254",
+      "id": "f386db23-36a4-43a4-8e29-43af7fe35175",
+      "producer_id": "6dfbf51c-2dbb-4d0a-af37-f19cba42a415",
+      "verifier_id": "bfa2d98f-a7f8-4808-8c7e-992c8f184ec2",
+      "profile_version": "v1",
+      "build_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+      "dirty_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "result": "PASS",
+      "exit_code": "0",
+      "source_report_artifact_id": "92b97c53-c664-4781-82ad-8dcc08ca2935",
+      "admission_manifest_artifact_id": null
+    }
+  ],
+  "evidence": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "task_id": "0d565578-c702-4d53-aa4b-4396e3807d78",
+      "attempt_id": "36c9021d-dead-4cc3-99b8-0a4532fab254",
+      "id": "0726d6f7-5901-4f05-aed7-b0f103d4ff6d",
+      "verification_run_id": "f386db23-36a4-43a4-8e29-43af7fe35175",
+      "artifact_id": "a037f046-e153-4397-99f6-e0a385e6453b",
+      "command_receipt": "f4afc3eb-28ac-46f4-9893-6ba3ca859f50"
+    }
+  ],
+  "objectives": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "id": "24a01243-963a-4161-9272-7d125ddd4ab1",
+      "goal": "Synthetic evaluation",
+      "constraints": "['No external effects']",
+      "expected_outputs": "['fixture']",
+      "created_by": "00000000-0000-4000-8000-000000000004"
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "id": "dfcb839e-9afc-489e-ac6c-47e0a2d4e6a6",
+      "goal": "Deliver title normalization module for MGT01",
+      "constraints": "['Must pass independent verifier oracle']",
+      "expected_outputs": "['Normalized title implementation']",
+      "created_by": "00000000-0000-4000-8000-000000000004"
+    }
+  ],
+  "plans": [
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "id": "2864c622-e69d-4f6c-87cc-4d615d7637e6",
+      "objective_id": "24a01243-963a-4161-9272-7d125ddd4ab1",
+      "revision": "0",
+      "assumptions": "[]",
+      "acceptance_criteria": "['Synthetic case']",
+      "objective_review_command_id": null
+    },
+    {
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "id": "22ab2660-6b82-45f1-b1f6-a85261c21d5f",
+      "objective_id": "dfcb839e-9afc-489e-ac6c-47e0a2d4e6a6",
+      "revision": "0",
+      "assumptions": "['Independent verification available']",
+      "acceptance_criteria": "['All 13 test cases pass in verifier']",
+      "objective_review_command_id": null
+    }
+  ],
+  "clock_samples_count": [
+    {
+      "count": "92"
+    }
+  ]
+}

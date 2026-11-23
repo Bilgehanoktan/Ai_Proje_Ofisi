@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "mapped_files": 441,
+  "unique_targets": 440,
+  "manifest_files": 340,
+  "imported_modules": 60,
+  "parsed_python_files": 140,
+  "failures": [],
+  "scope": "LAYOUT_SOURCE_INTEGRITY_NOT_RUNTIME_ACCEPTANCE",
+  "G0": "OPEN",
+  "first13": "0/13"
+}

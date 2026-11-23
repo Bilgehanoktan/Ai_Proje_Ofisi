@@ -1,0 +1,90 @@
+{
+  "date": "2026-11-11",
+  "task_ids": [
+    "TASK-CODEX-20261111-01",
+    "TASK-CODEX-20261111-02",
+    "TASK-CODEX-20261111-03"
+  ],
+  "workspace": "E:\\Projeler\\Ai_Proje_Ofisi",
+  "environment": {
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "pydantic": "2.12.5"
+  },
+  "files": {
+    "company_os/verifier_runner.py": "f614af7bb0042491a95627b028cd9cf2c5ee54cb338fade26effe4f9036d5990",
+    "company_os/candidate_runner.py": "9f75b526557167f98ebe5b632d9275cd9b3082536cf5a356a95a96e3c403e4b9",
+    "company_os/secret_adapter.py": "7a087bba850f3b410b25ec1697e7b92fdc8075854a7a68e051fd5cd6922ef816",
+    "company_os/consent_binding.py": "63677fbf71ceea722e7ae677ab44b0f28c6c40a4d02d5dee02ffcfb97982bf24",
+    "tests/unit/test_verifier_runner.py": "45559156f4737f508496c1446caea044f4924d24e84fa5b6f73344f00f40a705",
+    "tests/unit/test_secret_adapter.py": "8362a5dff0d911f269b6893157474119b2f6176597c0e7a5ef2ba4ee5105ced9",
+    "tests/unit/test_consent_binding.py": "a5b8e038ec52a97067abed560f2b2ad59bfe6d271caf010bcd2c15cba3b76372",
+    "tools/run_disposable_e2e_workflow.py": "b04c093354a74a725d9cb01c610bbf8a76b1b561e4d32e8a86a67829880f96b1",
+    "tools/disposable_e2e_workflow_trial.py": "a3fee287baf0440cc956beb3662d3ef4e5bb990b199d8a728c930e5485195481",
+    "PLAN.md": "147ad75b5a82371ca822763acd764fed9ae72ae4cc268336481ba42acc86a2d6",
+    "UYGULAMA_DURUM_MATRISI.md": "a8ff80e032d6cbd94ea8bda7072a4857fa491237adcfe242a783ed5e889757ae",
+    "company_os/bounded_candidate.py": "8cda08f6a8669361f2c98ffdded49d3898926b6fc4a9bf3740461bad352a9776",
+    "tools/workflow_preflight.py": "e3a64ff9f76033d2cf311ef8b906f4307d977e8d7ed6e94ab71f606a9e605d8a",
+    "tools/__init__.py": "a2776568c809e75c9c30b8ef1f7199c4235617f4ad797c57cb13b8df1ac73127",
+    "tests/unit/test_verifier_boundary.py": "75143680e501ebcc555d3c141385fe452449f1e046f3ba9b1746be6a844b2b5a",
+    "tests/unit/test_workflow_preflight.py": "c63174be9b865adc81b19c62d6e7acaad6959f8ed837fbac69cc6ef82e5fed43",
+    "CODEX_UYGULAMA_20261111.md": "3e357efb9121b5b6b389de1fa8793eb6507a491d0949696c55342c61d66befd5"
+  },
+  "logs": {
+    "CODEX_UYGULAMA_20261111_A_DOGRULA.log": "65d228822382253b9ed95e646487aa2f37ae6c4f79a9a8071350645aeee22a33",
+    "CODEX_UYGULAMA_20261111_preflight.log": "acf0050ebb9529691e4a64b167f9a5caa982495bb5818c3d4466ee02a8c5ad8a",
+    "CODEX_UYGULAMA_20261111_pytest.log": "926c967fbef72912535ec2a26ba605322c0999df78cfdbcea63458114d7438b8",
+    "CODEX_UYGULAMA_20261111_wrapper.log": "a8b5a9887a1c32b9be342ec2653d9a58e3f3c0a1ba8e2d9a35c8b0d156c6a524"
+  },
+  "checks": [
+    {
+      "name": "pytest",
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "AiProjeOfisi/tests",
+        "-q",
+        "-rs"
+      ],
+      "exit": 0,
+      "raw_log": "AiProjeOfisi\\evidence\\CODEX_UYGULAMA_20261111_pytest.log",
+      "sha256": "926c967fbef72912535ec2a26ba605322c0999df78cfdbcea63458114d7438b8"
+    },
+    {
+      "name": "preflight",
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "AiProjeOfisi/tools/workflow_preflight.py"
+      ],
+      "exit": 2,
+      "raw_log": "AiProjeOfisi\\evidence\\CODEX_UYGULAMA_20261111_preflight.log",
+      "sha256": "acf0050ebb9529691e4a64b167f9a5caa982495bb5818c3d4466ee02a8c5ad8a"
+    },
+    {
+      "name": "wrapper",
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "AiProjeOfisi/tools/run_disposable_e2e_workflow.py"
+      ],
+      "exit": 2,
+      "raw_log": "AiProjeOfisi\\evidence\\CODEX_UYGULAMA_20261111_wrapper.log",
+      "sha256": "a8b5a9887a1c32b9be342ec2653d9a58e3f3c0a1ba8e2d9a35c8b0d156c6a524"
+    }
+  ],
+  "state": {
+    "G0": "OPEN",
+    "first13": "0/13",
+    "runtime": "NOT_RUN",
+    "independent_review": "PENDING",
+    "full_os_isolation": "NOT_IMPLEMENTED",
+    "actual_receipt_validator": "NOT_CONNECTED"
+  },
+  "architecture_source": {
+    "path": "GUNCEL/dokumanlar/hedef-mimari-v1/PROJE_TASARIM_DOKUMANI.md",
+    "sha256": "b0495856786d1cc8c5106b9466467fd44e689319bb888ced094b021c21f0357b"
+  }
+}

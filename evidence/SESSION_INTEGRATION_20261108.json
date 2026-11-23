@@ -1,0 +1,16 @@
+{
+  "scope": "SYNTHETIC_BOOTSTRAP_AND_SESSION_NATIVE_COMMIT_READBACK_NOT_REAL_OWNER_INSTALLATION",
+  "receipt": "NATIVE_CLOCK_TRIAL_3ee41cd3.json",
+  "session": {
+    "scope": "SYNTHETIC_SESSION_COMMIT_READBACK_NOT_OWNER_LOGIN_ACCEPTANCE",
+    "missing_project_clock_rejected": true,
+    "session_hash_match": true,
+    "session_epoch": 0,
+    "lock_rank": 2,
+    "new_grants": 0
+  },
+  "clock_preflight": "BOUNDED_REAL_SYNC_WAIT_NO_OVERRIDE",
+  "actual_command_result": "BLOCKED_TIME_DEPENDENCY",
+  "remaining_dependency": "Project clock epoch/sample enrollment; then policy approval",
+  "first13": "0/13"
+}

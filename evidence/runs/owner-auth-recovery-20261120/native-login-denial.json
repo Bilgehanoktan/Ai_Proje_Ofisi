@@ -1,0 +1,8 @@
+{
+  "scope": "LIVE_NATIVE_UNSAFE_LOGIN_DENIAL_NOT_SESSION_ACCEPTANCE",
+  "status": "PASS",
+  "reason": "EXACT_LEAST_PRIVILEGE_OWNER_AUTH_LOGIN_REQUIRED",
+  "counts_unchanged": true,
+  "session_delta": 0,
+  "grant_delta": 0
+}

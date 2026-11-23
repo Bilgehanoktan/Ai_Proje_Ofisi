@@ -1,0 +1,182 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI Proje Ofisi — Hibrit ofis</title><style>
+*{box-sizing:border-box}body{margin:0;background:#e9eeef;color:#233d49;font:14px/1.5 "Segoe UI",sans-serif}button,a,summary{touch-action:manipulation}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #b35c29;outline-offset:3px}header{height:66px;display:flex;align-items:center;justify-content:space-between;background:#fff;padding:0 24px;border-bottom:1px solid #cdd9dc}.brand{font-size:18px;font-weight:650}.brand b{background:#2d515a;color:white;padding:5px 9px;margin-right:10px;border-radius:6px}.context{display:flex;gap:20px;color:#607883;font-size:12px}.demo{color:#805a23;background:#fff0d3;padding:4px 10px;border-radius:4px}.app{display:grid;grid-template-columns:180px minmax(0,1fr)}nav{padding:24px 14px;background:#f6f8f8;border-right:1px solid #cdd9dc;min-height:calc(100vh - 66px)}nav a{display:block;padding:11px 13px;color:#526b76;text-decoration:none;border-radius:6px;margin-bottom:5px}nav a[aria-current]{background:#dce9e8;color:#244f51;font-weight:600}.nav-note{font-size:12px;color:#667e87;margin:35px 12px}main{padding:22px;min-width:0}.heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:17px}h1{font-size:24px;margin:0}h2{font-size:18px;margin:0}p{margin:6px 0;color:#637b84}.heading p{font-size:13px}.stats{display:flex;gap:24px;font-size:12px}.stats strong{display:block;font-size:17px;color:#33535e}.layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:18px}.office{background:#d5dfe0;border:1px solid #becdd0;border-radius:10px;overflow:hidden;min-width:0}.office-bar{display:flex;justify-content:space-between;align-items:center;background:#f8faf9;border-bottom:1px solid #c5d2d4;padding:12px 16px;gap:10px}.office-bar span{font-size:12px;color:#647a80}.controls{display:flex;gap:5px}.controls button{border:1px solid #bfccce;background:#fff;color:#34565e;border-radius:5px;min-width:33px;padding:4px 9px}.viewport{overflow:auto;min-height:480px;display:grid;align-items:center;padding:10px;background:#d1dddf}.world{position:relative;width:100%;min-width:700px;aspect-ratio:1100/720;margin:auto}canvas{display:block;width:100%;height:100%;image-rendering:pixelated}.hotspot{position:absolute;border:2px solid transparent;background:transparent;border-radius:5px;color:transparent}.hotspot:hover,.hotspot[aria-pressed=true]{border-color:#547f80;background:#ffffff0a}.hotspot:focus-visible{outline-offset:0}.office-footer{display:flex;justify-content:space-between;gap:12px;padding:10px 16px;background:#f8faf9;font-size:11px;color:#60777f}.side{background:#fff;border:1px solid #c5d2d4;border-radius:10px;overflow:hidden;align-self:start}.tabs{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid #d2dcdf}.tabs button{background:#f8faf9;border:0;border-bottom:3px solid transparent;font-size:11px;color:#60757e;padding:14px 3px}.tabs button[aria-selected=true]{border-color:#41747b;color:#254d54;background:white;font-weight:600}.panel{padding:22px;min-height:400px}.panel[hidden]{display:none}.eyebrow{font-size:11px;color:#6a8087}.role-icon{display:grid;place-items:center;width:49px;height:49px;background:#e3eeea;border-radius:8px;font-size:24px;margin:15px 0}.state{font-size:11px;background:#f9edd8;color:#805b26;padding:4px 7px;display:inline-block;margin:10px 0}.panel h3{font-size:13px;margin:24px 0 5px}.panel p{font-size:13px}.role-list{display:grid;gap:9px;margin-top:16px}.role-list button{background:#f4f7f7;border:1px solid #d7e0e1;border-radius:6px;padding:12px;text-align:left;color:#34545e}.role-list small{display:block;font-size:11px;color:#6b8188}.empty{padding:18px 0;border-top:1px solid #e0e6e8;margin-top:18px}.notice{font-size:12px;padding:13px 16px;background:#f7faf9;border:1px solid #cbd7d8;border-radius:7px;margin-top:16px;color:#617981}.bottom{margin-top:14px;display:flex;justify-content:space-between;gap:12px;font-size:11px;color:#637980}details{margin-top:18px;background:#fff;border:1px solid #cad6d8;border-radius:8px;padding:15px}summary{cursor:pointer}.table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;min-width:900px;font-size:12px;margin-top:15px}td,th{padding:11px;border-bottom:1px solid #dce4e6;text-align:left;vertical-align:top}code{overflow-wrap:anywhere}.source{font-size:12px;margin-top:16px;max-width:100ch}.expanded{position:fixed!important;inset:0;z-index:10;border-radius:0;display:flex;flex-direction:column}.expanded .viewport{flex:1}.expanded .world{max-width:1400px}.expanded .office-footer{flex-shrink:0}@media(max-width:1200px){.app{grid-template-columns:145px minmax(0,1fr)}main{padding:16px}.layout{grid-template-columns:minmax(0,1fr) 270px}.context{gap:10px}.stats{gap:14px}.viewport{min-height:420px}}@media(max-width:950px){.layout{grid-template-columns:1fr}.side .panel{min-height:220px}.app{grid-template-columns:1fr}nav{min-height:0;display:flex;gap:5px;padding:8px 12px;overflow:auto;border-bottom:1px solid #cdd9dc}nav a{white-space:nowrap;margin:0;font-size:12px;padding:8px}.nav-note{display:none}.role-list{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){header{padding:12px 14px;height:auto}.context>span:not(.demo){display:none}.brand{font-size:15px}.heading{align-items:start;gap:14px;flex-direction:column}.stats{width:100%;justify-content:space-between}.stats strong{font-size:15px}main{padding:13px}.office-bar{padding:10px;flex-wrap:wrap}.viewport{padding:0;min-height:0}.world{min-width:700px}.office-footer,.bottom{flex-direction:column}.panel{padding:18px}.source{font-size:11px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style></head><body><header><div class="brand"><b aria-hidden="true">⌘</b>AI Proje Ofisi</div><div class="context"><span>Yerel çalışma alanı</span><span>Kat 01 · Çekirdek ofis</span><span class="demo">DEMO / UNVERIFIED</span></div></header><div class="app"><nav aria-label="Ana gezinme"><a href="#office" aria-current="page">▦ &nbsp; Sanal ofis</a><a href="#modules">Mimari modüller</a><a href="#design-source">Tasarım kaynakları</a><div class="nav-note">Görsel yerleşim bir önizlemedir.<br><br>Canlı olay akışı bağlı değil.</div></nav><main><div class="heading"><div><h1>Çekirdek ofis</h1><p>Research, Orchestrator, Engineer ve QA aynı çalışma katında.</p></div><div class="stats"><span>Görsel rol<strong>4 örnek</strong></span><span>Canlı ajan<strong>Veri yok</strong></span><span>Veri tazeliği<strong>Bağlı değil</strong></span></div></div><div class="layout"><section class="office" id="office" aria-label="Hibrit ofis sahnesi"><div class="office-bar"><div><strong>Kat 01</strong> <span> / Hibrit yerleşim</span></div><div class="controls"><button id="zoom-out" aria-label="Uzaklaştır">−</button><button id="zoom-reset" aria-label="Yakınlaştırmayı sıfırla">100%</button><button id="zoom-in" aria-label="Yakınlaştır">+</button><button id="expand" aria-pressed="false">Büyüt</button></div></div><div class="viewport" tabindex="0" role="region" aria-label="Yatay kaydırılabilir ofis"><div class="world"><canvas id="office-canvas" width="1100" height="720" aria-label="Research solda, Orchestrator merkezde, Engineer sağda; aşağıda pasif rezerv, briefing ve ayrı QA alanı. Aynı roller Ajanlar sekmesinden seçilebilir." role="img"></canvas><div id="hotspots"></div></div></div><div class="office-footer"><span>○ Olay akışı bağlı değil · Hareket kapalı</span><span>Pasif rezerv boş · Kat geçişi kapalı</span></div></section><aside class="side" aria-label="Ofis operasyon paneli"><div class="tabs" role="tablist" aria-label="Ofis sekmeleri"><button role="tab" id="tab-activity" aria-controls="activity" aria-selected="false" tabindex="-1">Aktivite</button><button role="tab" id="tab-agents" aria-controls="agents" aria-selected="false" tabindex="-1">Ajanlar</button><button role="tab" id="tab-approvals" aria-controls="approvals" aria-selected="false" tabindex="-1">Onaylar</button><button role="tab" id="tab-context" aria-controls="context" aria-selected="true">Seçili Bağlam</button></div><section class="panel" id="activity" role="tabpanel" aria-labelledby="tab-activity" hidden><h2>Aktivite</h2><div class="empty"><p>Yetkili olay akışı bağlı değil.</p><p>Görev, plan ve çalışma olayları burada kaynak ve zaman bilgileriyle gösterilecek.</p></div></section><section class="panel" id="agents" role="tabpanel" aria-labelledby="tab-agents" hidden><h2>Çekirdek roller</h2><p>Bunlar örnek figürlerdir; etkin AgentInstance kaydı değildir.</p><div class="role-list" id="role-list"></div></section><section class="panel" id="approvals" role="tabpanel" aria-labelledby="tab-approvals" hidden><h2>Onaylar</h2><div class="empty"><p>Onay kayıtları bağlı değil; bekleyen onay sayısı bilinmiyor.</p><p>Bu panel imza veya kabul işlemi gerçekleştirmez.</p></div></section><section class="panel" id="context" role="tabpanel" aria-labelledby="tab-context"><span class="eyebrow">Seçili örnek rol</span><div class="role-icon" id="role-icon" aria-hidden="true">◇</div><h2 id="role-title">Orchestrator</h2><p id="role-sub">Merkez koordinasyon alanı</p><span class="state">UNVERIFIED · Canlı run yok</span><h3>Sorumluluk</h3><p id="role-description">Planlama, delegasyon ve koordinasyon.</p><h3>Bağlam ve kanıt</h3><p>agent_instance_id: bağlı değil<br>run_id: bağlı değil<br>Bağımsız doğrulama: veri yok</p><h3>Görsel sınır</h3><p>Örnek karakter çalışıyor anlamına gelmez. QA incelemesi bağımsız Verifier kabulü değildir.</p></section></aside></div><div class="notice">Dört çekirdek rol ve hibrit yerleşim kaynak tasarımdan alınmıştır. Bu sürüm özgün Canvas çizimleriyle hazırlanmış görsel önizlemedir; hedef Phaser 2.5D renderer ve sunucu projection entegrasyonu henüz uygulanmış değildir.</div><div class="bottom"><span>DEMO_SYNTHETIC · G0 OPEN · First13 0/13</span><span>Çalışma / kabul durumları görsel sahneden türetilmez.</span></div><details id="modules"><summary>Mimari durum matrisi · 16 modül</summary><div class="table-scroll" role="region" aria-label="Modül tablosu" tabindex="0"><table><thead><tr><th>Modül</th><th>Mimari adı</th><th>Faz</th><th>Antigravity</th><th>Codex</th><th>Açık kusur / notlar</th></tr></thead><tbody>
+        <tr>
+            <td><strong>MOD-001</strong></td>
+            <td>Kimlik, Policy ve Command Host</td>
+            <td><span class="badge phase">PH-01, PH-04</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">KISMEN_DOGRULANDI; F01 execute/enter/emit düzeltmesi doğrulandı; gerçek auth/DB kabulü ve P0-2 açık.</span></td>
+            <td>Engel: tools/disposable_e2e_workflow_trial.py içinde eski/uyumsuz sembol çağrıları (P0-2); G0 kapısı açık (OPEN), gerçek DB ortamında tam native E2E yürütme izni bekleniyor</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-002</strong></td>
+            <td>Hedef, Plan ve Ajan CEO</td>
+            <td><span class="badge phase">PH-00, PH-01</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">KISMEN_DOGRULANDI; F01 gerçek DTO isimleri doğrulandı; gerçek CEO/plan ve kalıcı zincir kabulü yok.</span></td>
+            <td>Canlı ortamda çok adımlı plan dallanması ve LLM tabanlı plan üreticisi bağlanmadı; şema ve model seviyesinde doğrulandı</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-003</strong></td>
+            <td>Scheduler ve Qualification</td>
+            <td><span class="badge phase">PH-02</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">DUZELTME_GEREKLI; R2-04: AttemptAdmission/FencedAttempt owning source içinde yok.</span></td>
+            <td>Worker claim mekanizmasının gerçek eşzamanlı multi-worker yarış testleri henüz yapılmadı</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-004</strong></td>
+            <td>Launch Controller ve Isolation</td>
+            <td><span class="badge phase">PH-02</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01 (Windows&#x27;ta Linux testleri SKIP)</span></td>
+            <td><span class="badge codex">DUZELTME_GEREKLI; F05/F07: kaynak hashleri doğrulandı; 4 SKIP rootless/cgroup testleri değil. Native isolation kabulü bu koşumda yapılmadı.</span></td>
+            <td>Windows geliştirme ortamında Linux native syscall/cgroup testleri çalıştırılamıyor (4 test SKIP); Linux derleme ve koşum ortamı gereklidir</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-005</strong></td>
+            <td>Engine ve Provider Adapter</td>
+            <td><span class="badge phase">PH-02</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">DUZELTME_GEREKLI; F05/F06: socketpair ve pipe/ownership ayrı SKIP; doğrudan egress/paid kapalılığı eksik sayılmamalı. Gerçek model koşumu yok.</span></td>
+            <td>Socketpair testlerinden ikisi Windows soket sınırlaması nedeniyle Linux platformuna şartlı (SKIP)</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-006</strong></td>
+            <td>Tool Broker ve Etki Sınırı</td>
+            <td><span class="badge phase">PH-02</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">KISMEN_DOGRULANDI; Hashler ve mevcut Windows regresyonu doğrulandı; tam broker/DB/FS izolasyon AC seti incelenmedi. F06: genel shell/egress kapalılığı eksik değildir.</span></td>
+            <td>Etki sınırları unit testlerde kanıtlandı; gerçek fs sandbox izolasyonu henüz E2E bağlanmadı</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-007</strong></td>
+            <td>Workspace, Patch ve Artifact</td>
+            <td><span class="badge phase">PH-03</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">KISMEN_DOGRULANDI; Hashler ve mevcut Windows regresyonu doğrulandı; canlı CAS/immutable artifact/bağımsız readback kabulü bu tur yok.</span></td>
+            <td>Patch staging mekanizması birim testlerde doğrulandı; verifier&#x27;a aktarımı test pipeline seviyesinde hazır</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-008</strong></td>
+            <td>Bağımsız Verifier</td>
+            <td><span class="badge phase">PH-03</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">DUZELTME_GEREKLI; R2-01..03: eski vektör FAIL, fakat CASES okuyan/protokol taklit eden fonksiyonsuz aday PASS13; pinlenmemiş oracle PASS13; READY timeout aşımı; stale hash.</span></td>
+            <td>Codex bulgusu P0-1: subprocess oracle çalıştırmasında aday kodun stdout manipülasyonu ve erken exit riski verifier_runner&#x27;da sertleştirildi; tam OS-level timeout ve cgroup kısıtı eklenecek</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-009</strong></td>
+            <td>Acceptance ve Release Kontrolü</td>
+            <td><span class="badge phase">PH-03</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">DUZELTME_GEREKLI; R2-01/02/04: verifier sahte PASS açık, acceptance kabulü yok; kaynaklanmamış dual custody şartı duruyor.</span></td>
+            <td>G0 kapısı ve First13 ara kabul kapısı açık (OPEN / 0/13). Antigravity kendi kendine kabul veremez</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-010</strong></td>
+            <td>Event ve Projection</td>
+            <td><span class="badge phase">PH-04</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">DUZELTME_GEREKLI; F05: presentation.app içinde consumer/checkpoint/dedup/resync uygulanmış olduğu gösterilmedi. SQL event mapping gerçek stream testi değil.</span></td>
+            <td>Bağımsız company_os/projections.py dosyası henüz açılmadı; mantık şu anda presentation/app.py ve SQL event map içinde yer alıyor</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-011</strong></td>
+            <td>Yönetim ve Ofis Sunumu</td>
+            <td><span class="badge phase">PH-04</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">DUZELTME_GEREKLI; R2-04/05: preview sabit iddialar gösteriyor, matris okunmuyor; HTTP/ASGI kart iddiaları sürüyor. Görsel denetim NOT_VERIFIED.</span></td>
+            <td>UI animasyonları kanıt sayılmaz kuralı gereği yalnız salt okunur veri sunumu ve yetki doğrulaması test edildi</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-012</strong></td>
+            <td>Katalog ve Hafıza</td>
+            <td><span class="badge phase">PH-01, PH-06</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">DUZELTME_GEREKLI; F04/F06/F07: operation registry ile skill/role katalog ve tenant hafıza kabulü ayrılmalı; ayrı knowledge servisi zorunluluğu kaynaklanmamış.</span></td>
+            <td>Bağımsız knowledge/hafıza servisi henüz kodlanmadı; şema ve sabit registry tanımları mevcut</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-013</strong></td>
+            <td>WorkType Uygulamaları</td>
+            <td><span class="badge phase">PH-06</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">DUZELTME_GEREKLI; F02 dört hatalı fixture yolu giderildi; yalnız yol doğrulandı. F03 açık; PH06 kapsam dışı ifadesi sürüyor.</span></td>
+            <td>Yalnız SOFTWARE MGT01 hazır; diğer iş türleri (Research, Spreadsheet vb.) mimari faz sırasına göre PH-06 geliştirme kuyruğundadır</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-014</strong></td>
+            <td>Bütçe, Ticari Kayıt ve Dış Etki</td>
+            <td><span class="badge phase">PH-02, PH-05</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">KISMEN_DOGRULANDI; Dosya/hash ve sözleşme varlığı doğrulandı; rezervasyon/UNKNOWN/ticari AC seti bağımsız test edilmedi. Paid kapalılığı eksik değildir; F04/F07.</span></td>
+            <td>Otomatik ücretli fallback ve harici faturalandırma kapalıdır; bütçe aşımında iş reddi kuralı şemada mevcuttur</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-015</strong></td>
+            <td>Operasyon, Recovery ve Backup</td>
+            <td><span class="badge phase">PH-05</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">KISMEN_DOGRULANDI; Dosya/hash varlığı doğrulandı; gerçek fenced restore/witness/backup/stop kabulü bu tur yok; F04/F07 görev detayları gerekli.</span></td>
+            <td>Geri yüklenen veride eski yetkilerin canlanmaması kuralı SQL katmanında tanımlı; operasyonel felaket tatbikatı henüz yapılmadı</td>
+        </tr>
+        
+        <tr>
+            <td><strong>MOD-016</strong></td>
+            <td>Teslimat, ADR ve Kalite Yönetişimi</td>
+            <td><span class="badge phase">PH-00, PH-01, PH-03</span></td>
+            <td><span class="badge status">KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01</span></td>
+            <td><span class="badge codex">DUZELTME_GEREKLI; R2-04/06: kanıt/görev/AC-test izleri eksik; DOGRULA exit1 sürüyor. Windows85PASS4SKIP97subtest tekrarlandı.</span></td>
+            <td>GUNCEL/DOGRULA.py kök düzeyinde CALISMA_DURUMU.md hash uyuşmazlığı nedeniyle hata vermektedir (A tabanı sabit pini). AiProjeOfisi iç testleri 85 PASS, 4 SKIP vermektedir</td>
+        </tr>
+        </tbody></table></div></details><details id="design-source"><summary>Yerleşimin kaynakları ve uygulama sınırı</summary><p class="source">B_v135.md §v134-02..05: büyük merkez sahne, hibrit ilk kat, dört çekirdek rol ve sağ panelde dört sabit sekme. ENTEGRASYON_KARAR_MATRISI.md DEC-014..017, DEC-297..301: seçili görsel dalda uyarlama; tarihsel B onayı A için genel UI kabulü değildir. Bu önizleme geometri freeze veya insan kabulü üretmez.</p><p class="source">Palet: duvar #8c9b9e, zemin #d6c5a5, Research #799a8b, Orchestrator #788eaa, Engineer #b79368, QA #978ba5. Yerleşim kavramsaldır; yayımlanmış FloorGeometryVersion değildir.</p><p class="source">Matris SHA256: <code>1ae1e9838fdc0d26c3d22d6df28ba95919dcd1b2f512d974198e24d889a69110</code></p></details></main></div><script>// Original procedural preview art; no external sprite or texture assets.
+const canvas=document.getElementById('office-canvas'),c=canvas.getContext('2d');
+c.imageSmoothingEnabled=false;
+function rect(x,y,w,h,color){c.fillStyle=color;c.fillRect(x,y,w,h)}
+function text(t,x,y,size=13,color='#40555b',bold=false){c.fillStyle=color;c.font=`${bold?'600':'400'} ${size}px Segoe UI`;c.fillText(t,x,y)}
+function line(x,y,x2,y2,color,width=2){c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(x,y);c.lineTo(x2,y2);c.stroke()}
+function wall(x,y,w,h){rect(x,y,w,h,'#839799');rect(x,y,w,5,'#c0cdca');rect(x,y+h-5,w,5,'#627b7f')}
+function desk(x,y,color='#bea17b'){rect(x+4,y+12,110,51,'#00000017');rect(x+8,y+38,7,25,'#8a775e');rect(x+94,y+38,7,25,'#8a775e');rect(x,y,110,45,'#927955');rect(x,y,110,35,color);rect(x+37,y-19,40,28,'#344d55');rect(x+41,y-15,32,19,'#94babb');rect(x+53,y+9,10,5,'#536a71');rect(x+39,y+20,34,6,'#e4e6d8');rect(x+10,y+8,17,14,'#f4f0dc');line(x+13,y+12,x+23,y+12,'#a8b1a2',1);rect(x+87,y+9,9,11,'#f2e9d1');rect(x+89,y+7,5,3,'#f2e9d1')}
+function chair(x,y){rect(x+4,y+14,36,15,'#536b6d');rect(x,y,44,24,'#6e8788');rect(x+3,y+3,38,7,'#91a7a3');rect(x+19,y+29,5,9,'#435a61');rect(x+5,y+37,33,3,'#435a61')}
+function person(x,y,color){rect(x-15,y+15,34,5,'#00000016');rect(x-10,y-8,21,22,color);rect(x-15,y-5,5,17,color);rect(x+11,y-5,5,17,color);rect(x-9,y+14,7,13,'#3d515b');rect(x+4,y+14,7,13,'#3d515b');rect(x-11,y+26,10,4,'#2e414b');rect(x+4,y+26,10,4,'#2e414b');rect(x-8,y-28,18,21,'#d4ad89');rect(x-10,y-30,22,8,'#5f5148');rect(x-10,y-23,4,8,'#5f5148');rect(x-3,y-18,3,3,'#4d4943');rect(x+6,y-18,3,3,'#4d4943')}
+function plant(x,y){rect(x-10,y+10,23,22,'#b08d71');rect(x-13,y+7,29,8,'#ceb08c');rect(x-3,y-20,5,30,'#68846a');rect(x-18,y-14,17,10,'#799679');rect(x+2,y-25,18,12,'#638a75');rect(x-13,y-33,14,15,'#8faa83');rect(x+4,y-7,17,9,'#8faa83')}
+function plaque(t,x,y,w,color){rect(x,y,w,29,'#ffffffd9');rect(x,y,4,29,color);text(t,x+12,y+19,13,'#3b535b',true)}
+function windowArt(x,y,w){rect(x,y,w,35,'#678a94');rect(x+5,y+4,w-10,25,'#bfd8dc');rect(x+w/2,y+4,4,25,'#739aa2');rect(x-3,y+32,w+6,7,'#dfe8df')}
+function draw(){rect(0,0,1100,720,'#d1dddf');rect(44,54,1020,625,'#b7c5c5');rect(37,44,1020,625,'#8c9b9e');rect(47,54,1000,603,'#d6c5a5');for(let y=63;y<656;y+=28){line(49,y,1045,y,'#c8b799',1);for(let x=50+(Math.floor(y/28)%2)*60;x<1040;x+=120)line(x,y,x,y+28,'#c8b799',1)}
+// Rear walls have height; furniture and figures are drawn in depth order.
+wall(37,28,1020,37);wall(37,28,12,627);wall(1045,28,12,627);windowArt(104,29,145);windowArt(476,29,145);windowArt(824,29,145);
+rect(65,84,281,238,'#d2dfca');rect(369,84,361,238,'#d3dde1');rect(751,84,273,238,'#e4d7be');
+plaque('Research',79,94,139,'#799a8b');plaque('Orchestrator',392,94,164,'#788eaa');plaque('Engineer',773,94,140,'#b79368');
+// Low partitions keep Research and Engineer semi-open around the central hub.
+wall(348,84,9,191);wall(738,84,9,191);wall(67,321,121,17);wall(270,321,77,17);wall(752,321,82,17);wall(918,321,106,17);
+desk(149,196);chair(183,257);person(204,263,'#6d947e');desk(498,196,'#adbbbf');chair(530,257);person(550,263,'#6e87ab');desk(829,196);chair(862,257);person(882,263,'#bb8a58');plant(87,267);plant(1000,267);
+// Shared circulation connects the open work pods to briefing and entrance.
+text('Ortak geçiş',465,371,12,'#867e6b');rect(64,409,282,207,'#d9ddd0');plaque('Pasif rezerv',80,425,157,'#a6ae9b');c.setLineDash([7,6]);c.strokeStyle='#a5af9d';c.strokeRect(89,480,229,98);c.setLineDash([]);text('Boş büyüme alanı',132,527,14,'#84917e');text('Yeni ajan yerleştirilmedi',119,551,11,'#84917e');
+rect(371,410,360,207,'#dfd5bf');plaque('Briefing / giriş',390,425,168,'#9b967d');rect(469,498,163,62,'#ab906f');rect(464,488,163,58,'#c9b18a');rect(479,479,32,12,'#7e9390');rect(576,479,32,12,'#7e9390');rect(479,551,32,12,'#7e9390');rect(576,551,32,12,'#7e9390');rect(516,504,28,21,'#f2f1df');rect(555,507,24,16,'#d6e1de');plant(402,566);
+// QA has a taller partition and a visible entry opening.
+rect(751,411,273,206,'#e1dce6');wall(741,402,13,213);wall(751,400,79,28);wall(919,400,114,28);plaque('QA / kontrol',773,439,153,'#978ba5');desk(830,515,'#b9afc1');chair(863,571);person(884,577,'#9482a6');wall(751,617,273,14);
+// Disabled portal remains outside the work area, with no phantom agents.
+rect(78,641,182,18,'#879697');text('Kat geçişi · Kapalı',99,654,11,'#f1f4ed');rect(476,640,151,19,'#a5ada4');text('Giriş',534,654,11,'#465c59');plant(998,580);text('Örnek figürler · Canlı çalışma gösterilmez',745,686,12,'#617981');}
+draw();
+const roles={research:{name:'Research',sub:'Yarı açık araştırma alanı',description:'Yetkili kaynakları inceler, araştırma bulgularını ve kaynak izlerini toplar.',icon:'⌕',x:65,y:84,w:281,h:238},orchestrator:{name:'Orchestrator',sub:'Merkez koordinasyon alanı',description:'Planlama, delegasyon ve koordinasyon. İnsan sahibin hedefleri ve mevcut yetki sınırları esas alınır.',icon:'◇',x:369,y:84,w:361,h:238},engineer:{name:'Engineer',sub:'Yarı açık üretim alanı',description:'Teknik üretim ve yazılım görevlerini izinli worker ve araç sınırlarında yürütür. Bu projede ilk akış SOFTWARE MGT01’dir.',icon:'⌨',x:751,y:84,w:273,h:238},qa:{name:'QA',sub:'Ayrışmış, yarı kapalı kontrol alanı',description:'Teknik inceleme ve kanıt toplama. QA rolü bağımsız Verifier veya insan kabulünün yerine geçmez.',icon:'✓',x:751,y:411,w:273,h:206}};
+const tabs=[...document.querySelectorAll('[role=tab]')];function showTab(id,focus=false){tabs.forEach(t=>{const active=t.getAttribute('aria-controls')===id;t.setAttribute('aria-selected',String(active));t.tabIndex=active?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!active;if(active&&focus)t.focus()})}
+tabs.forEach((t,i)=>{t.addEventListener('click',()=>showTab(t.getAttribute('aria-controls')));t.addEventListener('keydown',e=>{let next;if(e.key==='ArrowRight')next=(i+1)%tabs.length;if(e.key==='ArrowLeft')next=(i+tabs.length-1)%tabs.length;if(e.key==='Home')next=0;if(e.key==='End')next=tabs.length-1;if(next!==undefined){e.preventDefault();showTab(tabs[next].getAttribute('aria-controls'),true)}})});
+function selectRole(key){const r=roles[key];document.getElementById('role-title').textContent=r.name;document.getElementById('role-sub').textContent=r.sub;document.getElementById('role-description').textContent=r.description;document.getElementById('role-icon').textContent=r.icon;document.querySelectorAll('.hotspot').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.role===key)));showTab('context')}
+Object.entries(roles).forEach(([key,r])=>{const b=document.createElement('button');b.className='hotspot';b.dataset.role=key;b.setAttribute('aria-label',r.name+' örnek rolünü seç');b.setAttribute('aria-pressed',String(key==='orchestrator'));Object.assign(b.style,{left:r.x/11+'%',top:r.y/7.2+'%',width:r.w/11+'%',height:r.h/7.2+'%'});b.addEventListener('click',()=>selectRole(key));document.getElementById('hotspots').append(b);const list=document.createElement('button');list.append(document.createTextNode(r.name));const small=document.createElement('small');small.textContent='Örnek rol · UNVERIFIED';list.append(small);list.addEventListener('click',()=>selectRole(key));document.getElementById('role-list').append(list)});
+let zoom=100;const world=document.querySelector('.world');function setZoom(v){zoom=Math.max(75,Math.min(150,v));world.style.width=zoom+'%';document.getElementById('zoom-reset').textContent=zoom+'%'}document.getElementById('zoom-in').onclick=()=>setZoom(zoom+25);document.getElementById('zoom-out').onclick=()=>setZoom(zoom-25);document.getElementById('zoom-reset').onclick=()=>setZoom(100);const office=document.getElementById('office'),expand=document.getElementById('expand');function expanded(on){office.classList.toggle('expanded',on);expand.setAttribute('aria-pressed',String(on));expand.textContent=on?'Küçült':'Büyüt';document.body.style.overflow=on?'hidden':''}expand.onclick=()=>expanded(!office.classList.contains('expanded'));document.addEventListener('keydown',e=>{if(e.key==='Escape')expanded(false)});document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{const target=document.getElementById(a.hash.slice(1));if(target?.tagName==='DETAILS')target.open=true}));
+</script></body></html>

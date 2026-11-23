@@ -1,0 +1,23 @@
+{
+  "scope": "SOURCE_IMPORT_NOT_RUNTIME_ACCEPTANCE",
+  "files": [
+    {
+      "source": "GUNCEL/company_os/command_host.py",
+      "target": "company_os/command_host.py",
+      "sha256": "325cb92c680aeb6143ee3b6cf60569cd93a06423645362e148ccf1894938ceab",
+      "adaptation": "BYTE_EXACT"
+    },
+    {
+      "source": "GUNCEL/compatibility/work/r63/test_acceptance.py",
+      "source_sha256": "0f69a103eb0e3ee6c61a2c18599cee735b90e12c808e5f313f6d8807ec87f185",
+      "target": "tests/unit/test_constructors.py",
+      "adaptation": "SELECTED_TESTS_PORTED_NO_LEGACY_IMPORTS"
+    },
+    {
+      "source": "GUNCEL/compatibility/work/r64/test_finality.py",
+      "source_sha256": "04908d616293e4b9569d30fba345f9bf7cc700b4b2fed8e204991d0761e60aad",
+      "target": "tests/unit/test_finality.py",
+      "adaptation": "SELECTED_TESTS_PORTED_NO_LEGACY_IMPORTS"
+    }
+  ]
+}

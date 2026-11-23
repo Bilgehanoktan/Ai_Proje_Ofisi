@@ -1,0 +1,63 @@
+{
+  "date": "2026-11-08",
+  "source_tests": {
+    "discovered": 57,
+    "passed": 55,
+    "skipped": 2,
+    "failed": 0
+  },
+  "runtime": "NOT_RUN",
+  "first13": "0/13",
+  "G0": "OPEN",
+  "open": [
+    "Real owner root/clock key custody and enrollment",
+    "Project clock epoch/sample enrollment",
+    "Policy approval and authorized Task creation",
+    "Worker/model qualification and isolation",
+    "Independent verifier and minimal UI/reload"
+  ],
+  "scope": "SOURCE_PORT_AND_FAKE_DRIVER_NOT_FULL_ACCEPTANCE",
+  "pydantic_observed": "2.12.5",
+  "pydantic_contract_requirement": "2.14.0",
+  "dependency_qualification": "LINUX_VERSION_MATCH_NOT_FULL_QUALIFICATION",
+  "linux_source_tests": {
+    "passed": 75,
+    "skipped": 0,
+    "failed": 0
+  },
+  "pydantic_linux_observed": "2.14.0",
+  "host_readback": {
+    "interactive_uid": 0,
+    "db_user": "aipof-dbtest",
+    "db_uid": 999,
+    "data_mode": "0700",
+    "socket_mode": "0700",
+    "service_units_loaded": 0
+  },
+  "registry_definitions": "NINE_INACTIVE_SOURCE_DEFINITIONS_ADDED_NOT_DB_EXECUTED",
+  "disposable_postgresql_compile": {
+    "sources": 83,
+    "compile": "PASS",
+    "synthetic_registry_injection": false,
+    "registry_count": 45,
+    "inactive_required": 9,
+    "public_clock_execute": false,
+    "rollback": "VERIFIED",
+    "db_stop": "VERIFIED",
+    "unmount": "VERIFIED",
+    "receipt": "NATIVE_CLOCK_TRIAL_eb21d4ca.json",
+    "authorization_acceptance": "NOT_RUN"
+  },
+  "bootstrap_actual_readback": {
+    "receipt": "NATIVE_CLOCK_TRIAL_8ecc1ffe.json",
+    "bootstrap_roots": 0,
+    "installation_controls": 0,
+    "principals": 0,
+    "sessions": 0,
+    "grants": 0,
+    "finding": "TRUSTED_FIRST_INSTALL_PROVISIONING_NOT_IMPLEMENTED",
+    "acceptance": "NOT_RUN"
+  },
+  "bootstrap_integration_report": "BOOTSTRAP_INTEGRATION_20261108.json",
+  "session_integration": "SESSION_INTEGRATION_20261108.json"
+}

@@ -1,0 +1,575 @@
+{
+  "scope": "READ_ONLY_LOCAL_STATE_NOT_TRUST_ACCEPTANCE",
+  "foundation": {
+    "status": "LOCAL_POSTGRES_RUNNING",
+    "scope": "POSTGRES_FOUNDATION_ONLY_NOT_APPLICATION_ACCEPTANCE",
+    "database": "ai_proje_ofisi",
+    "port": 55490,
+    "tcp_enabled": false,
+    "local_auth": "PEER_OS_IDENTITY",
+    "auth_policy_readback_verified": true,
+    "socket_permissions": "0700",
+    "application_schema_installed": null,
+    "application_schema_count": 2,
+    "application_schema_status": "NOT_VERIFIED",
+    "application_session_issued": false,
+    "task_execution_verified": false
+  },
+  "read_only": "on",
+  "postgres_version": "18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)",
+  "table_counts": {
+    "company.acceptance_records": 1,
+    "company.agent_qualifications": 1,
+    "company.artifacts": 3,
+    "company.attempts": 2,
+    "company.audit_events": 75,
+    "company.authority_scope_heads": 44,
+    "company.budget_reservations": 0,
+    "company.budget_versions": 0,
+    "company.clock_epochs": 6,
+    "company.clock_samples": 585,
+    "company.commands": 9,
+    "company.evaluation_runs": 1,
+    "company.evidence": 1,
+    "company.governance_decision_heads": 1,
+    "company.host_registrations": 1,
+    "company.internal_receipt_envelopes": 0,
+    "company.license_records": 0,
+    "company.memberships": 6,
+    "company.objectives": 2,
+    "company.outbox": 9,
+    "company.plans": 2,
+    "company.policy_decisions": 0,
+    "company.principals": 6,
+    "company.process_runs": 0,
+    "company.project_event_heads": 1,
+    "company.project_grants": 14,
+    "company.projects": 1,
+    "company.resource_claims": 0,
+    "company.resource_slots": 0,
+    "company.secret_references": 0,
+    "company.sessions": 42,
+    "company.signer_enrollments": 16,
+    "company.task_dependencies": 0,
+    "company.tasks": 3,
+    "company.tenants": 1,
+    "company.tool_requests": 0,
+    "company.verification_runs": 1,
+    "company.verifier_receipts": 0,
+    "company.workflow_compile_requests": 0,
+    "company.workflow_instances": 0,
+    "company.workflow_stage_bindings": 0,
+    "company.workspaces": 1,
+    "company_private.bootstrap_receipts": 1,
+    "company_private.bootstrap_request_contexts": 0,
+    "company_private.installation_bootstrap_control": 1,
+    "company_private.operation_permissions": 49,
+    "company_private.owner_auth_receipts_v1": 12,
+    "company_private.r55_setup_root_enrollments": 1,
+    "company_private.r57_clock_policy_authority": 1,
+    "company_private.r57_clock_policy_consents": 1,
+    "company_private.r57_clock_policy_receipts": 1,
+    "company_private.r58_attestations": 4,
+    "company_private.r58_controller_heads": 0,
+    "company_private.r58_evidence_provenance": 1,
+    "company_private.r58_execution_receipts": 4,
+    "company_private.r58_key_material": 10,
+    "company_private.r58_launch_capabilities": 0,
+    "company_private.r58_lease_policies": 1,
+    "company_private.r58_patch_receipts": 1,
+    "company_private.r58_verification_profiles": 1,
+    "company_private.r58_verification_seals": 1,
+    "company_private.r58_workspace_heads": 1,
+    "company_private.r60_command_scopes": 8,
+    "company_private.r60_engine_streams": 0,
+    "company_private.r60_lease_extensions": 0,
+    "company_private.r60_process_reconciliations": 0,
+    "company_private.r60_ready_bindings": 2,
+    "company_private.r60_tool_consumptions": 0,
+    "company_private.r60_tool_manifests": 0,
+    "company_private.r61_attempt_authorities": 1,
+    "company_private.r61_extension_authorities": 0,
+    "company_private.request_contexts": 7,
+    "company_private.scope_lock_registry": 46
+  },
+  "disabled_user_triggers": [],
+  "rls_tables": [
+    [
+      "company",
+      "acceptance_records",
+      true,
+      true
+    ],
+    [
+      "company",
+      "agent_qualifications",
+      true,
+      true
+    ],
+    [
+      "company",
+      "artifacts",
+      true,
+      true
+    ],
+    [
+      "company",
+      "attempts",
+      true,
+      true
+    ],
+    [
+      "company",
+      "audit_events",
+      true,
+      true
+    ],
+    [
+      "company",
+      "authority_scope_heads",
+      true,
+      true
+    ],
+    [
+      "company",
+      "budget_reservations",
+      true,
+      true
+    ],
+    [
+      "company",
+      "budget_versions",
+      true,
+      true
+    ],
+    [
+      "company",
+      "clock_epochs",
+      true,
+      true
+    ],
+    [
+      "company",
+      "clock_samples",
+      true,
+      true
+    ],
+    [
+      "company",
+      "commands",
+      true,
+      true
+    ],
+    [
+      "company",
+      "evaluation_runs",
+      true,
+      true
+    ],
+    [
+      "company",
+      "evidence",
+      true,
+      true
+    ],
+    [
+      "company",
+      "governance_decision_heads",
+      true,
+      true
+    ],
+    [
+      "company",
+      "host_registrations",
+      true,
+      true
+    ],
+    [
+      "company",
+      "internal_receipt_envelopes",
+      true,
+      true
+    ],
+    [
+      "company",
+      "license_records",
+      true,
+      true
+    ],
+    [
+      "company",
+      "memberships",
+      true,
+      true
+    ],
+    [
+      "company",
+      "objectives",
+      true,
+      true
+    ],
+    [
+      "company",
+      "outbox",
+      true,
+      true
+    ],
+    [
+      "company",
+      "plans",
+      true,
+      true
+    ],
+    [
+      "company",
+      "policy_decisions",
+      true,
+      true
+    ],
+    [
+      "company",
+      "principals",
+      true,
+      true
+    ],
+    [
+      "company",
+      "process_runs",
+      true,
+      true
+    ],
+    [
+      "company",
+      "project_event_heads",
+      true,
+      true
+    ],
+    [
+      "company",
+      "project_grants",
+      true,
+      true
+    ],
+    [
+      "company",
+      "projects",
+      true,
+      true
+    ],
+    [
+      "company",
+      "resource_claims",
+      true,
+      true
+    ],
+    [
+      "company",
+      "resource_slots",
+      true,
+      true
+    ],
+    [
+      "company",
+      "secret_references",
+      true,
+      true
+    ],
+    [
+      "company",
+      "sessions",
+      true,
+      true
+    ],
+    [
+      "company",
+      "signer_enrollments",
+      false,
+      false
+    ],
+    [
+      "company",
+      "task_dependencies",
+      true,
+      true
+    ],
+    [
+      "company",
+      "tasks",
+      true,
+      true
+    ],
+    [
+      "company",
+      "tenants",
+      true,
+      true
+    ],
+    [
+      "company",
+      "tool_requests",
+      true,
+      true
+    ],
+    [
+      "company",
+      "verification_runs",
+      true,
+      true
+    ],
+    [
+      "company",
+      "verifier_receipts",
+      true,
+      true
+    ],
+    [
+      "company",
+      "workflow_compile_requests",
+      true,
+      true
+    ],
+    [
+      "company",
+      "workflow_instances",
+      true,
+      true
+    ],
+    [
+      "company",
+      "workflow_stage_bindings",
+      true,
+      true
+    ],
+    [
+      "company",
+      "workspaces",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "bootstrap_receipts",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "bootstrap_request_contexts",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "installation_bootstrap_control",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "operation_permissions",
+      false,
+      false
+    ],
+    [
+      "company_private",
+      "owner_auth_receipts_v1",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r55_setup_root_enrollments",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r57_clock_policy_authority",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r57_clock_policy_consents",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r57_clock_policy_receipts",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r58_attestations",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r58_controller_heads",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r58_evidence_provenance",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r58_execution_receipts",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r58_key_material",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r58_launch_capabilities",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r58_lease_policies",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r58_patch_receipts",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r58_verification_profiles",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r58_verification_seals",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r58_workspace_heads",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r60_command_scopes",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r60_engine_streams",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r60_lease_extensions",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r60_process_reconciliations",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r60_ready_bindings",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r60_tool_consumptions",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r60_tool_manifests",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r61_attempt_authorities",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "r61_extension_authorities",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "request_contexts",
+      true,
+      true
+    ],
+    [
+      "company_private",
+      "scope_lock_registry",
+      true,
+      true
+    ]
+  ],
+  "session_columns": [
+    "tenant_id",
+    "id",
+    "principal_id",
+    "token_hash",
+    "expires_at",
+    "revoked_at"
+  ],
+  "sessions_summary": {
+    "total": 42,
+    "unexpired_unrevoked": 1
+  },
+  "installation_readiness": {
+    "scope": "DIAGNOSTIC_ONLY_NOT_NATIVE_AUTHORIZATION",
+    "roots": [
+      {
+        "installation_id": "00000000-0000-4000-8000-000000000001",
+        "generation": 1,
+        "blockers": [
+          "HOST_BOOT_MISMATCH",
+          "ROOT_BOOTTIME_WINDOW_CLOSED",
+          "ROOT_WALL_TIME_WINDOW_CLOSED"
+        ]
+      }
+    ],
+    "bootstrap_receipts_total": 1,
+    "bootstrap_receipts_unexpired": 0,
+    "consumed_installations": 1,
+    "rerun_bootstrap_is_recovery": false,
+    "next_step": "SUPPORTED_OWNER_AUTH_OR_RECOVERY_REQUIRED"
+  },
+  "owner_auth_readiness": {
+    "scope": "DIAGNOSTIC_ONLY_NOT_NATIVE_AUTHORIZATION",
+    "native_v1_installed": true,
+    "active_owner_auth_signers": 1,
+    "active_clock_epochs": 1,
+    "next_step": "READY_FOR_NATIVE_OWNER_AUTH_CHECK"
+  },
+  "acceptance": "NOT_VERIFIED; ROW_EXISTENCE_IS_NOT_AUTHORIZED_PROVENANCE"
+}

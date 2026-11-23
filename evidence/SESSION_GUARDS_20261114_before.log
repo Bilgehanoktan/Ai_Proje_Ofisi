@@ -1,0 +1,14 @@
+F
+======================================================================
+FAIL: test_session_issue_does_not_assign_membership (tests.unit.test_session_provisioning.SessionTests.test_session_issue_does_not_assign_membership)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Projeler\Ai_Proje_Ofisi\AiProjeOfisi\tests\unit\test_session_provisioning.py", line 34, in test_session_issue_does_not_assign_membership
+    self.assertFalse(any('INSERT INTO company.memberships' in sql for sql,_ in c.calls))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (failures=1)

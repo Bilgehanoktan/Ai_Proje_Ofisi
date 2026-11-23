@@ -1,0 +1,120 @@
+{
+  "scope": "SOURCE_IMPORT_NOT_RUNTIME_ACCEPTANCE",
+  "files": [
+    {
+      "source": "GUNCEL/company_os/composition.py",
+      "target": "company_os/composition.py",
+      "sha256": "026263aee062e62def4022c8192461a2e69fceb40e942e8371c94c3e14c73e0f"
+    },
+    {
+      "source": "GUNCEL/company_os/engine_bridge.py",
+      "target": "company_os/engine_bridge.py",
+      "sha256": "b9b2e9ae7590206dc75ab2a479b11517d046252ec3b81baa42372be89e1b4540"
+    },
+    {
+      "source": "GUNCEL/company_os/execution_protocol.py",
+      "target": "company_os/execution_protocol.py",
+      "sha256": "df5e5dee7d55af19cf8c64f870a6a24d3668e36ada232699022ad1cb7486cca3"
+    },
+    {
+      "source": "GUNCEL/company_os/kernel_adapters.py",
+      "target": "company_os/kernel_adapters.py",
+      "sha256": "8f561b9b62e0a63b426a4670dd3bbe3c2ee5c6e57bffc1691d7ef806ff59aeb2"
+    },
+    {
+      "source": "GUNCEL/company_os/launch_controller.py",
+      "target": "company_os/launch_controller.py",
+      "sha256": "93d694196f1130dc9794e1bafa9f06342b6c7c648be8ba93ffc09a437d18324a"
+    },
+    {
+      "source": "GUNCEL/company_os/patch_pipeline.py",
+      "target": "company_os/patch_pipeline.py",
+      "sha256": "73f902b0cc0a37b8f4b91aa4a90acbd0dc8540e8502de8ffc5cadd8083e5c79a"
+    },
+    {
+      "source": "GUNCEL/company_os/r55_clock_observer.c",
+      "target": "native/r55_clock_observer.c",
+      "sha256": "799f3ac5d2b98fc1e12345c9214bb5112645c4d6dac280dff203e84b2a00bff2"
+    },
+    {
+      "source": "GUNCEL/company_os/r65_spawn_linux.c",
+      "target": "native/r65_spawn_linux.c",
+      "sha256": "571cb37fb28283bc37014a59ca3a4773a12de87f49a720e0f96af81354057c1c"
+    },
+    {
+      "source": "GUNCEL/company_os/reply_guard.py",
+      "target": "company_os/reply_guard.py",
+      "sha256": "64ffd6267bf2514bfe856b300ce59dd42e24b03508422d5206c70cd546f7bf3d"
+    },
+    {
+      "source": "GUNCEL/company_os/tool_broker.py",
+      "target": "company_os/tool_broker.py",
+      "sha256": "79e0014e59640b23c2779018ec8efba811b691ce1137a3696bc99ed716632e2d"
+    },
+    {
+      "source": "GUNCEL/company_os/tool_executor.py",
+      "target": "company_os/tool_executor.py",
+      "sha256": "871da19150c3a6f4710c8a6978bef51129f11674c02f971b7ff3caa644c2cc5e"
+    },
+    {
+      "source": "GUNCEL/packages/contracts/company-schemas.json",
+      "target": "packages/contracts/company-schemas.json",
+      "sha256": "311bd17cb4c5546473f3ba49f47388e0b05b8750223a91485f8c3ef6ddf42009"
+    },
+    {
+      "source": "GUNCEL/packages/contracts/company.py",
+      "target": "packages/contracts/company.py",
+      "sha256": "11aa436748f3efe44101ac607aeffdbba3f7e3c00c3244a7c64394d45d2778ac"
+    },
+    {
+      "source": "GUNCEL/packages/contracts/execution-schemas.json",
+      "target": "packages/contracts/execution-schemas.json",
+      "sha256": "554a157485380aac704cee2825e56f2ef6dd4b287e537c61959d0401b7028d3d"
+    },
+    {
+      "source": "GUNCEL/packages/contracts/execution.py",
+      "target": "packages/contracts/execution.py",
+      "sha256": "0ebc384cc3e58b4552d274b82f7a954eed84e9ea0ca19226e9bdaf3fa4620cd7"
+    },
+    {
+      "source": "GUNCEL/packages/contracts/lifecycle-schemas.json",
+      "target": "packages/contracts/lifecycle-schemas.json",
+      "sha256": "09a9981d768e7aa7ad1ec9380051af9e88165d46961b4b5e6babd5c8adbb5b65"
+    },
+    {
+      "source": "GUNCEL/packages/contracts/lifecycle.py",
+      "target": "packages/contracts/lifecycle.py",
+      "sha256": "58e9216521829a3e19e585324f6b8c6219799ba2c59094798b5366fd7c63b93f"
+    },
+    {
+      "source": "GUNCEL/packages/contracts/models.py",
+      "target": "packages/contracts/models.py",
+      "sha256": "7a1567f63ce359632fc234d1aa4e43f090a02b03f6cf893184347de11db8e466"
+    },
+    {
+      "source": "GUNCEL/packages/contracts/openapi.json",
+      "target": "packages/contracts/openapi.json",
+      "sha256": "36b524897c637006263f693631984c7464c729a3e12b4e230069146da9d066e7"
+    },
+    {
+      "source": "GUNCEL/packages/contracts/pilot-schemas.json",
+      "target": "packages/contracts/pilot-schemas.json",
+      "sha256": "78e0cafe64bff21ccce20dbe36a4016f63ba1ffc9924f5c1858847420ed267b2"
+    },
+    {
+      "source": "GUNCEL/packages/contracts/pilot.py",
+      "target": "packages/contracts/pilot.py",
+      "sha256": "c1c007013487e84bb7f0a7b928e87556cfa5c49b8cc6e1b5b0a57992eabc7b94"
+    },
+    {
+      "source": "GUNCEL/packages/contracts/schemas.json",
+      "target": "packages/contracts/schemas.json",
+      "sha256": "254d0b929749eb483ee5b1db966a23eb472c6e043d9ec4b6b5bd1db0430259c9"
+    },
+    {
+      "source": "GUNCEL/packages/contracts/task-transitions.json",
+      "target": "packages/contracts/task-transitions.json",
+      "sha256": "9ee9dbac0a60e0a2406eda0d760d281ebf4d275ae6a79ffc8d1286351be326b2"
+    }
+  ]
+}

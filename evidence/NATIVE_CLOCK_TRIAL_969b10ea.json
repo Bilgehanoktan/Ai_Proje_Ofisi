@@ -1,0 +1,83 @@
+{
+  "scope": "SCOPED_NATIVE_BUILD_AND_ROLLBACK_COMPILE_NOT_G0_ACCEPTANCE",
+  "sql_trial": {
+    "unit": "aipof-newtree-sql-dedbb872",
+    "exit_code": 0,
+    "result": {
+      "scope": "NEW_TREE_REAL_DDL_ROLLBACK_NOT_AUTHORIZATION_ACCEPTANCE",
+      "company_commit": false,
+      "start_exit": 0,
+      "original_guard_rejected": true,
+      "clock_load_probe": {
+        "backend_pid": 425,
+        "observation": {
+          "utc_ns": 1794166401349713458,
+          "profile": "LINUX_ADJTIMEX_DB_LOCAL_V1",
+          "backend_pid": 425,
+          "esterror_us": 16000000,
+          "maxerror_us": 16000000,
+          "host_boot_id": "7e1094d4-5cb1-4f06-9676-1ba8815b5e92",
+          "kernel_status": 64,
+          "boottime_after_ns": 4893265772,
+          "source_sync_state": "UNKNOWN",
+          "boottime_before_ns": 4893244859,
+          "tolerance_scaled_ppm": 32768000
+        }
+      },
+      "wrong_symbol_rejected": true,
+      "catalog_json": [
+        {
+          "registry_count": 48,
+          "inactive_required": 9,
+          "public_clock_execute": false
+        },
+        {
+          "bootstrap_roots": 0,
+          "installation_controls": 0,
+          "principals": 0,
+          "sessions": 0,
+          "grants": 0
+        },
+        {
+          "scope": "SYNTHETIC_ROOT_SHAPE_ONLY",
+          "root_rows": 1,
+          "duplicate_rejected": true
+        }
+      ],
+      "compile_exit": 0,
+      "compile_stderr": "",
+      "compile_stdout_tail": "ER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nGRANT\nCREATE POLICY\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nGRANT\nCREATE POLICY\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nGRANT\nCREATE POLICY\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nGRANT\nCREATE POLICY\nCREATE TRIGGER\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nGRANT\nCREATE POLICY\nCREATE TRIGGER\nGRANT\nCREATE POLICY\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nGRANT\nCREATE POLICY\nCREATE POLICY\nGRANT\nCREATE POLICY\nCREATE POLICY\nCREATE FUNCTION\nCREATE TRIGGER\nCREATE TRIGGER\nCREATE TRIGGER\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nGRANT\nREVOKE\nGRANT\nCREATE POLICY\nGRANT\nCREATE POLICY\nREVOKE\nCREATE TABLE\nCREATE TABLE\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nCREATE TRIGGER\nALTER FUNCTION\nREVOKE\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nCREATE POLICY\nALTER TABLE\nALTER TABLE\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nCREATE TRIGGER\nALTER FUNCTION\nREVOKE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nCREATE POLICY\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nDO\nCREATE FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nCREATE FUNCTION\nALTER FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nGRANT\nGRANT\nGRANT\nGRANT\nCREATE FUNCTION\nCREATE FUNCTION\nALTER FUNCTION\nALTER FUNCTION\nREVOKE\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\nCREATE POLICY\nCREATE POLICY\nCREATE FUNCTION\nALTER FUNCTION\nREVOKE\nGRANT\n{\"registry_count\" : 48, \"inactive_required\" : 9, \"public_clock_execute\" : false}\n{\"bootstrap_roots\" : 0, \"installation_controls\" : 0, \"principals\" : 0, \"sessions\" : 0, \"grants\" : 0}\nINSERT 0 1\nINSERT 0 1\nDO\n{\"scope\" : \"SYNTHETIC_ROOT_SHAPE_ONLY\", \"root_rows\" : 1, \"duplicate_rejected\" : true}\nROLLBACK\n",
+      "after_rollback": {
+        "company_exists": false,
+        "company_private_exists": false,
+        "smoke_rows": 1
+      },
+      "compile_pass": true,
+      "rollback_verified": true,
+      "stop_exit": 0,
+      "db_stopped": true
+    },
+    "stderr": "Running as unit: aipof-newtree-sql-dedbb872.service; invocation ID: 4077881e257b4fa4900c758c37d759a1\n          Finished with result: success\nMain processes terminated with: code=exited, status=0/SUCCESS\n               Service runtime: 5.040s\n             CPU time consumed: 2.301s\n                   Memory peak: 115.2M (swap: 0B)\n",
+    "source_sha256": "384735ce2c9774bfe8026d866278bd1a1d38afa8bc6610738ab22dc14594944d",
+    "properties": [
+      "User=aipof-dbtest",
+      "Group=aipof-dbtest",
+      "MemoryMax=512M",
+      "MemorySwapMax=0",
+      "CPUQuota=50%",
+      "TasksMax=64",
+      "RuntimeMaxSec=90",
+      "TimeoutStopSec=15",
+      "LimitNOFILE=256",
+      "LimitCORE=0",
+      "NoNewPrivileges=yes",
+      "PrivateNetwork=yes",
+      "ProtectSystem=strict",
+      "ProtectHome=yes",
+      "ReadWritePaths=/var/lib/ai-proje-ofisi-dbtest/storage",
+      "OOMPolicy=stop",
+      "KillMode=control-group"
+    ]
+  },
+  "unmount_exit": 0
+}

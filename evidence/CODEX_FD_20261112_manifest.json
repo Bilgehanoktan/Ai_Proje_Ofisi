@@ -1,0 +1,26 @@
+{
+  "scope": "SOURCE_AND_LINUX_PARENT_FD_NOT_WORKER_RUNTIME_ACCEPTANCE",
+  "files": {
+    "company_os/supervisor_handles.py": "e83308fb30c0f8f03dac1a1961009ccd9bc364c3f1b64a16ced0306ae8c068f0",
+    "company_os/engine_bridge.py": "fcec500398913f6d1a960944aafc5bdc747533718ea9b0001583b109d2625072",
+    "company_os/composition.py": "c4dce352fffd4e51c614ff247dd30dd4902d5850cb3ce9925707fffa163f7252",
+    "company_os/workflow.py": "d0968112eb4f885663a0c125c3a20f54e529b09053654d2f8464b4803a2890f9",
+    "tests/unit/test_supervisor_handles.py": "edafe6894b5c6cf5f745d668c827c4c25ce3bf06d5b1658692c580f50e78a33a",
+    "tests/unit/test_workflow.py": "9886a4072c6124e8e455a01b73c78f611869e9a015ffd8c3921bea9be244c472",
+    "tools/inspect_linux_supervisor.py": "5c9479b9276ec59f2f9e76af63c825912e9901209327177ca45da24078964d33",
+    "CODEX_LINUX_SUPERVISOR_20261112.md": "6099de956e0671ab0f5a2c6985ee5219355d553e2f77fe77f5c34c5c81b3565b",
+    "PLAN.md": "dc9b4c6656454093ded4a74e3efdbb670dd11167d1d6e4fcff993cbbf78bd4b6",
+    "UYGULAMA_DURUM_MATRISI.md": "3761c777085a130c8ae31c5bf437112a34bcdecd520264afb8136f6b37eb1548",
+    "ILERLEME_TAKIBI_20261112.md": "db07ce30733dbf9d7f2f4bf0cc35957f71d2b5641d85ddfde720ab8520ac8f03",
+    "evidence/CODEX_FD_20261112_linux_inventory.json": "fccb9db02a0893d7f7ac5833dc709966bb5622397e0d41c5f5c39e572de3b020",
+    "evidence/CODEX_FD_20261112_linux_tests.log": "82e3b632cc9a8151fb5000b361c6ef969926aeff06bf58bb7f3e7ba486d28c26",
+    "evidence/CODEX_FD_20261112_preflight.json": "ed5834493644a7bdeea89e3dfe0fed93b30ee2e71ee54881ede9e3efd6ea952c",
+    "evidence/CODEX_FD_20261112_windows_tests.log": "8fa6ac06c88291eb52ca4f224fad16345865ca6f4db824977cbaab0a73e1a2a6",
+    "evidence/CODEX_FD_20261112_BACKUP/company_os__composition.py": "771be68335f0957c09d6faf2b76d3c6b2584eeb179eec7bb8dd2880e29d315f8",
+    "evidence/CODEX_FD_20261112_BACKUP/company_os__engine_bridge.py": "d759b09ce071a7e8899c2497d38493b0eed8e1274bc7573ddd46b3975914d00b",
+    "evidence/CODEX_FD_20261112_BACKUP/company_os__workflow.py": "6b589fed4ca58945d933e29569eb6185a171a473ea597db026ec64da4d4400e4",
+    "evidence/CODEX_FD_20261112_BACKUP/tests__unit__test_composition.py": "c57b092fd746718a5219eb11f231f3f4847ca6de2e66d67ab5f7be4a72686712",
+    "evidence/CODEX_FD_20261112_BACKUP/tools__workflow_preflight.py": "f112ebbef319e78bfe88a2fb3ef336248d26e8e9bc92d59f5401939b90b83c0b",
+    "evidence/CODEX_FD_20261112_BACKUP/tests__unit__test_workflow.py": "c6a8484e811e35134a02b24eeb9fcc44dcb3cae53030524e00affdd6ff461196"
+  }
+}

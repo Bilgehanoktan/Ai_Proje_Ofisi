@@ -1,0 +1,24 @@
+{
+  "kind": "AcceptanceDecision",
+  "record": {
+    "id": "14d80db5-e4ff-41fb-9860-2c5efc04381a",
+    "task_id": "0d565578-c702-4d53-aa4b-4396e3807d78",
+    "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+    "attempt_id": "36c9021d-dead-4cc3-99b8-0a4532fab254",
+    "created_at": "2026-11-14T23:22:40.490579+03:00",
+    "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+    "accepted_by": "00000000-0000-4000-8000-000000000099",
+    "evidence_id": "0726d6f7-5901-4f05-aed7-b0f103d4ff6d",
+    "build_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+    "dirty_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+    "verification_run_id": "f386db23-36a4-43a4-8e29-43af7fe35175"
+  },
+  "pagination": null,
+  "source_digest": "7c53486818fac5562082ee3e830e7aa202d9793ff38e1d2a4c7e5e8e9efbdd76",
+  "ui_generation": 0,
+  "authority_epoch": 0,
+  "project_sequence": 9,
+  "command_receipt_ref": null,
+  "event_writer_generation": 54,
+  "access_audit_correlation": "20c19acf-a525-4aa3-b240-7ce73fbad6ff"
+}

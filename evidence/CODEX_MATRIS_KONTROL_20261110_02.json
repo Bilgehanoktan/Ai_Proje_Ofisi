@@ -1,0 +1,172 @@
+{
+  "date": "2026-11-10",
+  "review_id": "CODEX-20261110-MATRIS-02",
+  "scope": "LOCAL_CONTROLLED_REPRODUCTION_NO_DB_OR_NETWORK",
+  "pins": {
+    "company_os\\verifier_runner.py": "ed0f19e3ec0c8f567a7f88f3f1102e5233b26030259f39fb9f25499023816d1a",
+    "company_os\\candidate_runner.py": "d7cf419347a56ae3ef2bd05df3efd1b9c1eabc1bea5d5b583ae5c3b9cedb42c8",
+    "UYGULAMA_DURUM_MATRISI.md": "c929570a332a2b55283509ee0f94103c96a6c44070f38b24dad4d291ad35763e",
+    "presentation\\preview.html": "cc4869ce8f776f8ab9f6fccee48f93e5db0a7b14d2909aa3c1f47c468bedc58e",
+    "presentation\\preview_generator.py": "cb177f7584467660aa9e4cc06300aac09d26e4936f8cdb95a71e924be215f8ff"
+  },
+  "cases": [
+    {
+      "name": "candidate_reads_oracle_and_impersonates_runner",
+      "candidate_source": "import sys,os,json\nfrom pathlib import Path\nimport __main__\nsys.path.insert(0,str(Path(__main__.__file__).resolve().parents[1]))\nfrom company_os.verifier_runner import CASES\nexpected={c[0]:c for c in CASES}\nprint(\"READY\",flush=True)\nfor line in sys.stdin:\n if line.strip()==\"DONE\": os._exit(0)\n req=json.loads(line); c=expected[req[\"id\"]]\n out={\"status\":\"ERROR\",\"error_type\":c[3]} if c[3] else {\"status\":\"SUCCESS\",\"value\":c[2]}\n print(json.dumps(out,ensure_ascii=False),flush=True)\nos._exit(0)\n",
+      "result": {
+        "oracle_id": "mgt01.check_title.13cases.v1",
+        "candidate_sha256": "26f444c07605e61d7703aeb41ea552fe72fbb619772fc193ab8e836717d80a9e",
+        "oracle_sha256": "f43559258b69a6e0a502def4475d0ebd8832de8c185d3bb8ab841bc91d3e6c75",
+        "checks": [
+          {
+            "id": "plain",
+            "result": "PASS"
+          },
+          {
+            "id": "trim",
+            "result": "PASS"
+          },
+          {
+            "id": "collapse",
+            "result": "PASS"
+          },
+          {
+            "id": "mixed",
+            "result": "PASS"
+          },
+          {
+            "id": "unicode",
+            "result": "PASS"
+          },
+          {
+            "id": "nbsp",
+            "result": "PASS"
+          },
+          {
+            "id": "empty",
+            "result": "PASS"
+          },
+          {
+            "id": "only_space",
+            "result": "PASS"
+          },
+          {
+            "id": "wrong_type",
+            "result": "PASS"
+          },
+          {
+            "id": "numeric",
+            "result": "PASS"
+          },
+          {
+            "id": "boundary",
+            "result": "PASS"
+          },
+          {
+            "id": "too_long",
+            "result": "PASS"
+          },
+          {
+            "id": "normalized_length",
+            "result": "PASS"
+          }
+        ],
+        "passed": 13,
+        "total": 13,
+        "outcome": "PASS",
+        "report_digest": "27547464e34aedfadf1b0f001f4b6f4cf2574ce840c03c93c7cf1c8bfd6ad035"
+      }
+    },
+    {
+      "name": "unpinned_oracle_legacy_branch",
+      "oracle_source": "import json\nprint('{\"checks\": [{\"id\": \"boundary\", \"result\": \"PASS\"}, {\"id\": \"collapse\", \"result\": \"PASS\"}, {\"id\": \"empty\", \"result\": \"PASS\"}, {\"id\": \"mixed\", \"result\": \"PASS\"}, {\"id\": \"nbsp\", \"result\": \"PASS\"}, {\"id\": \"normalized_length\", \"result\": \"PASS\"}, {\"id\": \"numeric\", \"result\": \"PASS\"}, {\"id\": \"only_space\", \"result\": \"PASS\"}, {\"id\": \"plain\", \"result\": \"PASS\"}, {\"id\": \"too_long\", \"result\": \"PASS\"}, {\"id\": \"trim\", \"result\": \"PASS\"}, {\"id\": \"unicode\", \"result\": \"PASS\"}, {\"id\": \"wrong_type\", \"result\": \"PASS\"}]}')\n",
+      "result": {
+        "oracle_id": "mgt01.check_title.13cases.v1",
+        "candidate_sha256": "9e4bd9c4e51978a3b2483e8bef7862361dce7000f234930341bcf0ee0635e38d",
+        "oracle_sha256": "6798073da699c444cd8dc5046fa4190c4021a888ed67102944dbb7f49ae8ce72",
+        "checks": [
+          {
+            "id": "boundary",
+            "result": "PASS"
+          },
+          {
+            "id": "collapse",
+            "result": "PASS"
+          },
+          {
+            "id": "empty",
+            "result": "PASS"
+          },
+          {
+            "id": "mixed",
+            "result": "PASS"
+          },
+          {
+            "id": "nbsp",
+            "result": "PASS"
+          },
+          {
+            "id": "normalized_length",
+            "result": "PASS"
+          },
+          {
+            "id": "numeric",
+            "result": "PASS"
+          },
+          {
+            "id": "only_space",
+            "result": "PASS"
+          },
+          {
+            "id": "plain",
+            "result": "PASS"
+          },
+          {
+            "id": "too_long",
+            "result": "PASS"
+          },
+          {
+            "id": "trim",
+            "result": "PASS"
+          },
+          {
+            "id": "unicode",
+            "result": "PASS"
+          },
+          {
+            "id": "wrong_type",
+            "result": "PASS"
+          }
+        ],
+        "passed": 13,
+        "total": 13,
+        "outcome": "PASS",
+        "report_digest": "193aa10c7126fdbc282101852333dad566f14db5c0d05227dd4c1403a67527e0"
+      }
+    },
+    {
+      "name": "ready_read_ignores_deadline",
+      "candidate_source": "import time\ntime.sleep(0.6)\n",
+      "configured_seconds": 0.1,
+      "elapsed_seconds": 0.6972097999996549,
+      "observed": {
+        "outcome": "FAIL",
+        "passed": 0
+      }
+    }
+  ],
+  "pytest_observed": {
+    "command": "C:\\Python314\\python.exe -B -m pytest AiProjeOfisi/tests -q -rs",
+    "passed": 85,
+    "skipped": 4,
+    "subtests_passed": 97
+  },
+  "baseline_observed": {
+    "exit": 1,
+    "error": "AssertionError: dokumanlar/hedef-mimari-v1/CALISMA_DURUMU.md"
+  },
+  "visual_check": {
+    "status": "NOT_VERIFIED",
+    "reason": "Playwright/headless startup produced no result; session interrupted; no screenshot"
+  }
+}

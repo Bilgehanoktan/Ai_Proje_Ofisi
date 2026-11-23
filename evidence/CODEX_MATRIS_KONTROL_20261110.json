@@ -1,0 +1,591 @@
+{
+  "review_id": "CODEX-20261110-MATRIS-01",
+  "date": "2026-11-10",
+  "matrix_input_sha256": "fa65b274bbb884df02459cc64e25b1f71c7afa6dfec0872f9cfbf125750c7de6",
+  "scope": "SOURCE_AND_WINDOWS_UNIT_NOT_RUNTIME_ACCEPTANCE",
+  "pytest": {
+    "command": "C:\\Python314\\python.exe -B -m pytest AiProjeOfisi/tests -v -rs",
+    "exit_code": 0,
+    "passed": 85,
+    "skipped": 4,
+    "subtests_passed": 97,
+    "skipped_names": [
+      "test_real_socketpair_fragmentation_and_bounded_reply",
+      "test_actual_pipes_and_ownership_transfer",
+      "test_exact_key_is_read_without_consuming_directory",
+      "test_symlink_permissions_hardlink_and_traversal_rejected"
+    ]
+  },
+  "baseline_validation": {
+    "command": "C:\\Python314\\python.exe -B GUNCEL/DOGRULA.py",
+    "exit_code": 1,
+    "error": "AssertionError: dokumanlar/hedef-mimari-v1/CALISMA_DURUMU.md"
+  },
+  "controlled_false_pass": {
+    "candidate_source": "import os,sys\nsys.stdout.write('{\"checks\": [{\"id\": \"boundary\", \"result\": \"PASS\"}, {\"id\": \"collapse\", \"result\": \"PASS\"}, {\"id\": \"empty\", \"result\": \"PASS\"}, {\"id\": \"mixed\", \"result\": \"PASS\"}, {\"id\": \"nbsp\", \"result\": \"PASS\"}, {\"id\": \"normalized_length\", \"result\": \"PASS\"}, {\"id\": \"numeric\", \"result\": \"PASS\"}, {\"id\": \"only_space\", \"result\": \"PASS\"}, {\"id\": \"plain\", \"result\": \"PASS\"}, {\"id\": \"too_long\", \"result\": \"PASS\"}, {\"id\": \"trim\", \"result\": \"PASS\"}, {\"id\": \"unicode\", \"result\": \"PASS\"}, {\"id\": \"wrong_type\", \"result\": \"PASS\"}]}')\nsys.stdout.flush()\nos._exit(0)\n",
+    "report": {
+      "oracle_id": "mgt01.check_title.13cases.v1",
+      "candidate_sha256": "4e82925129f84b195a771c1c56236d6cf19b98b018b144ae7d4a3bb9551a3900",
+      "oracle_sha256": "f43559258b69a6e0a502def4475d0ebd8832de8c185d3bb8ab841bc91d3e6c75",
+      "checks": [
+        {
+          "id": "boundary",
+          "result": "PASS"
+        },
+        {
+          "id": "collapse",
+          "result": "PASS"
+        },
+        {
+          "id": "empty",
+          "result": "PASS"
+        },
+        {
+          "id": "mixed",
+          "result": "PASS"
+        },
+        {
+          "id": "nbsp",
+          "result": "PASS"
+        },
+        {
+          "id": "normalized_length",
+          "result": "PASS"
+        },
+        {
+          "id": "numeric",
+          "result": "PASS"
+        },
+        {
+          "id": "only_space",
+          "result": "PASS"
+        },
+        {
+          "id": "plain",
+          "result": "PASS"
+        },
+        {
+          "id": "too_long",
+          "result": "PASS"
+        },
+        {
+          "id": "trim",
+          "result": "PASS"
+        },
+        {
+          "id": "unicode",
+          "result": "PASS"
+        },
+        {
+          "id": "wrong_type",
+          "result": "PASS"
+        }
+      ],
+      "passed": 13,
+      "total": 13,
+      "outcome": "PASS",
+      "report_digest": "1117911f2aa044c5a9418c01c1f98b4fac078e66442ed73b7141177ac865c124"
+    },
+    "limitation": "Local subprocess reproduction only; no DB, network, model, signing, acceptance or permanent candidate created"
+  },
+  "inventory": [
+    {
+      "module": "MOD-001",
+      "files": [
+        {
+          "path": "company_os/command_host.py",
+          "exists": true,
+          "sha256": "a817f776cc3d241aaff29a54428fd934191fe84ce915531f3b905154d332176c"
+        },
+        {
+          "path": "company_os/kernel_adapters.py",
+          "exists": true,
+          "sha256": "8f561b9b62e0a63b426a4670dd3bbe3c2ee5c6e57bffc1691d7ef806ff59aeb2"
+        },
+        {
+          "path": "company_os/bootstrap_protocol.py",
+          "exists": true,
+          "sha256": "8cd5fd5c4572131404286bd2ede9e27c0a990e12065894059a1aac7576ed7572"
+        },
+        {
+          "path": "company_os/bootstrap_transaction.py",
+          "exists": true,
+          "sha256": "e3f14f5590f39ce4fc5e228e37e4ba9cc1a24b717c5d0feec18e2fa896c0b6b5"
+        },
+        {
+          "path": "company_os/clock_provisioning.py",
+          "exists": true,
+          "sha256": "928c8b433d41e1f8e034b3935e7e76853bc1574fe83f400a22913c60e8e05a33"
+        },
+        {
+          "path": "company_os/consent_binding.py",
+          "exists": true,
+          "sha256": "4fab6daf4a477079b4e390e0e5a006e79e465b67f4287f24c862f3ea97b06a14"
+        },
+        {
+          "path": "company_os/session_provisioning.py",
+          "exists": true,
+          "sha256": "b670c2248ba438524304ac0fe015d19ecd221ae5ebb4c0fadd02359c4a7a9c08"
+        },
+        {
+          "path": "company_os/secret_adapter.py",
+          "exists": true,
+          "sha256": "4735801e1f0201008382dde47e96bc4b4a1d5626a27b9a9c93a39fcc6976ae92"
+        },
+        {
+          "path": "company_os/registry_reader.py",
+          "exists": true,
+          "sha256": "672432f3b4f9f0ba8531ed55609fa0f8a5093a867d1a3e465550ff9f03559b10"
+        },
+        {
+          "path": "company_os/registry_preflight.py",
+          "exists": true,
+          "sha256": "b0ef8f3c2a2b92eabd4176570ea84c3f2b82ee28aba54920dae5f05cd1205fc7"
+        },
+        {
+          "path": "company_os/reply_guard.py",
+          "exists": true,
+          "sha256": "64ffd6267bf2514bfe856b300ce59dd42e24b03508422d5206c70cd546f7bf3d"
+        }
+      ]
+    },
+    {
+      "module": "MOD-002",
+      "files": [
+        {
+          "path": "packages/contracts/company.py",
+          "exists": true,
+          "sha256": "11aa436748f3efe44101ac607aeffdbba3f7e3c00c3244a7c64394d45d2778ac"
+        },
+        {
+          "path": "packages/contracts/models.py",
+          "exists": true,
+          "sha256": "7a1567f63ce359632fc234d1aa4e43f090a02b03f6cf893184347de11db8e466"
+        },
+        {
+          "path": "company_os/command_host.py",
+          "exists": true,
+          "sha256": "a817f776cc3d241aaff29a54428fd934191fe84ce915531f3b905154d332176c"
+        }
+      ]
+    },
+    {
+      "module": "MOD-003",
+      "files": [
+        {
+          "path": "packages/contracts/execution.py",
+          "exists": true,
+          "sha256": "0ebc384cc3e58b4552d274b82f7a954eed84e9ea0ca19226e9bdaf3fa4620cd7"
+        },
+        {
+          "path": "company_os/execution_protocol.py",
+          "exists": true,
+          "sha256": "df5e5dee7d55af19cf8c64f870a6a24d3668e36ada232699022ad1cb7486cca3"
+        },
+        {
+          "path": "sql/053_R60_WORKER_CLAIM_OVERLAY.sql",
+          "exists": true,
+          "sha256": "bfff3df32eabd7667de8e3511ee314974822dc6939166520d49227023068d692"
+        },
+        {
+          "path": "sql/077_R64_QUALIFICATION_FINALITY.sql",
+          "exists": true,
+          "sha256": "749dbc8bf207f3f65c7c6e03a0b5ec150f707e3d7ef7e2d5f8c12e18e4acc200"
+        }
+      ]
+    },
+    {
+      "module": "MOD-004",
+      "files": [
+        {
+          "path": "company_os/launch_controller.py",
+          "exists": true,
+          "sha256": "93d694196f1130dc9794e1bafa9f06342b6c7c648be8ba93ffc09a437d18324a"
+        },
+        {
+          "path": "company_os/r65_spawn_linux.c",
+          "exists": true,
+          "sha256": "b60b1d9ec1355f5feab45820aa4b26dabad9ecc0fece9250cc67205187ca1821"
+        },
+        {
+          "path": "native/r65_spawn_linux.c",
+          "exists": true,
+          "sha256": "571cb37fb28283bc37014a59ca3a4773a12de87f49a720e0f96af81354057c1c"
+        },
+        {
+          "path": "native/r55_clock_observer.c",
+          "exists": true,
+          "sha256": "799f3ac5d2b98fc1e12345c9214bb5112645c4d6dac280dff203e84b2a00bff2"
+        }
+      ]
+    },
+    {
+      "module": "MOD-005",
+      "files": [
+        {
+          "path": "company_os/engine_bridge.py",
+          "exists": true,
+          "sha256": "b9b2e9ae7590206dc75ab2a479b11517d046252ec3b81baa42372be89e1b4540"
+        },
+        {
+          "path": "company_os/composition.py",
+          "exists": true,
+          "sha256": "026263aee062e62def4022c8192461a2e69fceb40e942e8371c94c3e14c73e0f"
+        },
+        {
+          "path": "packages/contracts/pilot.py",
+          "exists": true,
+          "sha256": "c1c007013487e84bb7f0a7b928e87556cfa5c49b8cc6e1b5b0a57992eabc7b94"
+        }
+      ]
+    },
+    {
+      "module": "MOD-006",
+      "files": [
+        {
+          "path": "company_os/tool_broker.py",
+          "exists": true,
+          "sha256": "79e0014e59640b23c2779018ec8efba811b691ce1137a3696bc99ed716632e2d"
+        },
+        {
+          "path": "company_os/tool_executor.py",
+          "exists": true,
+          "sha256": "871da19150c3a6f4710c8a6978bef51129f11674c02f971b7ff3caa644c2cc5e"
+        },
+        {
+          "path": "sql/057_R60_TOOL_NATIVE.sql",
+          "exists": true,
+          "sha256": "00bf5d75473b196e1c24b2236b68d6dde4138b265c4e967c0b1e90594f9af142"
+        },
+        {
+          "path": "sql/082_R65_EFFECT_COMPLETE.sql",
+          "exists": true,
+          "sha256": "68656adac0cb7abfeb8e85aa4f94a07d59b72be8df3e92e22543b1ef4ff3d670"
+        }
+      ]
+    },
+    {
+      "module": "MOD-007",
+      "files": [
+        {
+          "path": "company_os/patch_pipeline.py",
+          "exists": true,
+          "sha256": "73f902b0cc0a37b8f4b91aa4a90acbd0dc8540e8502de8ffc5cadd8083e5c79a"
+        },
+        {
+          "path": "packages/contracts/lifecycle.py",
+          "exists": true,
+          "sha256": "58e9216521829a3e19e585324f6b8c6219799ba2c59094798b5366fd7c63b93f"
+        },
+        {
+          "path": "sql/040_R58_PATCH_ACCEPTANCE_NATIVE.sql",
+          "exists": true,
+          "sha256": "5e3d67746c8640d24df9849ce88946b29f4f4314c265db0565b1c18fdd0322c7"
+        },
+        {
+          "path": "sql/058_R60_PATCH_EFFECT_OVERLAY.sql",
+          "exists": true,
+          "sha256": "6a78cbba6c1b89795578677756584ba4981296487f1dab78e780013636f68fa8"
+        },
+        {
+          "path": "sql/081_R65_PATCH_READ.sql",
+          "exists": true,
+          "sha256": "ce4c7ccd6e701ed6d98767d02e0357effffaa5739ec5152cdd0c0c18bd9ecfea"
+        }
+      ]
+    },
+    {
+      "module": "MOD-008",
+      "files": [
+        {
+          "path": "company_os/verifier_runner.py",
+          "exists": true,
+          "sha256": "aa9335b305b99575fd4e83dada75a4b14a7469c06bc8911d37009dafb5447b14"
+        },
+        {
+          "path": "packages/contracts/lifecycle.py",
+          "exists": true,
+          "sha256": "58e9216521829a3e19e585324f6b8c6219799ba2c59094798b5366fd7c63b93f"
+        },
+        {
+          "path": "fixtures/mgt01/",
+          "exists": true,
+          "sha256": null
+        }
+      ]
+    },
+    {
+      "module": "MOD-009",
+      "files": [
+        {
+          "path": "company_os/command_host.py",
+          "exists": true,
+          "sha256": "a817f776cc3d241aaff29a54428fd934191fe84ce915531f3b905154d332176c"
+        },
+        {
+          "path": "packages/contracts/lifecycle.py",
+          "exists": true,
+          "sha256": "58e9216521829a3e19e585324f6b8c6219799ba2c59094798b5366fd7c63b93f"
+        },
+        {
+          "path": "sql/040_R58_PATCH_ACCEPTANCE_NATIVE.sql",
+          "exists": true,
+          "sha256": "5e3d67746c8640d24df9849ce88946b29f4f4314c265db0565b1c18fdd0322c7"
+        },
+        {
+          "path": "sql/041_R58_STOP_RELEASE_NATIVE.sql",
+          "exists": true,
+          "sha256": "c7b4a89641859241179b49c598fed4d62554af1c33848432eba31579e182c0fb"
+        },
+        {
+          "path": "sql/060_R60_STOP_RECONCILIATION_OVERLAY.sql",
+          "exists": true,
+          "sha256": "a9d2b1b8253b067a28023c9da2bc8e84c08a802dd5057ef96e883c30261d9568"
+        }
+      ]
+    },
+    {
+      "module": "MOD-010",
+      "files": [
+        {
+          "path": "packages/contracts/models.py",
+          "exists": true,
+          "sha256": "7a1567f63ce359632fc234d1aa4e43f090a02b03f6cf893184347de11db8e466"
+        },
+        {
+          "path": "presentation/app.py",
+          "exists": true,
+          "sha256": "6cf0f6f9fe5130b66f1e11192fae847a89ae0356bdac2df9466d9fbb21de3d92"
+        },
+        {
+          "path": "sql/020_R55_RECEIPT_EVENT_NATIVE_CANDIDATES.sql",
+          "exists": true,
+          "sha256": "a9a42fee9dba5df0e67294408beb2441b216f9518e626b2605e5154d716d6a7a"
+        },
+        {
+          "path": "sql/074_R64_EVENT_MAP.sql",
+          "exists": true,
+          "sha256": "2bb03e7104dcad1708abedc816867ecd912909708e6d22a09c7efc3675946d85"
+        }
+      ]
+    },
+    {
+      "module": "MOD-011",
+      "files": [
+        {
+          "path": "presentation/app.py",
+          "exists": true,
+          "sha256": "6cf0f6f9fe5130b66f1e11192fae847a89ae0356bdac2df9466d9fbb21de3d92"
+        },
+        {
+          "path": "presentation/__init__.py",
+          "exists": true,
+          "sha256": "971df670b6ad24a32fa587f39cdd1ec9f2b32ebf0dbd95f255e5965c1977fd85"
+        }
+      ]
+    },
+    {
+      "module": "MOD-012",
+      "files": [
+        {
+          "path": "packages/contracts/company.py",
+          "exists": true,
+          "sha256": "11aa436748f3efe44101ac607aeffdbba3f7e3c00c3244a7c64394d45d2778ac"
+        },
+        {
+          "path": "config/registry-decisions.json",
+          "exists": true,
+          "sha256": "e668062064bec25d8f915ae1e90a437fa60d0977d4736c438a3a3b682350bf16"
+        },
+        {
+          "path": "sql/035_R58_OPERATION_REGISTRY.sql",
+          "exists": true,
+          "sha256": "bd4a43d47b9a873f07959c56e4b7e50b6d8e3edaedfaa47f7b1ac5db79855670"
+        },
+        {
+          "path": "sql/048_R60_OPERATION_REGISTRY.sql",
+          "exists": true,
+          "sha256": "c53f90f143215568b4c28379f7e5b3130896ba2cec691f47c132eed47905631f"
+        }
+      ]
+    },
+    {
+      "module": "MOD-013",
+      "files": [
+        {
+          "path": "packages/contracts/company.py",
+          "exists": true,
+          "sha256": "11aa436748f3efe44101ac607aeffdbba3f7e3c00c3244a7c64394d45d2778ac"
+        },
+        {
+          "path": "fixtures/mgt01/oracle_mgt01.py",
+          "exists": false,
+          "sha256": null
+        },
+        {
+          "path": "fixtures/mgt01/candidate_valid.py",
+          "exists": false,
+          "sha256": null
+        },
+        {
+          "path": "fixtures/mgt01/candidate_mutant.py",
+          "exists": false,
+          "sha256": null
+        },
+        {
+          "path": "fixtures/mgt01/baseline_candidate.py",
+          "exists": false,
+          "sha256": null
+        }
+      ]
+    },
+    {
+      "module": "MOD-014",
+      "files": [
+        {
+          "path": "packages/contracts/company.py",
+          "exists": true,
+          "sha256": "11aa436748f3efe44101ac607aeffdbba3f7e3c00c3244a7c64394d45d2778ac"
+        },
+        {
+          "path": "packages/contracts/execution.py",
+          "exists": true,
+          "sha256": "0ebc384cc3e58b4552d274b82f7a954eed84e9ea0ca19226e9bdaf3fa4620cd7"
+        },
+        {
+          "path": "sql/058_R60_PATCH_EFFECT_OVERLAY.sql",
+          "exists": true,
+          "sha256": "6a78cbba6c1b89795578677756584ba4981296487f1dab78e780013636f68fa8"
+        },
+        {
+          "path": "sql/082_R65_EFFECT_COMPLETE.sql",
+          "exists": true,
+          "sha256": "68656adac0cb7abfeb8e85aa4f94a07d59b72be8df3e92e22543b1ef4ff3d670"
+        }
+      ]
+    },
+    {
+      "module": "MOD-015",
+      "files": [
+        {
+          "path": "sql/041_R58_STOP_RELEASE_NATIVE.sql",
+          "exists": true,
+          "sha256": "c7b4a89641859241179b49c598fed4d62554af1c33848432eba31579e182c0fb"
+        },
+        {
+          "path": "sql/059_R60_LEASE_RECOVERY_NATIVE.sql",
+          "exists": true,
+          "sha256": "2097e4f94e6f545f25b0e9dadbf3665220570ab6be851a5fee73abbb77c6c80a"
+        },
+        {
+          "path": "sql/060_R60_STOP_RECONCILIATION_OVERLAY.sql",
+          "exists": true,
+          "sha256": "a9d2b1b8253b067a28023c9da2bc8e84c08a802dd5057ef96e883c30261d9568"
+        },
+        {
+          "path": "tools/disposable_compile_trial.py",
+          "exists": true,
+          "sha256": "1aad97347b46d6b50a6020e89837d1a739eff4be1a9bdb85ef9bf3750f57debb"
+        },
+        {
+          "path": "tools/disposable_bootstrap_commit_trial.py",
+          "exists": true,
+          "sha256": "ebd5a5f55c1fd34c672a2c716a4f76b77881bfa0afbe8f9704cfdc7f265b152e"
+        }
+      ]
+    },
+    {
+      "module": "MOD-016",
+      "files": [
+        {
+          "path": "tools/verify_source.py",
+          "exists": true,
+          "sha256": "8dd031cf91a701d5c714dddbcf9bd6ea1f692109544d20fce2b21036580610e5"
+        },
+        {
+          "path": "packages/workspace_manifest.py",
+          "exists": true,
+          "sha256": "a579d27541d9baae8ad8ad803b629426b251b3a392b00e3e054077a938f04e7c"
+        },
+        {
+          "path": "tests/security/test_sql_source.py",
+          "exists": true,
+          "sha256": "0fb2df3afdecf09157a8e4e1a677bcd623e5c8667fe597a0e3fab1df411a8f32"
+        }
+      ]
+    }
+  ],
+  "e2e_static_import_gaps": [
+    {
+      "module": "company_os.consent_binding",
+      "missing_top_level_binding": "verify_owner_installation_consent"
+    },
+    {
+      "module": "company_os.constructors",
+      "missing_module": true
+    },
+    {
+      "module": "company_os.engine_bridge",
+      "missing_top_level_binding": "EngineReplyGuard"
+    },
+    {
+      "module": "company_os.engine_bridge",
+      "missing_top_level_binding": "PumpLimits"
+    },
+    {
+      "module": "company_os.launch_controller",
+      "missing_top_level_binding": "DeliveryGuard"
+    },
+    {
+      "module": "company_os.launch_controller",
+      "missing_top_level_binding": "SpawnPlan"
+    },
+    {
+      "module": "company_os.launch_controller",
+      "missing_top_level_binding": "sha256_file"
+    },
+    {
+      "module": "company_os.patch_pipeline",
+      "missing_top_level_binding": "DbScope"
+    },
+    {
+      "module": "company_os.patch_pipeline",
+      "missing_top_level_binding": "IntentJournal"
+    },
+    {
+      "module": "company_os.patch_pipeline",
+      "missing_top_level_binding": "UnknownCommitOutcome"
+    },
+    {
+      "module": "company_os.patch_pipeline",
+      "missing_top_level_binding": "canonical_json"
+    },
+    {
+      "module": "company_os.provisioning",
+      "missing_top_level_binding": "ProvisioningContext"
+    },
+    {
+      "module": "company_os.provisioning",
+      "missing_top_level_binding": "provision_project_grant"
+    },
+    {
+      "module": "company_os.provisioning",
+      "missing_top_level_binding": "revoke_project_grant"
+    },
+    {
+      "module": "company_os.secret_adapter",
+      "missing_top_level_binding": "read_secret_bytes"
+    },
+    {
+      "module": "company_os.tool_broker",
+      "missing_top_level_binding": "Unknown"
+    }
+  ],
+  "source_pins": {
+    "company_os\\verifier_runner.py": "aa9335b305b99575fd4e83dada75a4b14a7469c06bc8911d37009dafb5447b14",
+    "fixtures\\mgt01\\verifier\\check_title.py": "f43559258b69a6e0a502def4475d0ebd8832de8c185d3bb8ab841bc91d3e6c75",
+    "tools\\disposable_e2e_workflow_trial.py": "474abf7f206e8f7345636195f4996901f46921f18715a0c6904abb0c3ebea59e",
+    "presentation\\app.py": "6cf0f6f9fe5130b66f1e11192fae847a89ae0356bdac2df9466d9fbb21de3d92",
+    "tests\\unit\\test_presentation.py": "36025b1c2fd56f76f05b92f28e7248a0a5d641c1fb4ca13cbf60db49f2dbff57"
+  }
+}

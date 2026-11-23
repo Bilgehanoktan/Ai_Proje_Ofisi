@@ -1,0 +1,1 @@
+{"status": "PASS", "scope": "DISTINCT_UID_IPC_MECHANISM_ONLY_NOT_ENROLLMENT", "actual": {"client_uid": 999, "measured_server_uid": 65534, "result": {"echo": {"probe": "fixture-only"}, "peer_uid": 999, "server_uid": 65534}}, "helpers_stopped": true}

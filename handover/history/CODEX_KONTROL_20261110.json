@@ -1,0 +1,22 @@
+{
+  "scope": "LIMITED_SOURCE_REVIEW_AND_BENIGN_COUNTEREXAMPLE_NOT_NATIVE_E2E",
+  "windows_tests": {
+    "total": 89,
+    "pass": 85,
+    "skip": 4
+  },
+  "verified_fixes": [
+    "oracle exitcode and expected caseIDs now checked",
+    "clock explicit policy/state",
+    "cleanup conditional exact roles"
+  ],
+  "confirmed_remaining": [
+    "exit0+expected13ID forged report still PASS without normalize_title",
+    "E2E nonexistent imports still present",
+    "pg_ctl start still separate transient service"
+  ],
+  "native_receipt_read": "NATIVE_CLOCK_TRIAL_a20c6386.json",
+  "native_rerun": "NOT_RUN",
+  "next_task": "ANTIGRAVITY_SIRADAKI_GOREV_20261110.md",
+  "first13": "0/13"
+}

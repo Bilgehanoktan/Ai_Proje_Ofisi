@@ -1,0 +1,33 @@
+{
+  "canonical_workspace": "E:\\Projeler\\Ai_Proje_Ofisi",
+  "date": "2026-11-11",
+  "task_id": "TASK-CODEX-20261111-04",
+  "environment": {
+    "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "pydantic": "2.12.5"
+  },
+  "files": {
+    "company_os/composition.py": "57c1516d1e788637d6ceff29196c87e4ebd3f153eacdc4c007a915bfa04e0653",
+    "company_os/patch_pipeline.py": "78450e3040bd26f37b95f8d2abccf5dc263bb3abbbf32b30a77e24a86d2538f2",
+    "tests/unit/test_pipeline.py": "b9aa0edfae74c4c0281b2803a7a54c15e45350786df36b148a7f1703df501832",
+    "PLAN.md": "34eec46a292572484f3fe88900bd2019013f342b7f61b91dda02221760fd8e76",
+    "UYGULAMA_DURUM_MATRISI.md": "9a4652ec569bba49b9b69ab19a4bd083cd4c751abfdc4a679596a3c8d902a3bc",
+    "tests/unit/test_composition.py": "c57b092fd746718a5219eb11f231f3f4847ca6de2e66d67ab5f7be4a72686712",
+    "CODEX_PILOT_BAGLANTISI_20261111_02.md": "315885a20a01ba5a6fe70222e8d028f426bf41013940e397d47fe2be45768b08"
+  },
+  "logs": {
+    "CODEX_PILOT_20261111_02_preflight.log": "6b2fb171cc09627252d0a12f8d7a8a52bafbd6fc9309620a3b1a9f9d1ea6842e",
+    "CODEX_PILOT_20261111_02_preflight_FINAL.log": "b0d023574daea5f3df032c6001b53f1e7dbaa9908223bdb592c8ac5fa2d9589e",
+    "CODEX_PILOT_20261111_02_pytest.log": "4e9995721001058fe7dffc1e5ec9f77081bd961e21fead9601e5c591e4a6a42f",
+    "CODEX_PILOT_20261111_02_pytest_FINAL.log": "4247c1b650fa432cf7b64820df30cc4fdfade9c7ee1fae1a6c676fef88fdc36c"
+  },
+  "runtime": "NOT_RUN",
+  "G0": "OPEN",
+  "first13": "0/13",
+  "independent_review": "PENDING",
+  "actual_e2e": "NOT_RUN",
+  "legacy_trial_api_gaps": 17,
+  "source_tests": "121 PASS / 4 SKIP / 112 subtests PASS",
+  "A_validation": "PREVIOUS_FAILURE_REPORTED_NOT_RETESTED"
+}

@@ -1,0 +1,26 @@
+{
+  "scope": "SOURCE_AND_FAKE_DRIVER_NOT_RUNTIME_ACCEPTANCE",
+  "files": {
+    "company_os/workflow.py": "6b589fed4ca58945d933e29569eb6185a171a473ea597db026ec64da4d4400e4",
+    "company_os/composition.py": "771be68335f0957c09d6faf2b76d3c6b2584eeb179eec7bb8dd2880e29d315f8",
+    "tools/disposable_e2e_workflow_trial.py": "2a5cce954d83e4b98d41d40607b8ff66a197ce3298d90a12c834bc20ec76e54e",
+    "tools/run_disposable_e2e_workflow.py": "192547d1e5d4f8a19072f782b2dccbb600004ed5d418187a5fab6d03282f6929",
+    "tools/workflow_preflight.py": "f112ebbef319e78bfe88a2fb3ef336248d26e8e9bc92d59f5401939b90b83c0b",
+    "tests/unit/test_workflow.py": "c6a8484e811e35134a02b24eeb9fcc44dcb3cae53030524e00affdd6ff461196",
+    "tests/unit/test_workflow_preflight.py": "ea211c5c9e5cc9bce5d1f7bb1c524a1530d86e69a593ea51b9bca649a42a094a",
+    "tests/unit/test_workflow_trust.py": "176db154f22828c8354be48d0616bbea6334b5ee9db70cb9649bc8c039b42b50",
+    "CODEX_KANONIK_AKIS_20261112.md": "97b88c7d947bb7f5b8c132bcb410fc85cb0c173537dc9c57cfc8120a342eeafa",
+    "PLAN.md": "52cc6217bda96792df5b3ab4ed973e7417c7efbc4ecd7d40ff682e76d7a639ea",
+    "UYGULAMA_DURUM_MATRISI.md": "7ad37096e04430d0aa4e750b8b87b87881512b4552fbcafa209c8750e965f131",
+    "ILERLEME_TAKIBI_20261112.md": "38093c50cd059593d056128fc34d03691a42e43e0750f2dd98ad217218665006",
+    "evidence/CODEX_WORKFLOW_20261112_cli.log": "cab92fd08570adc9d2eb09b7997409b2a4f0346579bf3fc01b88d6546f8c0177",
+    "evidence/CODEX_WORKFLOW_20261112_preflight.json": "5783eaef0880df793da38d7062ebdca5c729d465606fd41b548a588526247330",
+    "evidence/CODEX_WORKFLOW_20261112_tests.log": "fe8b958a57d778e63ae19c54fce0ae3ceaf363373c15e12f2b5c248482e20dca",
+    "evidence/CODEX_WORKFLOW_20261112_BACKUP/company_os__composition.py": "57c1516d1e788637d6ceff29196c87e4ebd3f153eacdc4c007a915bfa04e0653",
+    "evidence/CODEX_WORKFLOW_20261112_BACKUP/tests__unit__test_workflow_preflight.py": "c63174be9b865adc81b19c62d6e7acaad6959f8ed837fbac69cc6ef82e5fed43",
+    "evidence/CODEX_WORKFLOW_20261112_BACKUP/tests__unit__test_workflow_trust.py": "38f41ad3d5d67bc340bc20e196bf717a3a53cc18551940c1a232d99bdebc64fd",
+    "evidence/CODEX_WORKFLOW_20261112_BACKUP/tools__disposable_e2e_workflow_trial.py": "ca7091d6324df1dea2b311c61421606430f0f3703061e61a1e817f74b1f345d9",
+    "evidence/CODEX_WORKFLOW_20261112_BACKUP/tools__run_disposable_e2e_workflow.py": "b04c093354a74a725d9cb01c610bbf8a76b1b561e4d32e8a86a67829880f96b1",
+    "evidence/CODEX_WORKFLOW_20261112_BACKUP/tools__workflow_preflight.py": "e3a64ff9f76033d2cf311ef8b906f4307d977e8d7ed6e94ab71f606a9e605d8a"
+  }
+}

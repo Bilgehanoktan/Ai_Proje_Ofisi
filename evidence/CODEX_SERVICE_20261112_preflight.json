@@ -1,0 +1,44 @@
+{
+  "status": "SOURCE_CALLS_COMPATIBLE",
+  "scope": "AST_SIGNATURE_ONLY_NOT_RUNTIME_ACCEPTANCE",
+  "checked_calls": 23,
+  "scanned_files": [
+    "tools\\disposable_e2e_workflow_trial.py",
+    "company_os\\workflow.py",
+    "company_os\\workflow_trust.py",
+    "company_os\\linux_observer.py",
+    "company_os\\observer_profile.py",
+    "company_os\\peer_rpc.py",
+    "company_os\\runtime_verification.py",
+    "company_os\\supervisor_service.py"
+  ],
+  "coverage_limits": [
+    "INSTANCE_METHODS_AND_DYNAMIC_ARGUMENT_VALUES_REQUIRE_BEHAVIOR_TESTS"
+  ],
+  "skipped_dynamic_calls": 2,
+  "findings": [],
+  "source_sha256": {
+    "tools\\disposable_e2e_workflow_trial.py": "2a5cce954d83e4b98d41d40607b8ff66a197ce3298d90a12c834bc20ec76e54e",
+    "company_os\\workflow.py": "61e6f37996523729d7b900b56d8d6e7267df857662f03484bab639f52115924b",
+    "company_os\\workflow_trust.py": "5214086177a82017200278defcb5318b0f072fdce64bf9507fe18bbee2a1c6d4",
+    "company_os\\execution_protocol.py": "df5e5dee7d55af19cf8c64f870a6a24d3668e36ada232699022ad1cb7486cca3",
+    "company_os\\__init__.py": "db81c1fb6236ba06e524c14e6c96b28369aed76aaaf6df7239061072554b050a",
+    "company_os\\composition.py": "c4dce352fffd4e51c614ff247dd30dd4902d5850cb3ce9925707fffa163f7252",
+    "company_os\\supervisor_handles.py": "e83308fb30c0f8f03dac1a1961009ccd9bc364c3f1b64a16ced0306ae8c068f0",
+    "company_os\\consent_binding.py": "63677fbf71ceea722e7ae677ab44b0f28c6c40a4d02d5dee02ffcfb97982bf24",
+    "company_os\\provisioning.py": "04188a95b106f380e1f6c828a57a7dcc92e0e392549193a15d0c36b50538b606",
+    "company_os\\secret_adapter.py": "7a087bba850f3b410b25ec1697e7b92fdc8075854a7a68e051fd5cd6922ef816",
+    "company_os\\linux_observer.py": "0d9513ec402d330b93378109e4b66d21fe2ca446df490fe981dcd6b47f2fb7ba",
+    "company_os\\observer_profile.py": "238334e4ef52ffb66b6b750d9bbd06eb98893bbba6f4929e6007361190694f6c",
+    "company_os\\peer_rpc.py": "fee014e65de1b59cdef9ab4f00956f31db20652667f03df2e2f1483422285696",
+    "company_os\\runtime_verification.py": "ba104af003bd21e00b888644003ab209e147b0e1f0b9a4e4242d87b6f9b74cbc",
+    "company_os\\verifier_runner.py": "f614af7bb0042491a95627b028cd9cf2c5ee54cb338fade26effe4f9036d5990",
+    "company_os\\supervisor_service.py": "8318ece6098cc5cfd9d5354b3e3edbb7faa731ed94147b940db83240230ff614"
+  },
+  "uninspectable_calls": 172,
+  "runtime_ready": false,
+  "runtime_blockers": [
+    "ENROLLED_ISOLATED_VERIFIER_REQUIRED",
+    "TRUSTED_OWNER_CLOCK_AND_PROFILE_BINDINGS_NOT_VERIFIED"
+  ]
+}

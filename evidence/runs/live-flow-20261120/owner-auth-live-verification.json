@@ -1,0 +1,318 @@
+{
+  "scope": "LOCAL_EVALUATION_CLUSTER_VERIFIED_NOT_G0_RATIFICATION",
+  "postgres_probe": {
+    "status": "LOCAL_POSTGRES_RUNNING",
+    "scope": "POSTGRES_FOUNDATION_ONLY_NOT_APPLICATION_ACCEPTANCE",
+    "database": "ai_proje_ofisi",
+    "port": 55490,
+    "tcp_enabled": false,
+    "local_auth": "PEER_OS_IDENTITY",
+    "auth_policy_readback_verified": true,
+    "socket_permissions": "0700",
+    "application_schema_installed": null,
+    "application_schema_count": 2,
+    "application_schema_status": "NOT_VERIFIED",
+    "application_session_issued": false,
+    "task_execution_verified": false
+  },
+  "086_live_install": "ALREADY_INSTALLED",
+  "least_privilege_roles": {
+    "aipof_http_kernel": {
+      "canlogin": true,
+      "super": false,
+      "bypassrls": false,
+      "inherit": true,
+      "createrole": false
+    },
+    "aipof_owner_auth": {
+      "canlogin": true,
+      "super": false,
+      "bypassrls": false,
+      "inherit": true,
+      "createrole": false
+    }
+  },
+  "repaired_missing_session_scope_heads": 0,
+  "clock_activation": {
+    "invalidated_old_epochs": [
+      "0d5b4897-68b2-4f1f-b6e0-c76b0727be7b"
+    ],
+    "clock_key_id": "473de499-c924-4c58-99ac-96e598f6efc5",
+    "clock_enrollment_revision": 7,
+    "host_boot_id": "c1ebb73c-47ba-4087-a558-6cdc1f234e2d",
+    "epoch_id": "5422ab46-9278-4a62-b01f-002c6a00f54a",
+    "samples": [
+      {
+        "seq": 1,
+        "sample_id": "c1b497ad-8c5a-4f75-ad6d-b2804c7224db",
+        "result": {
+          "status": "SAMPLE_PERSISTED_NO_LIVE_CUT",
+          "sample_id": "c1b497ad-8c5a-4f75-ad6d-b2804c7224db",
+          "source_sequence": 1
+        }
+      },
+      {
+        "seq": 2,
+        "sample_id": "b30dc10a-cb64-4115-8120-8c28822a8ecd",
+        "result": {
+          "status": "SAMPLE_PERSISTED_NO_LIVE_CUT",
+          "sample_id": "b30dc10a-cb64-4115-8120-8c28822a8ecd",
+          "source_sequence": 2
+        }
+      },
+      {
+        "seq": 3,
+        "sample_id": "10911afc-5627-40fd-bc31-ac705cf8aa8c",
+        "result": {
+          "status": "SAMPLE_PERSISTED_NO_LIVE_CUT",
+          "sample_id": "10911afc-5627-40fd-bc31-ac705cf8aa8c",
+          "source_sequence": 3
+        }
+      }
+    ],
+    "verified_current_bounds": {
+      "epoch_id": "5422ab46-9278-4a62-b01f-002c6a00f54a",
+      "sample_id": "10911afc-5627-40fd-bc31-ac705cf8aa8c",
+      "host_boot_id": "c1ebb73c-47ba-4087-a558-6cdc1f234e2d",
+      "host_generation": 1,
+      "utc_lower_bound": "2026-11-20T01:03:36.786145+03:00",
+      "utc_upper_bound": "2026-11-20T01:03:36.790366+03:00",
+      "boottime_after_ns": 405818426838,
+      "writer_generation": 54,
+      "host_registration_id": "00000000-0000-4000-8000-000000000020",
+      "host_registration_revision": 1
+    }
+  },
+  "owner_signer_enrollment": {
+    "owner_key_id": "c9fbf266-829d-4245-ab52-f9260ced90f7",
+    "owner_enrollment_revision": 5,
+    "fingerprint": "979b518874ee4918bf675b46a2defb2c089684ddabfd5c99321a1558f2335ad2"
+  },
+  "owner_auth_readiness_after_install": {
+    "scope": "DIAGNOSTIC_ONLY_NOT_NATIVE_AUTHORIZATION",
+    "native_v1_installed": true,
+    "active_owner_auth_signers": 1,
+    "active_clock_epochs": 1,
+    "next_step": "READY_FOR_NATIVE_OWNER_AUTH_CHECK"
+  },
+  "step2_tests": {
+    "positive_issue_s1": {
+      "execute": {
+        "auth_request_id": "7e2a0da1-3725-4870-8704-67fc896a5c24",
+        "installation_id": "00000000-0000-4000-8000-000000000001",
+        "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+        "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+        "principal_id": "00000000-0000-4000-8000-000000000004",
+        "action": "ISSUE_SESSION",
+        "session_id": "ddb3c203-c8c9-4071-9270-c3ec0928a609",
+        "expires_at": "2026-11-20T01:13:36.919731+03:00",
+        "revoked_session_count": 0,
+        "receipt_digest": "889b2d6960a0abd76e5fd302e39e05d24ab2b516c27bf715b4a737b41dccdeac",
+        "audit_id": 79,
+        "outcome": "ISSUED",
+        "commit": "ACKNOWLEDGED",
+        "independent_readback": "MATCH",
+        "new_grants": 0,
+        "new_memberships": 0,
+        "authorization": "SESSION_LIFECYCLE_ONLY_NOT_WORKFLOW_ACCEPTANCE"
+      },
+      "readback": {
+        "action": "ISSUE_SESSION",
+        "audit_id": 79,
+        "human_id": "00000000-0000-4000-8000-000000000004",
+        "readback": "EXACT_COMMITTED_WITNESS_MATCH",
+        "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+        "expires_at": "2026-11-20T01:13:36.919731+03:00",
+        "new_grants": 0,
+        "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+        "session_id": "ddb3c203-c8c9-4071-9270-c3ec0928a609",
+        "token_hash": "ef869e489ddcfdcc0ce880ff96f7ef557d50d3c30ffb41939c9c1972afdc0a0e",
+        "authorization": "SESSION_RECORD_READBACK_NOT_WORKFLOW_ACCEPTANCE",
+        "receipt_digest": "889b2d6960a0abd76e5fd302e39e05d24ab2b516c27bf715b4a737b41dccdeac",
+        "auth_request_id": "7e2a0da1-3725-4870-8704-67fc896a5c24",
+        "installation_id": "00000000-0000-4000-8000-000000000001",
+        "new_memberships": 0,
+        "revoked_session_count": 0
+      }
+    },
+    "positive_issue_s2": {
+      "auth_request_id": "f1d584e6-278c-45c1-8c5f-24791730d42b",
+      "installation_id": "00000000-0000-4000-8000-000000000001",
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "00000000-0000-4000-8000-000000000004",
+      "action": "ISSUE_SESSION",
+      "session_id": "0c0af8b9-a1f8-4f3e-9078-b6bdfaa72111",
+      "expires_at": "2026-11-20T01:13:36.962502+03:00",
+      "revoked_session_count": 0,
+      "receipt_digest": "1f09f472c93bccca5e927474f56bb4dd078bef2480f17573f08e3e459ca5ba81",
+      "audit_id": 80,
+      "outcome": "ISSUED",
+      "commit": "ACKNOWLEDGED",
+      "independent_readback": "MATCH",
+      "new_grants": 0,
+      "new_memberships": 0,
+      "authorization": "SESSION_LIFECYCLE_ONLY_NOT_WORKFLOW_ACCEPTANCE"
+    },
+    "positive_replay_s2": {
+      "auth_request_id": "f1d584e6-278c-45c1-8c5f-24791730d42b",
+      "installation_id": "00000000-0000-4000-8000-000000000001",
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "00000000-0000-4000-8000-000000000004",
+      "action": "ISSUE_SESSION",
+      "session_id": "0c0af8b9-a1f8-4f3e-9078-b6bdfaa72111",
+      "expires_at": "2026-11-20T01:13:36.962502+03:00",
+      "revoked_session_count": 0,
+      "receipt_digest": "1f09f472c93bccca5e927474f56bb4dd078bef2480f17573f08e3e459ca5ba81",
+      "audit_id": 80,
+      "outcome": "REPLAY_ALREADY_RECORDED",
+      "commit": "ACKNOWLEDGED",
+      "independent_readback": "MATCH",
+      "new_grants": 0,
+      "new_memberships": 0,
+      "authorization": "SESSION_LIFECYCLE_ONLY_NOT_WORKFLOW_ACCEPTANCE"
+    },
+    "negative_superuser_rejected": {
+      "python_guard_error": "EXACT_LEAST_PRIVILEGE_OWNER_AUTH_LOGIN_REQUIRED",
+      "sql_guard_error": "OWNER_AUTH_TRANSPORT_REQUIRED"
+    },
+    "negative_wrong_hmac": "INVALID_OWNER_AUTH_HMAC",
+    "negative_request_conflict": "OWNER_AUTH_REQUEST_CONFLICT",
+    "positive_revoke_s1": {
+      "execute": {
+        "auth_request_id": "f4011d54-05f6-4445-abdd-b58ab673a0b0",
+        "installation_id": "00000000-0000-4000-8000-000000000001",
+        "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+        "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+        "principal_id": "00000000-0000-4000-8000-000000000004",
+        "action": "REVOKE_SESSION",
+        "session_id": "ddb3c203-c8c9-4071-9270-c3ec0928a609",
+        "expires_at": "2026-11-20T01:13:36.919731+03:00",
+        "revoked_session_count": 1,
+        "receipt_digest": "b19db995bfc3a510e9aea7d7d6a1e7deb1a9df3bf9e224f3b45d2773b95b3c67",
+        "audit_id": 81,
+        "outcome": "REVOKED",
+        "commit": "ACKNOWLEDGED",
+        "independent_readback": "MATCH",
+        "new_grants": 0,
+        "new_memberships": 0,
+        "authorization": "SESSION_LIFECYCLE_ONLY_NOT_WORKFLOW_ACCEPTANCE"
+      },
+      "readback": {
+        "action": "REVOKE_SESSION",
+        "audit_id": 81,
+        "human_id": "00000000-0000-4000-8000-000000000004",
+        "readback": "EXACT_COMMITTED_WITNESS_MATCH",
+        "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+        "expires_at": "2026-11-20T01:13:36.919731+03:00",
+        "new_grants": 0,
+        "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+        "session_id": "ddb3c203-c8c9-4071-9270-c3ec0928a609",
+        "token_hash": "ef869e489ddcfdcc0ce880ff96f7ef557d50d3c30ffb41939c9c1972afdc0a0e",
+        "authorization": "SESSION_RECORD_READBACK_NOT_WORKFLOW_ACCEPTANCE",
+        "receipt_digest": "b19db995bfc3a510e9aea7d7d6a1e7deb1a9df3bf9e224f3b45d2773b95b3c67",
+        "auth_request_id": "f4011d54-05f6-4445-abdd-b58ab673a0b0",
+        "installation_id": "00000000-0000-4000-8000-000000000001",
+        "new_memberships": 0,
+        "revoked_session_count": 1
+      }
+    },
+    "negative_double_revoke_s1": "OWNER_SESSION_ALREADY_REVOKED",
+    "negative_revoked_s1_command_host": {
+      "exception_type": "Blocked",
+      "detail": "NO_COMMAND_RESULT_RELEASED"
+    },
+    "positive_issue_s3": {
+      "auth_request_id": "2178bc6b-6334-4d9d-99e8-1249ae2a4a66",
+      "installation_id": "00000000-0000-4000-8000-000000000001",
+      "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+      "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+      "principal_id": "00000000-0000-4000-8000-000000000004",
+      "action": "ISSUE_SESSION",
+      "session_id": "cfa71f68-fe99-44c3-86ff-478d9ef6ff92",
+      "expires_at": "2026-11-20T01:13:37.103519+03:00",
+      "revoked_session_count": 0,
+      "receipt_digest": "9b9bce62ee3acfd5af30caaf880a0eac4ef13025b8eca6c2c126453538c09bdd",
+      "audit_id": 82,
+      "outcome": "ISSUED",
+      "commit": "ACKNOWLEDGED",
+      "independent_readback": "MATCH",
+      "new_grants": 0,
+      "new_memberships": 0,
+      "authorization": "SESSION_LIFECYCLE_ONLY_NOT_WORKFLOW_ACCEPTANCE"
+    },
+    "positive_recover_rotate_s4": {
+      "execute": {
+        "auth_request_id": "ae362162-a04b-4cc3-9e2c-8dbbfedeeba8",
+        "installation_id": "00000000-0000-4000-8000-000000000001",
+        "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+        "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+        "principal_id": "00000000-0000-4000-8000-000000000004",
+        "action": "RECOVER_ROTATE_SESSIONS",
+        "session_id": "e9899181-dfe0-47b8-9097-7eebdcf8c38c",
+        "expires_at": "2026-11-20T01:18:37.131483+03:00",
+        "revoked_session_count": 3,
+        "receipt_digest": "cd456e892678a6fe323916d0c2c10852802085ede3a4182dcedf4b35a0756877",
+        "audit_id": 83,
+        "outcome": "RECOVERED_ROTATED",
+        "commit": "ACKNOWLEDGED",
+        "independent_readback": "MATCH",
+        "new_grants": 0,
+        "new_memberships": 0,
+        "authorization": "SESSION_LIFECYCLE_ONLY_NOT_WORKFLOW_ACCEPTANCE"
+      },
+      "readback": {
+        "action": "RECOVER_ROTATE_SESSIONS",
+        "audit_id": 83,
+        "human_id": "00000000-0000-4000-8000-000000000004",
+        "readback": "EXACT_COMMITTED_WITNESS_MATCH",
+        "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+        "expires_at": "2026-11-20T01:18:37.131483+03:00",
+        "new_grants": 0,
+        "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+        "session_id": "e9899181-dfe0-47b8-9097-7eebdcf8c38c",
+        "token_hash": "01f4fd464aaa2a9d12e6a7ef6c5860a3f87f113c7f617faec49b82dfddc411ea",
+        "authorization": "SESSION_RECORD_READBACK_NOT_WORKFLOW_ACCEPTANCE",
+        "receipt_digest": "cd456e892678a6fe323916d0c2c10852802085ede3a4182dcedf4b35a0756877",
+        "auth_request_id": "ae362162-a04b-4cc3-9e2c-8dbbfedeeba8",
+        "installation_id": "00000000-0000-4000-8000-000000000001",
+        "new_memberships": 0,
+        "revoked_session_count": 3
+      }
+    },
+    "independent_session_state_readback": {
+      "S1": {
+        "revoked": true,
+        "expires_at": "2026-11-20 01:13:36.919731+03",
+        "epoch": 1,
+        "revision": 1
+      },
+      "S2": {
+        "revoked": true,
+        "expires_at": "2026-11-20 01:13:36.962502+03",
+        "epoch": 1,
+        "revision": 1
+      },
+      "S3": {
+        "revoked": true,
+        "expires_at": "2026-11-20 01:13:37.103519+03",
+        "epoch": 1,
+        "revision": 1
+      },
+      "S4_active": {
+        "revoked": false,
+        "expires_at": "2026-11-20 01:18:37.131483+03",
+        "epoch": 0,
+        "revision": 0
+      }
+    }
+  },
+  "e0_hashes_unchanged": true,
+  "e0_snapshot_sha256": {
+    "company_private.r55_setup_root_enrollments": "99ff11cfbbc52f1273aba37920c33a426abadd5a0a3d8bf6577a08c0a0304395",
+    "company_private.installation_bootstrap_control": "8db0a51c988e9520722ea7557a0f16f55460cf3c9ecd3ceb458c00d996987916",
+    "company_private.bootstrap_receipts": "99eb188b45bcdba73c44d6e04dc6612d613f46da1ec39474905f62e75f27b1f2"
+  },
+  "disabled_user_triggers": []
+}

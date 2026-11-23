@@ -1,0 +1,41 @@
+{
+  "scope": "READ_ONLY_LOCAL_STATE_NOT_TRUST_ACCEPTANCE",
+  "foundation": {
+    "status": "LOCAL_POSTGRES_RUNNING",
+    "scope": "POSTGRES_FOUNDATION_ONLY_NOT_APPLICATION_ACCEPTANCE",
+    "database": "ai_proje_ofisi",
+    "port": 55490,
+    "tcp_enabled": false,
+    "local_auth": "PEER_OS_IDENTITY",
+    "auth_policy_readback_verified": true,
+    "socket_permissions": "0700",
+    "application_schema_installed": null,
+    "application_schema_count": 2,
+    "application_schema_status": "NOT_VERIFIED",
+    "application_session_issued": false,
+    "task_execution_verified": false
+  },
+  "postgres_version": "18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)",
+  "sessions_summary": {
+    "total": 33,
+    "unexpired_unrevoked": 1
+  },
+  "installation_readiness": {
+    "scope": "DIAGNOSTIC_ONLY_NOT_NATIVE_AUTHORIZATION",
+    "roots": [
+      {
+        "installation_id": "00000000-0000-4000-8000-000000000001",
+        "generation": 1,
+        "blockers": [
+          "ROOT_BOOTTIME_WINDOW_CLOSED",
+          "ROOT_WALL_TIME_WINDOW_CLOSED"
+        ]
+      }
+    ],
+    "bootstrap_receipts_total": 1,
+    "bootstrap_receipts_unexpired": 0,
+    "consumed_installations": 1,
+    "rerun_bootstrap_is_recovery": false,
+    "next_step": "SUPPORTED_OWNER_AUTH_OR_RECOVERY_REQUIRED"
+  }
+}

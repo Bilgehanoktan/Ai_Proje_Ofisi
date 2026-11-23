@@ -1,0 +1,9 @@
+[Unit]
+Description=AI Proje Ofisi PostgreSQL 18.6 Physical Basebackup & Verify (MOD-015)
+
+[Service]
+Type=oneshot
+User=aipof-dbtest
+Group=aipof-dbtest
+NoNewPrivileges=yes
+ExecStart=/usr/bin/bash /mnt/e/Projeler/Ai_Proje_Ofisi/scripts/operations/run_pg_basebackup.sh

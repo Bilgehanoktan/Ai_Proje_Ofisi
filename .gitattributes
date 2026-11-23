@@ -1,0 +1,2 @@
+# Preserve exact byte SHA256 pins across Windows and Linux CI runners.
+* -text

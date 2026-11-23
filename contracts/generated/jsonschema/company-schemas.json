@@ -1,0 +1,1190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "Mission": {
+      "additionalProperties": false,
+      "properties": {
+        "mission_id": {
+          "format": "uuid",
+          "title": "Mission Id",
+          "type": "string"
+        },
+        "tenant_id": {
+          "format": "uuid",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "objective_id": {
+          "format": "uuid",
+          "title": "Objective Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "state": {
+          "enum": [
+            "PROPOSED",
+            "ACTIVE",
+            "PAUSED",
+            "CLOSED"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "activation_approval_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Activation Approval Id"
+        },
+        "outcome_metric": {
+          "maxLength": 200,
+          "minLength": 3,
+          "title": "Outcome Metric",
+          "type": "string"
+        },
+        "target_value": {
+          "minimum": 0,
+          "title": "Target Value",
+          "type": "integer"
+        },
+        "observed_value": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Observed Value"
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "const": "TRY",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Currency"
+        },
+        "metric_unit": {
+          "enum": [
+            "COUNT",
+            "TRY_MINOR_UNITS"
+          ],
+          "title": "Metric Unit",
+          "type": "string"
+        },
+        "deadline": {
+          "format": "date-time",
+          "title": "Deadline",
+          "type": "string"
+        },
+        "max_active_projects": {
+          "maximum": 10,
+          "minimum": 1,
+          "title": "Max Active Projects",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "mission_id",
+        "tenant_id",
+        "objective_id",
+        "revision",
+        "state",
+        "activation_approval_id",
+        "outcome_metric",
+        "target_value",
+        "observed_value",
+        "currency",
+        "metric_unit",
+        "deadline",
+        "max_active_projects"
+      ],
+      "title": "Mission",
+      "type": "object"
+    },
+    "Stage": {
+      "additionalProperties": false,
+      "properties": {
+        "stage_id": {
+          "pattern": "^[a-z][a-z0-9_-]{0,63}$",
+          "title": "Stage Id",
+          "type": "string"
+        },
+        "depends_on": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Depends On",
+          "type": "array"
+        },
+        "required_capabilities": {
+          "items": {
+            "pattern": "^SKILL_[A-Z0-9_]{3,64}$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required Capabilities",
+          "type": "array"
+        },
+        "verification_profile": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Verification Profile",
+          "type": "string"
+        }
+      },
+      "required": [
+        "stage_id",
+        "depends_on",
+        "required_capabilities",
+        "verification_profile"
+      ],
+      "title": "Stage",
+      "type": "object"
+    },
+    "WorkflowTemplateVersion": {
+      "additionalProperties": false,
+      "properties": {
+        "template_id": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Template Id",
+          "type": "string"
+        },
+        "version": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Version",
+          "type": "string"
+        },
+        "job_class": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Job Class",
+          "type": "string"
+        },
+        "input_schema": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Input Schema",
+          "type": "string"
+        },
+        "required_capabilities": {
+          "items": {
+            "pattern": "^SKILL_[A-Z0-9_]{3,64}$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required Capabilities",
+          "type": "array"
+        },
+        "stage_dag": {
+          "items": {
+            "$ref": "#/$defs/Stage"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Stage Dag",
+          "type": "array"
+        },
+        "policy_version": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Policy Version",
+          "type": "string"
+        },
+        "budget_profile": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Budget Profile",
+          "type": "string"
+        },
+        "budget_profile_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Budget Profile Digest",
+          "type": "string"
+        },
+        "schema_bundle_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Schema Bundle Digest",
+          "type": "string"
+        },
+        "verification_profile": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Verification Profile",
+          "type": "string"
+        },
+        "verification_profile_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Verification Profile Digest",
+          "type": "string"
+        },
+        "output_schema": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Output Schema",
+          "type": "string"
+        },
+        "failure_policy": {
+          "enum": [
+            "STOP_AND_RECORD",
+            "BOUNDED_REVISION"
+          ],
+          "title": "Failure Policy",
+          "type": "string"
+        },
+        "compensation_policy": {
+          "enum": [
+            "RESTORE_ISOLATED_COPY",
+            "QUARANTINE_OUTPUT",
+            "NO_SIDE_EFFECT"
+          ],
+          "title": "Compensation Policy",
+          "type": "string"
+        },
+        "runtime_status": {
+          "const": "NOT_IMPLEMENTED",
+          "title": "Runtime Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "template_id",
+        "version",
+        "job_class",
+        "input_schema",
+        "required_capabilities",
+        "stage_dag",
+        "policy_version",
+        "budget_profile",
+        "budget_profile_digest",
+        "schema_bundle_digest",
+        "verification_profile",
+        "verification_profile_digest",
+        "output_schema",
+        "failure_policy",
+        "compensation_policy",
+        "runtime_status"
+      ],
+      "title": "WorkflowTemplateVersion",
+      "type": "object"
+    },
+    "Qualification": {
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "format": "uuid",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "role_id": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Role Id",
+          "type": "string"
+        },
+        "skill_code": {
+          "pattern": "^SKILL_[A-Z0-9_]{3,64}$",
+          "title": "Skill Code",
+          "type": "string"
+        },
+        "model_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Model Digest",
+          "type": "string"
+        },
+        "engine_version": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Engine Version",
+          "type": "string"
+        },
+        "role_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Role Digest",
+          "type": "string"
+        },
+        "tool_manifest_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Tool Manifest Digest",
+          "type": "string"
+        },
+        "suite_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Suite Digest",
+          "type": "string"
+        },
+        "result": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "REVOKED",
+            "NOT_RUN"
+          ],
+          "title": "Result",
+          "type": "string"
+        },
+        "valid_until": {
+          "format": "date-time",
+          "title": "Valid Until",
+          "type": "string"
+        },
+        "false_accepts": {
+          "minimum": 0,
+          "title": "False Accepts",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "role_id",
+        "skill_code",
+        "model_digest",
+        "engine_version",
+        "role_digest",
+        "tool_manifest_digest",
+        "suite_digest",
+        "result",
+        "valid_until",
+        "false_accepts"
+      ],
+      "title": "Qualification",
+      "type": "object"
+    },
+    "ActionScope": {
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "format": "uuid",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "action_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Action Digest",
+          "type": "string"
+        },
+        "target_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Target Digest",
+          "type": "string"
+        },
+        "policy_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Policy Digest",
+          "type": "string"
+        },
+        "effect": {
+          "enum": [
+            "ANALYZE",
+            "READ_AUTHORIZED",
+            "WRITE_ISOLATED_TEST",
+            "SEND_MESSAGE",
+            "SPEND_MONEY",
+            "PUBLISH_PRODUCTION",
+            "SHARE_CUSTOMER_DATA"
+          ],
+          "title": "Effect",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "project_id",
+        "task_id",
+        "action_digest",
+        "target_digest",
+        "policy_digest",
+        "effect"
+      ],
+      "title": "ActionScope",
+      "type": "object"
+    },
+    "HumanAuthorization": {
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "format": "uuid",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "action_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Action Digest",
+          "type": "string"
+        },
+        "target_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Target Digest",
+          "type": "string"
+        },
+        "policy_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Policy Digest",
+          "type": "string"
+        },
+        "effect": {
+          "enum": [
+            "ANALYZE",
+            "READ_AUTHORIZED",
+            "WRITE_ISOLATED_TEST",
+            "SEND_MESSAGE",
+            "SPEND_MONEY",
+            "PUBLISH_PRODUCTION",
+            "SHARE_CUSTOMER_DATA"
+          ],
+          "title": "Effect",
+          "type": "string"
+        },
+        "approval_id": {
+          "format": "uuid",
+          "title": "Approval Id",
+          "type": "string"
+        },
+        "approved_by": {
+          "format": "uuid",
+          "title": "Approved By",
+          "type": "string"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "title": "Expires At",
+          "type": "string"
+        },
+        "revoked": {
+          "title": "Revoked",
+          "type": "boolean"
+        },
+        "consumed": {
+          "title": "Consumed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "project_id",
+        "task_id",
+        "action_digest",
+        "target_digest",
+        "policy_digest",
+        "effect",
+        "approval_id",
+        "approved_by",
+        "expires_at",
+        "revoked",
+        "consumed"
+      ],
+      "title": "HumanAuthorization",
+      "type": "object"
+    },
+    "ToolDefinitionVersion": {
+      "additionalProperties": false,
+      "properties": {
+        "tool_id": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Tool Id",
+          "type": "string"
+        },
+        "manifest_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Manifest Digest",
+          "type": "string"
+        },
+        "input_schema": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Input Schema",
+          "type": "string"
+        },
+        "output_schema": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Output Schema",
+          "type": "string"
+        },
+        "effect": {
+          "enum": [
+            "READ_AUTHORIZED",
+            "WRITE_ISOLATED_TEST",
+            "SEND_MESSAGE",
+            "SPEND_MONEY",
+            "PUBLISH_PRODUCTION",
+            "SHARE_CUSTOMER_DATA"
+          ],
+          "title": "Effect",
+          "type": "string"
+        },
+        "executor": {
+          "enum": [
+            "ROOTLESS_CONTAINER",
+            "LOCAL_READ_BROKER",
+            "APPROVED_CONNECTOR"
+          ],
+          "title": "Executor",
+          "type": "string"
+        },
+        "data_trust": {
+          "enum": [
+            "UNTRUSTED_SOURCE",
+            "DERIVED_EVIDENCE",
+            "VERIFIED_RECORD"
+          ],
+          "title": "Data Trust",
+          "type": "string"
+        },
+        "network": {
+          "enum": [
+            "NONE",
+            "EXPLICIT_ALLOWLIST"
+          ],
+          "title": "Network",
+          "type": "string"
+        },
+        "network_allowlist": {
+          "items": {
+            "pattern": "^https://[a-z0-9.-]+(?::443)?$",
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Network Allowlist",
+          "type": "array"
+        },
+        "timeout_seconds": {
+          "maximum": 600,
+          "minimum": 1,
+          "title": "Timeout Seconds",
+          "type": "integer"
+        },
+        "output_limit_bytes": {
+          "maximum": 52428800,
+          "minimum": 1,
+          "title": "Output Limit Bytes",
+          "type": "integer"
+        },
+        "compensation": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Compensation",
+          "type": "string"
+        },
+        "activation": {
+          "const": "DISABLED",
+          "title": "Activation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool_id",
+        "manifest_digest",
+        "input_schema",
+        "output_schema",
+        "effect",
+        "executor",
+        "data_trust",
+        "network",
+        "timeout_seconds",
+        "output_limit_bytes",
+        "compensation",
+        "activation"
+      ],
+      "title": "ToolDefinitionVersion",
+      "type": "object"
+    },
+    "VerificationProfileVersion": {
+      "additionalProperties": false,
+      "properties": {
+        "profile_id": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Profile Id",
+          "type": "string"
+        },
+        "job_class": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Job Class",
+          "type": "string"
+        },
+        "required_checks": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 2,
+          "title": "Required Checks",
+          "type": "array"
+        },
+        "independent_actor_required": {
+          "const": true,
+          "title": "Independent Actor Required",
+          "type": "boolean"
+        },
+        "source_fingerprint_required": {
+          "const": true,
+          "title": "Source Fingerprint Required",
+          "type": "boolean"
+        },
+        "missing_evidence": {
+          "const": "BLOCKED",
+          "title": "Missing Evidence",
+          "type": "string"
+        },
+        "failing_check": {
+          "const": "FAIL",
+          "title": "Failing Check",
+          "type": "string"
+        },
+        "runtime_status": {
+          "const": "NOT_IMPLEMENTED",
+          "title": "Runtime Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "profile_id",
+        "job_class",
+        "required_checks",
+        "independent_actor_required",
+        "source_fingerprint_required",
+        "missing_evidence",
+        "failing_check",
+        "runtime_status"
+      ],
+      "title": "VerificationProfileVersion",
+      "type": "object"
+    },
+    "IntegrationCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Candidate Digest",
+          "type": "string"
+        },
+        "base_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Base Digest",
+          "type": "string"
+        },
+        "changeset_digests": {
+          "items": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Changeset Digests",
+          "type": "array"
+        },
+        "integrated_verification_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Integrated Verification Digest"
+        },
+        "verified_candidate_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Verified Candidate Digest"
+        },
+        "conflict_count": {
+          "minimum": 0,
+          "title": "Conflict Count",
+          "type": "integer"
+        },
+        "check_result": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "NOT_RUN"
+          ],
+          "title": "Check Result",
+          "type": "string"
+        }
+      },
+      "required": [
+        "candidate_digest",
+        "base_digest",
+        "changeset_digests",
+        "integrated_verification_digest",
+        "verified_candidate_digest",
+        "conflict_count",
+        "check_result"
+      ],
+      "title": "IntegrationCandidate",
+      "type": "object"
+    },
+    "EvaluationScorecard": {
+      "additionalProperties": false,
+      "properties": {
+        "suite_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Suite Digest",
+          "type": "string"
+        },
+        "candidate_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Candidate Digest",
+          "type": "string"
+        },
+        "sample_count": {
+          "exclusiveMinimum": 0,
+          "title": "Sample Count",
+          "type": "integer"
+        },
+        "first_pass_count": {
+          "minimum": 0,
+          "title": "First Pass Count",
+          "type": "integer"
+        },
+        "false_accepts": {
+          "minimum": 0,
+          "title": "False Accepts",
+          "type": "integer"
+        },
+        "critical_regressions": {
+          "minimum": 0,
+          "title": "Critical Regressions",
+          "type": "integer"
+        },
+        "total_duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Total Duration Ms"
+        },
+        "resource_units": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Resource Units"
+        }
+      },
+      "required": [
+        "suite_digest",
+        "candidate_digest",
+        "sample_count",
+        "first_pass_count",
+        "false_accepts",
+        "critical_regressions",
+        "total_duration_ms",
+        "resource_units"
+      ],
+      "title": "EvaluationScorecard",
+      "type": "object"
+    },
+    "SourceFingerprint": {
+      "additionalProperties": false,
+      "properties": {
+        "build_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Build Digest",
+          "type": "string"
+        },
+        "commit": {
+          "pattern": "^(?:[a-f0-9]{40}|UNCOMMITTED)$",
+          "title": "Commit",
+          "type": "string"
+        },
+        "dirty_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Dirty Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "build_digest",
+        "commit",
+        "dirty_digest"
+      ],
+      "title": "SourceFingerprint",
+      "type": "object"
+    },
+    "SoftwareJobInput": {
+      "additionalProperties": false,
+      "properties": {
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceFingerprint"
+        },
+        "expected_behavior": {
+          "maxLength": 4000,
+          "minLength": 10,
+          "title": "Expected Behavior",
+          "type": "string"
+        },
+        "acceptance_criteria": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Acceptance Criteria",
+          "type": "array"
+        }
+      },
+      "required": [
+        "project_id",
+        "task_id",
+        "workspace_id",
+        "source",
+        "expected_behavior",
+        "acceptance_criteria"
+      ],
+      "title": "SoftwareJobInput",
+      "type": "object"
+    },
+    "SoftwareJobOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "attempt_id": {
+          "format": "uuid",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "changeset_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Changeset Digest",
+          "type": "string"
+        },
+        "patch_artifact_id": {
+          "format": "uuid",
+          "title": "Patch Artifact Id",
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceFingerprint"
+        },
+        "status": {
+          "const": "PROPOSED_NOT_ACCEPTED",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "task_id",
+        "attempt_id",
+        "changeset_digest",
+        "patch_artifact_id",
+        "source",
+        "status"
+      ],
+      "title": "SoftwareJobOutput",
+      "type": "object"
+    },
+    "SpreadsheetJobInput": {
+      "additionalProperties": false,
+      "properties": {
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "input_artifact_id": {
+          "format": "uuid",
+          "title": "Input Artifact Id",
+          "type": "string"
+        },
+        "input_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Input Sha256",
+          "type": "string"
+        },
+        "expected_sheets": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 3,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "minItems": 1,
+          "title": "Expected Sheets",
+          "type": "array"
+        },
+        "required_checks": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 30,
+          "minItems": 2,
+          "title": "Required Checks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "project_id",
+        "task_id",
+        "input_artifact_id",
+        "input_sha256",
+        "expected_sheets",
+        "required_checks"
+      ],
+      "title": "SpreadsheetJobInput",
+      "type": "object"
+    },
+    "SpreadsheetJobOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "attempt_id": {
+          "format": "uuid",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "output_artifact_id": {
+          "format": "uuid",
+          "title": "Output Artifact Id",
+          "type": "string"
+        },
+        "output_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Output Sha256",
+          "type": "string"
+        },
+        "formula_report_artifact_id": {
+          "format": "uuid",
+          "title": "Formula Report Artifact Id",
+          "type": "string"
+        },
+        "status": {
+          "const": "PROPOSED_NOT_ACCEPTED",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "task_id",
+        "attempt_id",
+        "output_artifact_id",
+        "output_sha256",
+        "formula_report_artifact_id",
+        "status"
+      ],
+      "title": "SpreadsheetJobOutput",
+      "type": "object"
+    },
+    "ResearchJobInput": {
+      "additionalProperties": false,
+      "properties": {
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "question": {
+          "maxLength": 4000,
+          "minLength": 10,
+          "title": "Question",
+          "type": "string"
+        },
+        "source_artifact_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "title": "Source Artifact Ids",
+          "type": "array"
+        },
+        "freshness_cutoff": {
+          "format": "date-time",
+          "title": "Freshness Cutoff",
+          "type": "string"
+        }
+      },
+      "required": [
+        "project_id",
+        "task_id",
+        "question",
+        "source_artifact_ids",
+        "freshness_cutoff"
+      ],
+      "title": "ResearchJobInput",
+      "type": "object"
+    },
+    "ResearchClaim": {
+      "additionalProperties": false,
+      "properties": {
+        "claim": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Claim",
+          "type": "string"
+        },
+        "source_artifact_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Source Artifact Ids",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "SUPPORTED",
+            "CONTRADICTED",
+            "UNRESOLVED"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "claim",
+        "source_artifact_ids",
+        "status"
+      ],
+      "title": "ResearchClaim",
+      "type": "object"
+    },
+    "ResearchJobOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "attempt_id": {
+          "format": "uuid",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "report_artifact_id": {
+          "format": "uuid",
+          "title": "Report Artifact Id",
+          "type": "string"
+        },
+        "report_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Report Sha256",
+          "type": "string"
+        },
+        "claims": {
+          "items": {
+            "$ref": "#/$defs/ResearchClaim"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "title": "Claims",
+          "type": "array"
+        },
+        "status": {
+          "const": "PROPOSED_NOT_ACCEPTED",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "task_id",
+        "attempt_id",
+        "report_artifact_id",
+        "report_sha256",
+        "claims",
+        "status"
+      ],
+      "title": "ResearchJobOutput",
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-08",
+  "scope": "CONDITIONAL_SYNTHETIC_BOOTSTRAP_REAL_COMMIT_AND_SEPARATE_CONNECTION_READBACK",
+  "receipt": "NATIVE_CLOCK_TRIAL_64ed5d1f.json",
+  "receipt_sha256": "b8fef18280df53c82049eb36ba8b8f8b9fa680d3ef62727dc5f6bcf23038106c",
+  "readback": {
+    "bootstrap_receipts": 1,
+    "objectives": 1,
+    "plans": 1,
+    "consumed": 1,
+    "audit_events": 1,
+    "outbox_events": 1,
+    "project_grants": 1,
+    "exact_receipt_witnesses": 1
+  },
+  "invalid_hmac_rejected": true,
+  "replay_no_new_grant": true,
+  "cleanup": "VERIFIED",
+  "linux_source_tests": {
+    "passed": 75,
+    "skipped": 0,
+    "failed": 0
+  },
+  "latest_repeat": {
+    "receipt": "NATIVE_CLOCK_TRIAL_0c4c035d.json",
+    "result": "REJECTED_ROOT_TRUSTED_LOCAL_OBSERVATION_REQUIRED",
+    "native_clock": "UNKNOWN",
+    "repeatability": "NOT_ACCEPTED",
+    "note": "Receipt company_commit=true was an incorrect initialized field in the earlier runner; compile failed before COMMIT. Runner now sets true only after successful compile."
+  },
+  "actual_owner_installation": "NOT_RUN",
+  "Task_worker_verifier_UI": "INCOMPLETE",
+  "first13": "0/13"
+}

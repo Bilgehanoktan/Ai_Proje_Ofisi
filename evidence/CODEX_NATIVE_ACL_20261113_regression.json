@@ -1,0 +1,14 @@
+{
+  "windows": {
+    "tests": 212,
+    "passed": 192,
+    "skipped": 20
+  },
+  "linux_uid999": {
+    "tests": 212,
+    "passed": 212,
+    "skipped": 0
+  },
+  "scope": "SOURCE_REGRESSION_NOT_APPLICATION_ACCEPTANCE",
+  "native_evidence": "CODEX_NATIVE_ACL_20261113_attempt02.json"
+}

@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-23",
+  "browser_e2e": {
+    "origin": "http://127.0.0.1:8769",
+    "live_events_url": "http://127.0.0.1:8769/live-events",
+    "work_types_displayed": "RESEARCH (WFT-RESEARCH-01) · SPREADSHEET (WFT-SPREADSHEET-01) · OBLIGATION (WFT-OBLIGATION-01)",
+    "sse_events_received": 8,
+    "verified_tasks": [
+      "task-research-01",
+      "task-spreadsheet-01",
+      "task-obligation-01"
+    ],
+    "office_preview_status": "200 OK (0 console errors)",
+    "result": "PASS"
+  },
+  "scheduled_backup_restore_and_queue_pg": {
+    "scheduled_backup_used": "/var/lib/ai-proje-ofisi-local/backups/basebackup-20261123T162844Z",
+    "pg_verifybackup": "PASS",
+    "restored_accepted_tasks": 3,
+    "restored_force_rls_087_tables": 4,
+    "daemon_processed": 3,
+    "daemon_accepted": 3,
+    "persisted_work_types": [
+      "OBLIGATION",
+      "RESEARCH",
+      "SPREADSHEET"
+    ],
+    "systemd_worker_state": "active",
+    "systemd_backup_timer_state": "active",
+    "result": "PASS"
+  }
+}

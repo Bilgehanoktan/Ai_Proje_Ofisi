@@ -1,0 +1,20 @@
+{
+  "scope": "LOCAL_MODEL_PATCH_GENERATION_EVIDENCE",
+  "model": "qwen2.5-coder:3b",
+  "models_root": "E:\\ollama_local\\models",
+  "endpoint": "http://127.0.0.1:11434/api/generate",
+  "available_models": [
+    "bge-m3:latest",
+    "qwen2.5-coder:7b",
+    "qwen2.5-coder:3b"
+  ],
+  "eval_count": 91,
+  "prompt_eval_count": 305,
+  "total_duration_ns": 4765951900,
+  "candidate_sha256": "6c7e44ac0e32bcbce6b0939752f46f0e990176fc5fa79ae23bc23bf7a3402c83",
+  "unified_diff": "--- a/task_title.py\n+++ b/task_title.py\n@@ -1,10 +1,10 @@\n \"\"\"İlk üretici görevi için hatalı disposable fixture; ürün modülü değildir.\"\"\"\n def normalize_title(value):\n-    if not isinstance(value,str):\n+    if not isinstance(value, str):\n         raise TypeError('TITLE_MUST_BE_STRING')\n-    result=value.strip()\n+    result = ' '.join(value.split())\n     if not result:\n         raise ValueError('TITLE_EMPTY')\n-    if len(result)>120:\n+    if len(result) > 120:\n         raise ValueError('TITLE_TOO_LONG')\n     return result\n",
+  "oracle_precheck": {
+    "passed": 13,
+    "total": 13
+  }
+}

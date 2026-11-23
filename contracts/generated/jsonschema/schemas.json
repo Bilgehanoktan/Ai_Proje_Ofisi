@@ -1,0 +1,1766 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "SourceFingerprint": {
+      "additionalProperties": false,
+      "properties": {
+        "build_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Build Digest",
+          "type": "string"
+        },
+        "commit": {
+          "pattern": "^(?:[a-f0-9]{40}|UNCOMMITTED)$",
+          "title": "Commit",
+          "type": "string"
+        },
+        "dirty_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Dirty Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "build_digest",
+        "commit",
+        "dirty_digest"
+      ],
+      "title": "SourceFingerprint",
+      "type": "object"
+    },
+    "BootstrapRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "bootstrap_token": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Bootstrap Token",
+          "type": "string"
+        },
+        "owner_name": {
+          "maxLength": 200,
+          "minLength": 3,
+          "title": "Owner Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "bootstrap_token",
+        "owner_name"
+      ],
+      "title": "BootstrapRequest",
+      "type": "object"
+    },
+    "SessionRead": {
+      "additionalProperties": false,
+      "properties": {
+        "principal_id": {
+          "format": "uuid",
+          "title": "Principal Id",
+          "type": "string"
+        },
+        "tenant_id": {
+          "format": "uuid",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "permissions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Permissions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "principal_id",
+        "tenant_id",
+        "permissions"
+      ],
+      "title": "SessionRead",
+      "type": "object"
+    },
+    "LeaseRead": {
+      "additionalProperties": false,
+      "properties": {
+        "attempt_id": {
+          "format": "uuid",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "fencing_epoch": {
+          "exclusiveMinimum": 0,
+          "title": "Fencing Epoch",
+          "type": "integer"
+        },
+        "lease_expires_at": {
+          "format": "date-time",
+          "title": "Lease Expires At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "attempt_id",
+        "task_id",
+        "fencing_epoch",
+        "lease_expires_at"
+      ],
+      "title": "LeaseRead",
+      "type": "object"
+    },
+    "ArtifactRead": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "attempt_id": {
+          "format": "uuid",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size_bytes": {
+          "minimum": 0,
+          "title": "Size Bytes",
+          "type": "integer"
+        },
+        "state": {
+          "enum": [
+            "STAGING",
+            "AVAILABLE",
+            "QUARANTINED"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "project_id",
+        "task_id",
+        "attempt_id",
+        "sha256",
+        "size_bytes",
+        "state"
+      ],
+      "title": "ArtifactRead",
+      "type": "object"
+    },
+    "TaskRead": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 200,
+          "minLength": 3,
+          "title": "Title",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/TaskState"
+        },
+        "revision": {
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "active_attempt_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Active Attempt Id"
+        }
+      },
+      "required": [
+        "id",
+        "project_id",
+        "title",
+        "state",
+        "revision"
+      ],
+      "title": "TaskRead",
+      "type": "object"
+    },
+    "TaskState": {
+      "enum": [
+        "DRAFT",
+        "READY",
+        "RUNNING",
+        "WAITING_APPROVAL",
+        "VERIFYING",
+        "CHANGES_REQUIRED",
+        "BLOCKED",
+        "ACCEPTED",
+        "FAILED",
+        "CANCELLED"
+      ],
+      "title": "TaskState",
+      "type": "string"
+    },
+    "SnapshotRead": {
+      "additionalProperties": false,
+      "properties": {
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "cursor": {
+          "minimum": 0,
+          "title": "Cursor",
+          "type": "integer"
+        },
+        "tasks": {
+          "items": {
+            "$ref": "#/$defs/TaskRead"
+          },
+          "maxItems": 200,
+          "title": "Tasks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "project_id",
+        "cursor",
+        "tasks"
+      ],
+      "title": "SnapshotRead",
+      "type": "object"
+    },
+    "WorkspaceRead": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 200,
+          "minLength": 3,
+          "title": "Name",
+          "type": "string"
+        },
+        "trust_class": {
+          "enum": [
+            "DISPOSABLE_TEST",
+            "TRUSTED_LOCAL",
+            "UNTRUSTED"
+          ],
+          "title": "Trust Class",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "trust_class"
+      ],
+      "title": "WorkspaceRead",
+      "type": "object"
+    },
+    "WorkspaceList": {
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/$defs/WorkspaceRead"
+          },
+          "maxItems": 200,
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "required": [
+        "items"
+      ],
+      "title": "WorkspaceList",
+      "type": "object"
+    },
+    "ProjectRead": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 200,
+          "minLength": 3,
+          "title": "Name",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "name",
+        "revision"
+      ],
+      "title": "ProjectRead",
+      "type": "object"
+    },
+    "ProjectList": {
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/$defs/ProjectRead"
+          },
+          "maxItems": 200,
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "required": [
+        "items"
+      ],
+      "title": "ProjectList",
+      "type": "object"
+    },
+    "ObjectiveRead": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "goal": {
+          "maxLength": 4000,
+          "minLength": 10,
+          "title": "Goal",
+          "type": "string"
+        },
+        "constraints": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Constraints",
+          "type": "array"
+        },
+        "expected_outputs": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Expected Outputs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "project_id",
+        "goal",
+        "constraints",
+        "expected_outputs"
+      ],
+      "title": "ObjectiveRead",
+      "type": "object"
+    },
+    "PlanRead": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "objective_id": {
+          "format": "uuid",
+          "title": "Objective Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "assumptions": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Assumptions",
+          "type": "array"
+        },
+        "acceptance_criteria": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Acceptance Criteria",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "project_id",
+        "objective_id",
+        "revision",
+        "assumptions",
+        "acceptance_criteria"
+      ],
+      "title": "PlanRead",
+      "type": "object"
+    },
+    "VerificationReport": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "const": "PASS"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "exit_code": {
+                "const": 0
+              },
+              "evidence_ids": {
+                "minItems": 1
+              }
+            },
+            "required": [
+              "exit_code"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "idempotency_key": {
+          "maxLength": 128,
+          "minLength": 16,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "verification_run_id": {
+          "format": "uuid",
+          "title": "Verification Run Id",
+          "type": "string"
+        },
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "attempt_id": {
+          "format": "uuid",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "fencing_epoch": {
+          "exclusiveMinimum": 0,
+          "title": "Fencing Epoch",
+          "type": "integer"
+        },
+        "profile_version": {
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$",
+          "title": "Profile Version",
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceFingerprint"
+        },
+        "result": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "BLOCKED"
+          ],
+          "title": "Result",
+          "type": "string"
+        },
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Exit Code"
+        },
+        "evidence_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "correlation_id",
+        "verification_run_id",
+        "task_id",
+        "attempt_id",
+        "fencing_epoch",
+        "profile_version",
+        "source",
+        "result",
+        "exit_code",
+        "evidence_ids"
+      ],
+      "title": "VerificationReport",
+      "type": "object"
+    },
+    "VerificationRead": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "attempt_id": {
+          "format": "uuid",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "profile_version": {
+          "title": "Profile Version",
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceFingerprint"
+        },
+        "result": {
+          "enum": [
+            "NOT_RUN",
+            "RUNNING",
+            "PASS",
+            "FAIL",
+            "BLOCKED"
+          ],
+          "title": "Result",
+          "type": "string"
+        },
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Exit Code"
+        }
+      },
+      "required": [
+        "id",
+        "task_id",
+        "attempt_id",
+        "profile_version",
+        "source",
+        "result",
+        "exit_code"
+      ],
+      "title": "VerificationRead",
+      "type": "object"
+    },
+    "ProjectCreate": {
+      "additionalProperties": false,
+      "properties": {
+        "idempotency_key": {
+          "maxLength": 128,
+          "minLength": 16,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 200,
+          "minLength": 3,
+          "title": "Name",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "correlation_id",
+        "name",
+        "workspace_id"
+      ],
+      "title": "ProjectCreate",
+      "type": "object"
+    },
+    "ObjectiveCreate": {
+      "additionalProperties": false,
+      "properties": {
+        "idempotency_key": {
+          "maxLength": 128,
+          "minLength": 16,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "goal": {
+          "maxLength": 4000,
+          "minLength": 10,
+          "title": "Goal",
+          "type": "string"
+        },
+        "constraints": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Constraints",
+          "type": "array"
+        },
+        "expected_outputs": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 10,
+          "minItems": 1,
+          "title": "Expected Outputs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "correlation_id",
+        "project_id",
+        "goal",
+        "constraints",
+        "expected_outputs"
+      ],
+      "title": "ObjectiveCreate",
+      "type": "object"
+    },
+    "PlanCreate": {
+      "additionalProperties": false,
+      "properties": {
+        "idempotency_key": {
+          "maxLength": 128,
+          "minLength": 16,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "objective_id": {
+          "format": "uuid",
+          "title": "Objective Id",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 0,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "assumptions": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Assumptions",
+          "type": "array"
+        },
+        "acceptance_criteria": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Acceptance Criteria",
+          "type": "array"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "correlation_id",
+        "project_id",
+        "objective_id",
+        "expected_revision",
+        "assumptions",
+        "acceptance_criteria"
+      ],
+      "title": "PlanCreate",
+      "type": "object"
+    },
+    "TaskCreate": {
+      "additionalProperties": false,
+      "properties": {
+        "idempotency_key": {
+          "maxLength": 128,
+          "minLength": 16,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "plan_id": {
+          "format": "uuid",
+          "title": "Plan Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 200,
+          "minLength": 3,
+          "title": "Title",
+          "type": "string"
+        },
+        "role_id": {
+          "pattern": "^(?:MGR|EXP)-\\d{2,3}$",
+          "title": "Role Id",
+          "type": "string"
+        },
+        "acceptance_criteria": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Acceptance Criteria",
+          "type": "array"
+        },
+        "depends_on": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Depends On",
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "correlation_id",
+        "project_id",
+        "plan_id",
+        "title",
+        "role_id",
+        "acceptance_criteria"
+      ],
+      "title": "TaskCreate",
+      "type": "object"
+    },
+    "TaskAction": {
+      "additionalProperties": false,
+      "properties": {
+        "idempotency_key": {
+          "maxLength": 128,
+          "minLength": 16,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 0,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "action": {
+          "enum": [
+            "ready",
+            "cancel",
+            "retry",
+            "approve",
+            "reject"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "approval_ref": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Approval Ref"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "correlation_id",
+        "expected_revision",
+        "action",
+        "reason"
+      ],
+      "title": "TaskAction",
+      "type": "object"
+    },
+    "ClaimRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "idempotency_key": {
+          "maxLength": 128,
+          "minLength": 16,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "capabilities": {
+          "items": {
+            "maxLength": 80,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Capabilities",
+          "type": "array"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "correlation_id",
+        "project_id",
+        "capabilities"
+      ],
+      "title": "ClaimRequest",
+      "type": "object"
+    },
+    "AttemptReport": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "STOPPED",
+                  "PRODUCED"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "receipt_id": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "receipt_id"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "idempotency_key": {
+          "maxLength": 128,
+          "minLength": 16,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "attempt_id": {
+          "format": "uuid",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "fencing_epoch": {
+          "exclusiveMinimum": 0,
+          "title": "Fencing Epoch",
+          "type": "integer"
+        },
+        "expected_revision": {
+          "minimum": 0,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "state": {
+          "enum": [
+            "RUNNING",
+            "CANCEL_REQUESTED",
+            "STOPPED",
+            "FAILED",
+            "PRODUCED",
+            "UNKNOWN_RECOVERY"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "receipt_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Receipt Id"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "correlation_id",
+        "attempt_id",
+        "fencing_epoch",
+        "expected_revision",
+        "state"
+      ],
+      "title": "AttemptReport",
+      "type": "object"
+    },
+    "Heartbeat": {
+      "additionalProperties": false,
+      "properties": {
+        "attempt_id": {
+          "format": "uuid",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "fencing_epoch": {
+          "exclusiveMinimum": 0,
+          "title": "Fencing Epoch",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "attempt_id",
+        "fencing_epoch"
+      ],
+      "title": "Heartbeat",
+      "type": "object"
+    },
+    "ArtifactStage": {
+      "additionalProperties": false,
+      "properties": {
+        "idempotency_key": {
+          "maxLength": 128,
+          "minLength": 16,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "attempt_id": {
+          "format": "uuid",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "fencing_epoch": {
+          "exclusiveMinimum": 0,
+          "title": "Fencing Epoch",
+          "type": "integer"
+        },
+        "filename": {
+          "maxLength": 120,
+          "minLength": 1,
+          "not": {
+            "pattern": "\\.\\.|\\.$"
+          },
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$",
+          "title": "Filename",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size_bytes": {
+          "maximum": 52428800,
+          "minimum": 0,
+          "title": "Size Bytes",
+          "type": "integer"
+        },
+        "media_type": {
+          "enum": [
+            "text/plain",
+            "application/json",
+            "application/zip",
+            "text/x-diff"
+          ],
+          "title": "Media Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "correlation_id",
+        "project_id",
+        "task_id",
+        "attempt_id",
+        "fencing_epoch",
+        "filename",
+        "sha256",
+        "size_bytes",
+        "media_type"
+      ],
+      "title": "ArtifactStage",
+      "type": "object"
+    },
+    "VerificationRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "idempotency_key": {
+          "maxLength": 128,
+          "minLength": 16,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "attempt_id": {
+          "format": "uuid",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 0,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "profile_version": {
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$",
+          "title": "Profile Version",
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceFingerprint"
+        },
+        "artifact_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Artifact Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "correlation_id",
+        "task_id",
+        "attempt_id",
+        "expected_revision",
+        "profile_version",
+        "source",
+        "artifact_ids"
+      ],
+      "title": "VerificationRequest",
+      "type": "object"
+    },
+    "AcceptanceRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "idempotency_key": {
+          "maxLength": 128,
+          "minLength": 16,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "attempt_id": {
+          "format": "uuid",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 0,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "verification_run_id": {
+          "format": "uuid",
+          "title": "Verification Run Id",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "maxItems": 30,
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceFingerprint"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "correlation_id",
+        "task_id",
+        "attempt_id",
+        "expected_revision",
+        "verification_run_id",
+        "evidence_ids",
+        "source"
+      ],
+      "title": "AcceptanceRequest",
+      "type": "object"
+    },
+    "MessageCreate": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "ANSWER"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "reply_to": {
+                "format": "uuid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "reply_to"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "idempotency_key": {
+          "maxLength": 128,
+          "minLength": 16,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "task_id": {
+          "format": "uuid",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "attempt_id": {
+          "format": "uuid",
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "recipient_id": {
+          "format": "uuid",
+          "title": "Recipient Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "QUESTION",
+            "ANSWER",
+            "HELP_REQUEST",
+            "FINDING",
+            "REVIEW_REQUEST",
+            "HANDOFF",
+            "BLOCKER",
+            "STATUS"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "body": {
+          "maxLength": 16384,
+          "minLength": 1,
+          "title": "Body",
+          "type": "string"
+        },
+        "reply_to": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reply To"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "correlation_id",
+        "project_id",
+        "task_id",
+        "attempt_id",
+        "recipient_id",
+        "kind",
+        "body"
+      ],
+      "title": "MessageCreate",
+      "type": "object"
+    },
+    "ErrorEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$",
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "retryable": {
+          "title": "Retryable",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "correlation_id",
+        "retryable"
+      ],
+      "title": "ErrorEnvelope",
+      "type": "object"
+    },
+    "CommandReceipt": {
+      "additionalProperties": false,
+      "properties": {
+        "command_id": {
+          "format": "uuid",
+          "title": "Command Id",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "QUEUED",
+            "RUNNING",
+            "SUCCEEDED",
+            "FAILED"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "result_ref": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Result Ref"
+        }
+      },
+      "required": [
+        "command_id",
+        "correlation_id",
+        "state"
+      ],
+      "title": "CommandReceipt",
+      "type": "object"
+    },
+    "EventEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "exclusiveMinimum": 0,
+          "title": "Event Id",
+          "type": "integer"
+        },
+        "tenant_id": {
+          "format": "uuid",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "project_id": {
+          "format": "uuid",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "aggregate_id": {
+          "format": "uuid",
+          "title": "Aggregate Id",
+          "type": "string"
+        },
+        "aggregate_revision": {
+          "minimum": 0,
+          "title": "Aggregate Revision",
+          "type": "integer"
+        },
+        "attempt_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Attempt Id"
+        },
+        "kind": {
+          "pattern": "^[a-z][a-z0-9_.]{1,79}$",
+          "title": "Kind",
+          "type": "string"
+        },
+        "occurred_at": {
+          "format": "date-time",
+          "title": "Occurred At",
+          "type": "string"
+        },
+        "task_state": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TaskState"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "event_id",
+        "tenant_id",
+        "project_id",
+        "aggregate_id",
+        "aggregate_revision",
+        "attempt_id",
+        "kind",
+        "occurred_at"
+      ],
+      "title": "EventEnvelope",
+      "type": "object"
+    },
+    "RoleBudget": {
+      "additionalProperties": false,
+      "properties": {
+        "max_turns": {
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Max Turns",
+          "type": "integer"
+        },
+        "max_tool_calls": {
+          "maximum": 12,
+          "minimum": 0,
+          "title": "Max Tool Calls",
+          "type": "integer"
+        },
+        "timeout_seconds": {
+          "maximum": 600,
+          "minimum": 30,
+          "title": "Timeout Seconds",
+          "type": "integer"
+        },
+        "paid_provider_allowed": {
+          "const": false,
+          "title": "Paid Provider Allowed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "max_turns",
+        "max_tool_calls",
+        "timeout_seconds",
+        "paid_provider_allowed"
+      ],
+      "title": "RoleBudget",
+      "type": "object"
+    },
+    "RoleCard": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.15",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "role_id": {
+          "pattern": "^(?:MGR-00|EXP-\\d{3})$",
+          "title": "Role Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 200,
+          "minLength": 3,
+          "title": "Name",
+          "type": "string"
+        },
+        "activation_status": {
+          "const": "DISABLED",
+          "title": "Activation Status",
+          "type": "string"
+        },
+        "approval_status": {
+          "const": "PENDING_HUMAN_REVIEW",
+          "title": "Approval Status",
+          "type": "string"
+        },
+        "competency_status": {
+          "const": "NOT_RUN",
+          "title": "Competency Status",
+          "type": "string"
+        },
+        "source_file": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Source File",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "license_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "License Sha256",
+          "type": "string"
+        },
+        "source_is_authority": {
+          "const": false,
+          "title": "Source Is Authority",
+          "type": "boolean"
+        },
+        "purpose": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Purpose",
+          "type": "string"
+        },
+        "inputs": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Inputs",
+          "type": "array"
+        },
+        "outputs": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Outputs",
+          "type": "array"
+        },
+        "requested_capabilities": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requested Capabilities",
+          "type": "array"
+        },
+        "allowed_tools": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 0,
+          "title": "Allowed Tools",
+          "type": "array"
+        },
+        "budget": {
+          "$ref": "#/$defs/RoleBudget"
+        },
+        "workflow": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 3,
+          "title": "Workflow",
+          "type": "array"
+        },
+        "handoff_to": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Handoff To",
+          "type": "array"
+        },
+        "stop_conditions": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 2,
+          "title": "Stop Conditions",
+          "type": "array"
+        },
+        "acceptance_checks": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 2,
+          "title": "Acceptance Checks",
+          "type": "array"
+        },
+        "adaptations": {
+          "items": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 2,
+          "title": "Adaptations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "schema_version",
+        "role_id",
+        "name",
+        "activation_status",
+        "approval_status",
+        "competency_status",
+        "source_file",
+        "source_sha256",
+        "license_sha256",
+        "source_is_authority",
+        "purpose",
+        "inputs",
+        "outputs",
+        "requested_capabilities",
+        "allowed_tools",
+        "budget",
+        "workflow",
+        "handoff_to",
+        "stop_conditions",
+        "acceptance_checks",
+        "adaptations"
+      ],
+      "title": "RoleCard",
+      "type": "object"
+    }
+  }
+}

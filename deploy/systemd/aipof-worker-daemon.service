@@ -1,0 +1,19 @@
+[Unit]
+Description=AI Proje Ofisi Autonomous Worker Daemon (MOD-002/MOD-003)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=aipof-dbtest
+Group=aipof-dbtest
+WorkingDirectory=/mnt/e/Projeler/Ai_Proje_Ofisi
+Delegate=yes
+NoNewPrivileges=yes
+PrivateTmp=yes
+ExecStart=/usr/bin/python3 -B /mnt/e/Projeler/Ai_Proje_Ofisi/scripts/operations/run_worker_daemon.py --poll-interval 5.0
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

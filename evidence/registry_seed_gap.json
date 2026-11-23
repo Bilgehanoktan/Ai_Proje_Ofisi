@@ -1,0 +1,17 @@
+{
+  "scope": "STATIC_LITERAL_ROUTE_SEED_COVERAGE_NOT_AUTHORIZATION",
+  "missing_route_seeds": [
+    "CAP-017.revoke",
+    "e0.evaluation_artifact_record",
+    "e0.qualification_candidate_issue",
+    "e0.setup_mandate_consume",
+    "objectives.create",
+    "plans.create",
+    "qualification.activate",
+    "qualification.revoke",
+    "tasks.create"
+  ],
+  "runtime": "NOT_RUN",
+  "policy_values_inferred": false,
+  "source_root": "AiProjeOfisi"
+}

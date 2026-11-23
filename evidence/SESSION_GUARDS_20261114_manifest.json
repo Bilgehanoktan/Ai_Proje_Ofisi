@@ -1,0 +1,16 @@
+{
+  "company_os/session_provisioning.py": "38ddb02c2eb4919dee42456c1f3e18dfde0b0baf06e4369cdae92df2ce5f792f",
+  "tests/unit/test_session_provisioning.py": "050a40282263d8c7de3b9b787ee31788ceba2c0232266208e79c24c59de6daeb",
+  "tools/native_session_guards_fixture.py": "e752812a5372c536210a2c416e6cca88bef087663893fc0c8891830f677f18ab",
+  "tools/probe_bootstrap_reader_pg.py": "7db8bc21071e7e4cd96540c30d321743db576461bf1633c3cbf49d16f3109a82",
+  "CODEX_OTURUM_SINIRLARI_20261114.md": "c67a15060d9563b52bbebf1ee775dc08912bc65a08ea1216a02919d576e4eacc",
+  "BAKIM_VE_DEGISIKLIK_REHBERI.md": "9c4dd6d5c0e59ceafb5e6e563d837c42ca067a9a07eeac5df4b52c32f1b9fe91",
+  "ILERLEME_TABLOSU.json": "fd1ea19b620488c436079c4c42138709e851910d7f3cbfcc868d444ff8fdbe42",
+  "ILERLEME_TABLOSU.md": "2dd5acade604f89f96f2982a598fc8488989a566c3cedba0b115f9a691f85b2e",
+  "KALAN_ISLER_20261113.md": "311c5d0f627fee73cd17067d24cca53668ea62ac976e8fb339cc4702eedc533c",
+  "evidence/SESSION_GUARDS_20261114_before.log": "bf72e79d29a43a2239ed80a4263cd2e8709a7c1356f1be23f97502b1a097e735",
+  "evidence/SESSION_GUARDS_20261114_linux.log": "1f5dbe3641aee1a3b55414ea9e31d632bc36f0882ffe2eee702c7299b7de29fc",
+  "evidence/SESSION_GUARDS_20261114_native.json": "948737abba81aa235e3308f2bd695360690bfa27a6a3b79eb8872d2b56675e6c",
+  "evidence/SESSION_GUARDS_20261114_setup_observation.json": "4507c6c92022bfbb87f15eda9bad797363bc2e02fc9ba410bcd91052172cbc93",
+  "evidence/SESSION_GUARDS_20261114_windows.log": "8a69d88e508b55c17dab0577e409ebda7aa3d06dc44e37cc1eaa45075fe6155c"
+}

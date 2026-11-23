@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <title>AI Proje Ofisi — Canlı Olay Paneli (SSE)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; margin: 24px; }
+    h1 { font-size: 1.25rem; margin-bottom: 12px; }
+    .bar { display: flex; gap: 8px; margin-bottom: 16px; }
+    input, button { padding: 8px 12px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #f8fafc; }
+    button { cursor: pointer; background: #2563eb; border-color: #2563eb; }
+    #status { font-size: 0.9rem; color: #94a3b8; margin-bottom: 12px; }
+    ul { list-style: none; padding: 0; display: grid; gap: 8px; }
+    li { background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 10px 12px; font-family: monospace; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <h1>AI Proje Ofisi — Canlı Olay ve Çoklu Görev Paneli (Salt Okunur SSE)</h1>
+  <div class="bar">
+    <input id="tenant" value="t1" placeholder="tenant_id">
+    <button id="connect">Bağlan (/api/events)</button>
+  </div>
+  <div id="status">Durum: Beklemede</div>
+  <div id="work-types" style="margin-bottom: 12px; font-size: 0.85rem; color: #cbd5e1;"></div>
+  <ul id="events"></ul>
+  <script>
+    let es = null;
+    const statusEl = document.getElementById("status");
+    const listEl = document.getElementById("events");
+    const wtEl = document.getElementById("work-types");
+    fetch("/api/work-types")
+      .then((r) => r.json())
+      .then((data) => {
+        const names = (data.work_types || []).map((w) => `${w.work_type} (${w.template_id})`).join(" · ");
+        wtEl.textContent = `Kayıtlı İş Türleri: ${names}`;
+      })
+      .catch(() => { wtEl.textContent = "İş türleri okunamadı"; });
+    document.getElementById("connect").addEventListener("click", () => {
+      if (es) es.close();
+      const tid = encodeURIComponent(document.getElementById("tenant").value.trim());
+      statusEl.textContent = "Durum: Bağlanıyor...";
+      es = new EventSource(`/api/events?tenant_id=${tid}`);
+      es.onopen = () => { statusEl.textContent = `Durum: Bağlandı (tenant_id=${tid})`; };
+      const appendEvent = (ev) => {
+        const li = document.createElement("li");
+        li.textContent = `[id=${ev.lastEventId} type=${ev.type}] ${ev.data}`;
+        listEl.prepend(li);
+      };
+      es.onmessage = appendEvent;
+      [
+        "ObjectiveCreated",
+        "TaskCreated",
+        "Migration087Verified",
+        "MemoryPromoted",
+        "BudgetSettled",
+        "WorkerTaskClaimed",
+        "WorkerTaskAccepted",
+        "WorkerTaskRejected",
+        "WorkerTaskError"
+      ].forEach((t) => {
+        es.addEventListener(t, appendEvent);
+      });
+      es.onerror = () => { statusEl.textContent = "Durum: Akış kapandı veya bağlantı hatası"; };
+    });
+  </script>
+</body>
+</html>

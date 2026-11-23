@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-12",
+  "scope": "SOURCE_TEST_NOT_RUNTIME_ACCEPTANCE",
+  "files": {
+    "company_os/workflow_trust.py": "5214086177a82017200278defcb5318b0f072fdce64bf9507fe18bbee2a1c6d4",
+    "tools/disposable_e2e_workflow_trial.py": "ca7091d6324df1dea2b311c61421606430f0f3703061e61a1e817f74b1f345d9",
+    "tests/unit/test_workflow_trust.py": "38f41ad3d5d67bc340bc20e196bf717a3a53cc18551940c1a232d99bdebc64fd",
+    "CODEX_GUVEN_GIRDILERI_20261112.md": "9060ccc9bfff19dbd64e97d296daa58b939ed191da95937bba9e16172adf33e9",
+    "evidence/CODEX_TRUST_20261112_tests.log": "f44385efd2f4cc90a32f27a3fd8f77d20aeb0463a150ab5905ddf40be18b4108",
+    "evidence/CODEX_TRUST_20261112_preflight.json": "b1358ef7a6c3639987b4f891f305077d7a8e26b20d6a9df48bc0f7ce0c600b86"
+  }
+}

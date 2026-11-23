@@ -1,0 +1,365 @@
+{
+  "version": 1,
+  "canonical_workspace": "E:\\Projeler\\Ai_Proje_Ofisi",
+  "updated_at": "2026-11-23",
+  "summary": "2026-11-23 kullanıcı G0 ve first13 (13/13) insan onayı işlendi (handover/G0_INSAN_ONAYI_KONTROL_LISTESI_20261123.md). 087_MOD012_MOD014_EXTENSIONS_CANDIDATE.sql migration'ı database/assembly/assembly.json içine 87. migration olarak eklendi; temiz PG 18.6 (verify_087_migration_pg.py) ve canlı PG 18.6 değerlendirme kümesinde (/var/lib/ai-proje-ofisi-local, port 55490, 4 FORCE RLS tablosu, 0 devre dışı trigger) doğrulandı. Native C r65_spawn_linux.c + R65NativeLauncher köprüsü delegated cgroup v2 içinde gerçek MGT-TITLE-NORMALIZATION-01 worker yama üretimi ve 13/13 oracle doğrulamasıyla (verify_mgt01_native_launcher.py) PASS verdi. Tüm 16 modül (MOD-001–MOD-016) için temel kaynak, canlı PG readback, SSE, yedek/restore ve native başlatıcı kanıtları tamamlandı; üretim dağıtımı öncesi ek iş türleri ve sürekli otonom daemon geliştirmeleri açık kalır.",
+  "update_policy": "Her anlamlı geliştirmede ilgili satırı kanıtıyla güncelle. Tahmini oranı ölçülmüş sonuçtan ayır; değişmeyen alanı yeniden doğrulanmış sayma.",
+  "areas": [
+    {
+      "id": "frontend",
+      "title": "Ön yüz (Frontend)",
+      "modules": [
+        "MOD-011"
+      ],
+      "status": "Ofis önizlemesi, /live-events çoklu görev SSE akışı ve 087 API'leri tarayıcıdan doğrulandı",
+      "ready": "Panel persistence, 6 /api/details restart readback, /live-events canlı SSE ekranında RESEARCH/SPREADSHEET/OBLIGATION çoklu görev olayları (8 canlı SSE olayı) ve / ana ofis önizlemesi (0 konsol hatası) gerçek tarayıcı E2E ile doğrulandı.",
+      "missing": "Canlı üretim veritabanı kimlik doğrulamasıyla etkileşimli ofis sahnesi yazma aksiyonları açık.",
+      "next_step": "Üretim ortamında authenticated komut istemcisini ofis sahnesine bağlamak.",
+      "last_reviewed": "2026-11-23",
+      "evidence": [
+        "evidence/runs/browser-multitask-and-restore-20261123.json",
+        "product/frontend/live-events.html",
+        "handover/LIVE_FLOW_VERIFICATION_20261120.md",
+        "product/frontend/previews/preview.html"
+      ],
+      "evidence_scope": "2026-11-23 gerçek tarayıcıda /live-events (8 SSE olayı + 3 iş türü) ve / ana ofis önizlemesi (0 konsol hatası) PASS.",
+      "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
+      "estimated_percent": 75,
+      "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
+      "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
+    },
+    {
+      "id": "backend",
+      "title": "Arka uç (Backend)",
+      "modules": [
+        "MOD-001",
+        "MOD-002"
+      ],
+      "status": "Değerlendirme kümesinde Kernel/Panel/086 canlı zinciri ve birim düzeltmeleri doğrulandı",
+      "ready": "086 owner-auth/recovery + saat epoch + least-privilege transport rolleriyle canlı PostgreSQL üzerinde Objective/Plan/Task yaşam döngüsü doğrulandı; command_host.py per-operation grant_ids çözümlemesi ve kernel_adapters.py çok satırlı base64 frame temizliği birim testleriyle onarıldı. Üç SQL bulgusu kaynak paketinde düzeltildi. Temiz PostgreSQL kümesinde 86 kaynak rollback ile derlendi. Süreç trigger deneyi ve iki SELECT politikasının katalog kontrolü geçti. 083 politikalarının sentetik satır düzeyi olumlu ve olumsuz testi geçti. Temiz sentetik başlangıçta native bootstrap bir makbuz, bir hedef ve bir plan oluşturdu. İzole sentetik kurulumda R58 saat politikası aktivasyonu ve tekrar çağrısı tek makbuz üretti. Sentetik yetkilendirme ile native workspace komutu ve makbuzu, saat dönemi ve iki örnek doğrulandı.",
+      "missing": "Yetkili PL/pgSQL işlev çağrıları, tam şemada launch delivery ve uzlaştırma komutu, native C başlatıcı ve resmî kabul açık.",
+      "next_step": "Temiz kurulumda saat politikası için işlem tanımı ve yetkilendirme kayıtlarının sağlanması, host bağlama, epoch ve örnek kaydı, teknik oturum ve dört işlem için proje izinleri.",
+      "last_reviewed": "2026-11-21",
+      "evidence": [
+        "handover/LIVE_FLOW_VERIFICATION_20261120.md",
+        "evidence/runs/live-flow-20261120/owner-auth-live-verification.json",
+        "evidence/runs/live-flow-20261120/panel-live-persistence.json",
+        "evidence/runs/live-flow-20261120/mgt01-live-workflow-acceptance.json",
+        "handover/OWNER_AUTH_RECOVERY_20261120.md",
+        "tests/unit/test_host_guards.py",
+        "tests/unit/test_pipeline.py",
+        "database/assembly/assembly.json",
+        "tests/security/test_sql_source.py",
+        "evidence/runs/sql-step1-20261120.md",
+        "scripts/verification/clock_policy_activation_probe.sql",
+        "scripts/verification/workspace_head_native_probe.sql"
+      ],
+      "evidence_scope": "Yerel WSL değerlendirme kümesi (55490) canlı PostgreSQL/HTTP doğrulaması ve Windows/Linux birim testleri PASS; G0 OPEN ve resmî runtime kabulü NOT_RUN korunur. Yeni deneme temiz geçici küme ve rollback ile sınırlı. Temiz kurulumda dört işlem için onaylı politika ve eşleşen izin sayısı sıfır. Native proje saat sınırı BLOCKED_TIME_DEPENDENCY verdi.",
+      "real_acceptance": "NOT_VERIFIED",
+      "estimated_percent": 65,
+      "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
+      "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
+    },
+    {
+      "id": "database",
+      "title": "Veritabanı",
+      "modules": [
+        "MOD-001",
+        "MOD-016"
+      ],
+      "status": "Canlı 086+087 kurulumu, E0 bütünlüğü, 4 FORCE RLS tablosu ve soğuk restart readback doğrulandı",
+      "ready": "Yerel değerlendirme kümesinde 086 ve 087 (catalog_entries, memory_promotions, work_template_validations, external_effect_ledger; 4 FORCE RLS + separation-of-duties CHECK) kurulumu, E0 SHA256 değişmezliği (0 disabled trigger), canlı Objective/Plan/Task/Attempt/Acceptance zinciri, izole pg_basebackup/restore ve PG soğuk restart sonrası veri kalıcılığı doğrulandı.",
+      "missing": "Üretim ortamı kalıcı yedekleme otomasyonu ve uzun süreli yük/regresyon testleri açık.",
+      "next_step": "Üretim ortamı kurulumunda 001..087 assembly sırasını ve otomatik yedekleme/restore prosedürünü devreye almak.",
+      "last_reviewed": "2026-11-23",
+      "evidence": [
+        "evidence/runs/migration-087-live-20261123.json",
+        "scripts/verification/verify_087_migration_pg.py",
+        "database/assembly/assembly.json",
+        "handover/LIVE_FLOW_VERIFICATION_20261120.md",
+        "evidence/runs/live-flow-20261120/precheck-functions-e0.json",
+        "evidence/runs/live-flow-20261120/readiness-final.json"
+      ],
+      "evidence_scope": "2026-11-23 temiz PG 18.6 (001..087) ve canlı PG 18.6 değerlendirme kümesinde (55490) 087 uygulaması, 4 FORCE RLS tablosu, SoD CHECK ve 0 devre dışı trigger doğrulandı.",
+      "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
+      "estimated_percent": 85,
+      "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
+      "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
+    },
+    {
+      "id": "security",
+      "title": "Güvenlik (Security)",
+      "modules": [
+        "MOD-001",
+        "MOD-004"
+      ],
+      "status": "086/owner-auth, pidfd ve native C r65_spawn cgroup v2 ile MGT-01 13/13 doğrulandı",
+      "ready": "aipof_owner_auth / aipof_http_kernel peer map=aipof_local, OWNER_AUTH signer enrollment, ISSUE/REPLAY/REVOKE/RECOVER_ROTATE pozitif+negatif testleri, native C r65_spawn_linux.c (gcc -Wall -Wextra -Werror, delegated cgroup2fs CLONE_INTO_CGROUP|CLONE_PIDFD + seccomp + execveat -> child_exit_code=0, non-cgroup EINVAL reddi) ve R65NativeLauncher üzerinden gerçek MGT-TITLE-NORMALIZATION-01 worker yama üretimi + 13/13 oracle PASS doğrulandı.",
+      "missing": "Üretim ortamı donanım/HSM anahtar yönetimi ve harici sızma testi açık.",
+      "next_step": "Üretim anahtar rotasyonu ve sürekli supervisor güvenliği izlemesini kurmak.",
+      "last_reviewed": "2026-11-23",
+      "evidence": [
+        "evidence/runs/mgt01-native-launcher-20261123.json",
+        "scripts/verification/verify_mgt01_native_launcher.py",
+        "scripts/verification/verify_r65_spawn_native.py",
+        "product/backend/native/linux/r65_spawn_linux.c",
+        "handover/LIVE_FLOW_VERIFICATION_20261120.md",
+        "evidence/runs/live-flow-20261120/owner-auth-live-verification.json",
+        "handover/OWNER_AUTH_RECOVERY_20261120.md"
+      ],
+      "evidence_scope": "2026-11-23 WSL Linux üzerinde R65NativeLauncher + r65_spawn_linux.c delegated cgroup v2 içinde MGT-TITLE-NORMALIZATION-01 yama + 13/13 oracle PASS; G0 insan onayı 2026-11-23.",
+      "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
+      "estimated_percent": 85,
+      "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
+      "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
+    },
+    {
+      "id": "agents",
+      "title": "Ajanlar ve iş yönetimi",
+      "modules": [
+        "MOD-002",
+        "MOD-003"
+      ],
+      "status": "MGT-01 uçtan uca akışı ve fail-closed AutonomousWorkerDaemon döngüsü doğrulandı",
+      "ready": "MGT-TITLE-NORMALIZATION-01 için tasks.ready, worker.claim, process.launch_reserve/consume, DeliveryGuard, LaunchActivation, PilotSession.run, ProcessReconciler, process.stop_release ve devre kesicili AutonomousWorkerDaemon (product/backend/company_os/runtime/worker_daemon.py) doğrulandı.",
+      "missing": "Üretim ortamında çoklu eşzamanlı worker ölçekleme ve uzun dönemli soak testi açık.",
+      "next_step": "Üretim ortamında systemd/supervisor altında AutonomousWorkerDaemon servisini başlatıp uzun süreli izleme yapmak.",
+      "last_reviewed": "2026-11-23",
+      "evidence": [
+        "product/backend/company_os/runtime/worker_daemon.py",
+        "tests/unit/test_worker_daemon_and_087_api.py",
+        "evidence/runs/mgt01-native-launcher-20261123.json",
+        "handover/LIVE_FLOW_VERIFICATION_20261120.md",
+        "evidence/runs/live-flow-20261120/mgt01-live-workflow-acceptance.json"
+      ],
+      "evidence_scope": "2026-11-23 AutonomousWorkerDaemon kuyruk + devre kesici birim testleri ve native C launcher MGT-01 13/13 PASS.",
+      "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
+      "estimated_percent": 80,
+      "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
+      "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
+    },
+    {
+      "id": "models",
+      "title": "Yerel yapay zekâ modeli",
+      "modules": [
+        "MOD-005"
+      ],
+      "status": "Ücretsiz yerel Ollama modeli (qwen2.5-coder:3b) MGT-TITLE-NORMALIZATION-01 akışına bağlandı",
+      "ready": "E:\\ollama_local\\models üzerinden qwen2.5-coder:3b canlı çağrısı (prompt_eval_count: 305, eval_count: 91) ile task_title.py yaması üretildi ve 13/13 oracle'dan geçti.",
+      "missing": "Çoklu iş türleri (MOD-013) ve uzun süreli yerel model oturumu hata/yeniden deneme stratejisi açık.",
+      "next_step": "MOD-013 iş türleri için yerel model adaptör profillerini genişletmek.",
+      "last_reviewed": "2026-11-20",
+      "evidence": [
+        "handover/LIVE_FLOW_VERIFICATION_20261120.md",
+        "evidence/runs/live-flow-20261120/local-model-invocation.json",
+        "evidence/runs/live-flow-20261120/mgt01-live-workflow-acceptance.json"
+      ],
+      "evidence_scope": "2026-11-20 tek dosya MGT-TITLE-NORMALIZATION-01 yama üretimi yerel Ollama ile doğrulandı; G0/ürün kabulü açık.",
+      "real_acceptance": "NOT_VERIFIED",
+      "estimated_percent": 50,
+      "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
+      "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
+    },
+    {
+      "id": "tools",
+      "title": "Dosyalar ve araçlar",
+      "modules": [
+        "MOD-006",
+        "MOD-007"
+      ],
+      "status": "Broker + LinuxSingleFileExecutor canlı yama ve base64 frame düzeltmesi doğrulandı",
+      "ready": "tool.authorize_final -> tool.consume -> LinuxSingleFileExecutor -> r60_effect_finish -> r58_patch_receipt zinciri canlı PostgreSQL'de çalıştı; ToolKernel.effect_scope çok satırlı base64 frame hatası onarıldı.",
+      "missing": "Çok dosyalı yama ve dış araç genişlemeleri (MOD-013/MOD-014) açık.",
+      "next_step": "MOD-013 ve MOD-014 modülleri için ek broker araç yetkilerini bağlamak.",
+      "last_reviewed": "2026-11-20",
+      "evidence": [
+        "handover/LIVE_FLOW_VERIFICATION_20261120.md",
+        "evidence/runs/live-flow-20261120/mgt01-live-workflow-acceptance.json",
+        "product/backend/company_os/kernel/kernel_adapters.py",
+        "tests/unit/test_pipeline.py",
+        "product/backend/company_os/broker/tool_broker.py"
+      ],
+      "evidence_scope": "2026-11-20 değerlendirme kümesinde tek dosyalık task_title.py yama akışı ve birim regresyon testi PASS.",
+      "real_acceptance": "NOT_VERIFIED",
+      "estimated_percent": 65,
+      "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
+      "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
+    },
+    {
+      "id": "verification",
+      "title": "Sonuç kontrolü ve kabul",
+      "modules": [
+        "MOD-008",
+        "MOD-009"
+      ],
+      "status": "RuntimeTitleVerifier (13/13), native C launcher MGT-01 (13/13) ve 2026-11-23 insan kabulü tamamlandı",
+      "ready": "Baseline (8/13 fail) ve mutant (0/13 fail) reddi sonrası yamalanmış task_title.py 13/13 ACTUAL_RUNTIME PASS; verification.final_seal, evidence.provenance ve QA_AUDITOR verification.accept (ACCEPTED) canlı DB'de işlendi; R65NativeLauncher cgroup v2 içinde 13/13 oracle PASS ve 2026-11-23 insan kabulü (first13: 13/13) kaydedildi.",
+      "missing": "MOD-013 kapsamındaki ek iş türleri için uzun dönemli üretim doğrulayıcı kalibrasyonu açık.",
+      "next_step": "MOD-013 iş türleri (Research/Spreadsheet/Obligation) için canlı üretim doğrulayıcı eşiklerini genişletmek.",
+      "last_reviewed": "2026-11-23",
+      "evidence": [
+        "handover/G0_INSAN_ONAYI_KONTROL_LISTESI_20261123.md",
+        "evidence/runs/mgt01-native-launcher-20261123.json",
+        "handover/LIVE_FLOW_VERIFICATION_20261120.md",
+        "evidence/runs/live-flow-20261120/mgt01-live-workflow-acceptance.json"
+      ],
+      "evidence_scope": "2026-11-23 G0 + first13 (13/13) kullanıcı insan onayı, canlı PG QA ACCEPTED ve R65NativeLauncher 13/13 oracle PASS doğrulandı.",
+      "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
+      "estimated_percent": 85,
+      "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
+      "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
+    },
+    {
+      "id": "events",
+      "title": "Canlı durum ve olaylar",
+      "modules": [
+        "MOD-010"
+      ],
+      "status": "Outbox/audit, restart readback ve çoklu görev canlı SSE tarayıcı akışı doğrulandı",
+      "ready": "ObjectiveCreated/PlanCreated/TaskCreated outbox olayları, restart sonrası 6 /api/details readback ve AutonomousWorkerDaemon'dan üretilen 8 çoklu görev/bütçe/hafıza SSE olayının (/api/events) gerçek tarayıcıda tüketimi doğrulandı.",
+      "missing": "Yüksek hacimli uzun süreli SSE bağlantı kopma/yeniden bağlanma yük testi açık.",
+      "next_step": "Üretim ortamında çoklu istemcili SSE yük ve yeniden bağlanma testini yapmak.",
+      "last_reviewed": "2026-11-23",
+      "evidence": [
+        "evidence/runs/browser-multitask-and-restore-20261123.json",
+        "product/frontend/live-events.html",
+        "handover/LIVE_FLOW_VERIFICATION_20261120.md"
+      ],
+      "evidence_scope": "2026-11-23 gerçek tarayıcıda tenant-scoped 8 canlı SSE olayı tüketimi PASS.",
+      "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
+      "estimated_percent": 75,
+      "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
+      "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
+    },
+    {
+      "id": "memory",
+      "title": "Katalog ve ürün hafızası",
+      "modules": [
+        "MOD-012"
+      ],
+      "status": "087 canlı PG şeması (FORCE RLS + SoD CHECK), Python servisi ve readback doğrulandı",
+      "ready": "TenantCatalogRegistry ve ProductMemoryPromotionPipeline (CANDIDATE->VERIFIED->PROMOTED, tenant izolasyonu ve görev ayrılığı) birim testleri, izole PG 18.6 readback ve 087_MOD012_MOD014_EXTENSIONS_CANDIDATE.sql (company.catalog_entries, company.memory_promotions) canlı PG 18.6 değerlendirme kümesinde (55490) doğrulandı.",
+      "missing": "HTTP/worker uçtan uca otomatik hafıza terfi akışı ve üretim yük testi açık.",
+      "next_step": "MOD-012 katalog/terfi API uçlarını panel ve worker döngüsüne doğrudan bağlamak.",
+      "last_reviewed": "2026-11-23",
+      "evidence": [
+        "evidence/runs/migration-087-live-20261123.json",
+        "scripts/verification/verify_087_migration_pg.py",
+        "scripts/verification/verify_mod012_to_mod014_pg.py",
+        "product/backend/company_os/catalog/memory_promotion.py",
+        "tests/unit/test_mod011_to_mod014.py"
+      ],
+      "evidence_scope": "2026-11-23 birim testi + izole PG readback + 087 canlı PG 18.6 FORCE RLS ve SoD CHECK PASS.",
+      "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
+      "estimated_percent": 50,
+      "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
+      "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
+    },
+    {
+      "id": "worktypes",
+      "title": "Diğer iş türleri",
+      "modules": [
+        "MOD-013"
+      ],
+      "status": "RESEARCH/SPREADSHEET/OBLIGATION otonom kuyruk, bağımsız doğrulayıcı ve 087 PG kalıcılığı PASS",
+      "ready": "MultiWorkTypeQueueRunner + AutonomousWorkerDaemon ile RESEARCH, SPREADSHEET ve OBLIGATION iş türleri bağımsız validate_work_output doğrulayıcısına bağlandı; birim testleri (kabul+red) ve izole restore PG 18.6 üzerinde 087 company.work_template_validations kalıcılık readback'i PASS.",
+      "missing": "Gerçek dış araştırma/elektronik tablo aracı adaptörleriyle üretim yük testi açık.",
+      "next_step": "Gerçek dosya/web araç adaptörlerini MultiWorkTypeQueueRunner executor portlarına bağlamak.",
+      "last_reviewed": "2026-11-23",
+      "evidence": [
+        "product/backend/company_os/workflows/queue_adapter.py",
+        "scripts/verification/verify_backup_restore_and_queue_pg.py",
+        "evidence/runs/browser-multitask-and-restore-20261123.json",
+        "tests/unit/test_worker_daemon_and_087_api.py"
+      ],
+      "evidence_scope": "2026-11-23 otonom kuyruk + bağımsız doğrulayıcı + 087 PG 18.6 kalıcılık ve tarayıcı SSE E2E PASS.",
+      "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
+      "estimated_percent": 75,
+      "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
+      "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
+    },
+    {
+      "id": "budget",
+      "title": "Bütçe ve dış işlemler",
+      "modules": [
+        "MOD-014"
+      ],
+      "status": "087 external_effect_ledger canlı PG şeması, sıfır olmayan rezervasyon ve UNKNOWN maliyet uzlaştırması PASS",
+      "ready": "0-minor rezervasyon canlıda, sıfır olmayan rezervasyon + UNKNOWN maliyet uzlaştırması + idempotent ExternalEffectLedger birim testi/izole PG readback'i ve 087 company.external_effect_ledger FORCE RLS tablosu canlı PG 18.6 (55490) üzerinde doğrulandı.",
+      "missing": "Gerçek dış ticari sağlayıcı (webhook/API) canlı mutabakatı açık.",
+      "next_step": "MOD-014 external_effect_ledger tablosunu gerçek dış sağlayıcı adaptörleriyle bağlamak.",
+      "last_reviewed": "2026-11-23",
+      "evidence": [
+        "evidence/runs/migration-087-live-20261123.json",
+        "scripts/verification/verify_087_migration_pg.py",
+        "scripts/verification/verify_mod012_to_mod014_pg.py",
+        "product/backend/company_os/budget/ledger.py",
+        "tests/unit/test_mod011_to_mod014.py"
+      ],
+      "evidence_scope": "2026-11-23 birim testi + izole PG readback + 087 canlı PG 18.6 FORCE RLS PASS.",
+      "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
+      "estimated_percent": 50,
+      "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
+      "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
+    },
+    {
+      "id": "operations",
+      "title": "Kurulum, yedek ve kurtarma",
+      "modules": [
+        "MOD-015"
+      ],
+      "status": "086+087 kurulumu, izole yedek/restore/epoch kurtarma ve üretim runbook tamamlandı",
+      "ready": "086+087 canlı kurulumu, taze boot clock epoch/sample aktivasyonu, OWNER_AUTH signer enrollment, PG soğuk restart sürekliliği, izole pg_basebackup/pg_verifybackup + restore sonrası clock epoch invalidation ve üretim işletim rehberi (docs/operations/PRODUCTION_RUNBOOK.md) doğrulandı.",
+      "missing": "Üretim sunucusunda otomatik zamanlanmış yedekleme cron/systemd kurulumu açık.",
+      "next_step": "PRODUCTION_RUNBOOK.md adımlarını hedef üretim sunucusunda uygulayıp zamanlanmış yedeklemeyi etkinleştirmek.",
+      "last_reviewed": "2026-11-23",
+      "evidence": [
+        "docs/operations/PRODUCTION_RUNBOOK.md",
+        "evidence/runs/migration-087-live-20261123.json",
+        "scripts/verification/verify_disposable_restore.py",
+        "scripts/verification/verify_restore_epoch_retirement.py",
+        "handover/LIVE_FLOW_VERIFICATION_20261120.md"
+      ],
+      "evidence_scope": "2026-11-23 üretim runbook + 087 canlı PG + izole restore/epoch retirement doğrulaması PASS.",
+      "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
+      "estimated_percent": 80,
+      "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
+      "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
+    },
+    {
+      "id": "quality",
+      "title": "Testler ve teslim kalitesi",
+      "modules": [
+        "MOD-016"
+      ],
+      "status": "Birim/layout + 087 API/store + otonom daemon + native C MGT-01 + CI iş akışı PASS",
+      "ready": "run.py verify + verify_layout.py PASS; 087 temiz/canlı PG 18.6 + Extensions087Store + /api/catalog, /api/memory-promotions, /api/external-effects PASS; AutonomousWorkerDaemon PASS; R65NativeLauncher + r65_spawn_linux.c delegated cgroup v2 MGT-01 13/13 PASS; GitHub Actions CI (.github/workflows/ci.yml) eklendi.",
+      "missing": "Uzak GitHub runner üzerinde ilk CI koşusu ve uzun süreli yük/soak testleri açık.",
+      "next_step": "Değişiklikleri uzak depoya gönderip .github/workflows/ci.yml hattının Linux runner üzerinde yeşil geçtiğini teyit etmek.",
+      "last_reviewed": "2026-11-23",
+      "evidence": [
+        ".github/workflows/ci.yml",
+        "tests/unit/test_worker_daemon_and_087_api.py",
+        "handover/G0_INSAN_ONAYI_KONTROL_LISTESI_20261123.md",
+        "evidence/runs/migration-087-live-20261123.json",
+        "evidence/runs/mgt01-native-launcher-20261123.json",
+        "BAKIM_VE_DEGISIKLIK_REHBERI.md"
+      ],
+      "evidence_scope": "2026-11-23 Windows/Linux birim+layout, 087 canlı PG/API, AutonomousWorkerDaemon, native C launcher MGT-01 13/13 ve CI iş akışı hazır.",
+      "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
+      "estimated_percent": 85,
+      "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
+      "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
+    }
+  ],
+  "estimate_note": "Kaba geliştirme tahmini: alanlar eşit ağırlıklı değerlendirilir, ortalama en yakın5puana yuvarlanır. Efor/zaman ağırlıklı veya denetlenmiş tamamlanma ölçümü değildir. Genel belirsizlik aralığı%20–40; yeni kanıtla oran düşebilir. Test sayısından türetilmez.",
+  "estimate_range": [
+    20,
+    40
+  ],
+  "first_flow_acceptance": {
+    "completed": 13,
+    "total": 13,
+    "scope": "İlk gerçek yazılım akışının (MGT-TITLE-NORMALIZATION-01) 2026-11-23 insan onaylı ve teknik kanıtlı kabul adımları (handover/G0_INSAN_ONAYI_KONTROL_LISTESI_20261123.md); tüm ürünün geliştirme yüzdesi değildir."
+  }
+}

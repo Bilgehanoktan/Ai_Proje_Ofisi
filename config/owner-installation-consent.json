@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-08",
+  "canonical_workspace": "E:\\Projeler\\Ai_Proje_Ofisi",
+  "application_root": "AiProjeOfisi",
+  "source": "DIRECT_USER_STATEMENT_IN_CURRENT_CHAT",
+  "owner_declaration": "USER_DECLARES_SELF_AS_COMPANY_OWNER",
+  "installation_consent": "EXPLICITLY_GRANTED",
+  "statement": "sirketsahibibemnimkurulumabenizinverdim",
+  "statement_sha256": "df26d80fe68a13091d219a797f9b7cf6ac3edf62f1ce7f69124dee2d8b7b8ee3",
+  "scope": "Local project installation and first safe software workflow requested in this chat",
+  "identity_verification": "USER_DECLARATION_NOT_INDEPENDENTLY_VERIFIED",
+  "G0": "OPEN",
+  "runtime_acceptance": "NOT_INFERRED",
+  "external_paid_or_production_authority": "NOT_GRANTED_BY_THIS_RECORD"
+}

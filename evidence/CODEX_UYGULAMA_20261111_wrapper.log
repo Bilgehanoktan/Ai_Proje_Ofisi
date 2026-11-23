@@ -1,0 +1,137 @@
+{
+  "status": "BLOCKED_BEFORE_ENVIRONMENT_SETUP",
+  "preflight": {
+    "status": "BLOCKED",
+    "scope": "AST_SIGNATURE_ONLY_NOT_RUNTIME_ACCEPTANCE",
+    "checked_calls": 43,
+    "skipped_dynamic_calls": 1,
+    "findings": [
+      {
+        "line": 734,
+        "symbol": "verify_owner_installation_consent",
+        "signature": "(path, *, expected_human_id, expected_document_sha256, expected_workspace, root_record)",
+        "error": "missing a required argument: 'expected_workspace'"
+      },
+      {
+        "line": 747,
+        "symbol": "read_secret_bytes",
+        "signature": "(directory_fd, name, *, owner_uid)",
+        "error": "missing a required keyword-only argument: 'owner_uid'"
+      },
+      {
+        "line": 2019,
+        "symbol": "DeliveryGuard",
+        "signature": "(scope)",
+        "error": "missing a required argument: 'scope'"
+      },
+      {
+        "line": 2189,
+        "symbol": "LinuxSingleFileExecutor",
+        "signature": "(*, directory_fd, measure_head)",
+        "error": "too many positional arguments"
+      },
+      {
+        "line": 2190,
+        "symbol": "Broker",
+        "signature": "(*, binding, kernel, journal, executor)",
+        "error": "too many positional arguments"
+      },
+      {
+        "line": 2191,
+        "symbol": "PatchProposalProducer",
+        "signature": "(*, connect, controller_auth, signer, binding, process_id, source_snapshot)",
+        "error": "too many positional arguments"
+      },
+      {
+        "line": 2192,
+        "symbol": "PatchReceiptRecorder",
+        "signature": "(*, connect, controller_auth, worker_auth, patch_signer)",
+        "error": "too many positional arguments"
+      },
+      {
+        "line": 2193,
+        "symbol": "ProducerOutputAdapter",
+        "signature": "(*, producer, broker)",
+        "error": "too many positional arguments"
+      },
+      {
+        "line": 2194,
+        "symbol": "EngineReplyGuard",
+        "signature": "(*, scope, binding)",
+        "error": "too many positional arguments"
+      },
+      {
+        "line": 2196,
+        "symbol": "PilotSession",
+        "signature": "(*, connect, worker_auth, controller_auth, controller_id, process_id, binding, proposal_signer, effect_signer, patch_signer, directory_fd, measure_head, source_snapshot, journal, transport, stop_request, lease_state, timeout)",
+        "error": "missing a required keyword-only argument: 'connect'"
+      },
+      {
+        "line": 2221,
+        "symbol": "PipeTransport",
+        "signature": "(*, stdout_fd, stdin_fd, stderr_fd, max_stderr_bytes=16384)",
+        "error": "missing a required keyword-only argument: 'stdout_fd'"
+      },
+      {
+        "line": 2222,
+        "symbol": "EnginePump",
+        "signature": "(*, transport, handler, emission_guard, stop_request, lease_remaining, timeout, max_frames=16, clock=<built-in function monotonic>)",
+        "error": "missing a required argument: 'emission_guard'"
+      },
+      {
+        "line": 2039,
+        "symbol": "LinuxLauncher",
+        "signature": "(library_path, library_digest, cgroup_fd, workspace_paths, executable_path, namespace_inodes, uid, boot_id, resource_limits, lease_registry)",
+        "error": "missing a required argument: 'library_digest'"
+      },
+      {
+        "line": 2353,
+        "symbol": "IndependentVerificationPipeline",
+        "signature": "(*, connect, verifier_auth, verifier_signer, evidence_auth, evidence_signer, human_auth, receipt_validator=None)",
+        "error": "too many positional arguments"
+      },
+      {
+        "line": 3074,
+        "symbol": "PatchProposalProducer",
+        "signature": "(*, connect, controller_auth, signer, binding, process_id, source_snapshot)",
+        "error": "too many positional arguments"
+      },
+      {
+        "line": 3076,
+        "symbol": "DbScope",
+        "signature": "(connect, auth, timeout_ms=2000)",
+        "error": "missing a required argument: 'auth'"
+      },
+      {
+        "line": 2201,
+        "symbol": "DbScope",
+        "signature": "(connect, auth, timeout_ms=2000)",
+        "error": "missing a required argument: 'auth'"
+      }
+    ],
+    "source_sha256": {
+      "tools\\disposable_e2e_workflow_trial.py": "a3fee287baf0440cc956beb3662d3ef4e5bb990b199d8a728c930e5485195481",
+      "company_os\\clock_provisioning.py": "928c8b433d41e1f8e034b3935e7e76853bc1574fe83f400a22913c60e8e05a33",
+      "company_os\\command_host.py": "a817f776cc3d241aaff29a54428fd934191fe84ce915531f3b905154d332176c",
+      "company_os\\composition.py": "026263aee062e62def4022c8192461a2e69fceb40e942e8371c94c3e14c73e0f",
+      "company_os\\consent_binding.py": "63677fbf71ceea722e7ae677ab44b0f28c6c40a4d02d5dee02ffcfb97982bf24",
+      "company_os\\constructors.py": "7cac697d4f14d41aa47acd5242af8cbba15c88f1678d80f842caeb2762a1a102",
+      "company_os\\engine_bridge.py": "d759b09ce071a7e8899c2497d38493b0eed8e1274bc7573ddd46b3975914d00b",
+      "company_os\\launch_controller.py": "c6a88f29dd7c1315ca5e3317b69633f2c7956d849268e2d7a41e6f1f46e08fbb",
+      "company_os\\patch_pipeline.py": "9ad57e3a931ef44da34280cb1dd9402af32672953199fff48ad1c7140a96c624",
+      "company_os\\provisioning.py": "04188a95b106f380e1f6c828a57a7dcc92e0e392549193a15d0c36b50538b606",
+      "company_os\\secret_adapter.py": "7a087bba850f3b410b25ec1697e7b92fdc8075854a7a68e051fd5cd6922ef816",
+      "company_os\\session_provisioning.py": "b670c2248ba438524304ac0fe015d19ecd221ae5ebb4c0fadd02359c4a7a9c08",
+      "company_os\\tool_broker.py": "61186081b0c6f97e767700a60ea906d999f6e56b391f134b6d54fa94711b313e",
+      "company_os\\tool_executor.py": "871da19150c3a6f4710c8a6978bef51129f11674c02f971b7ff3caa644c2cc5e",
+      "company_os\\verifier_runner.py": "f614af7bb0042491a95627b028cd9cf2c5ee54cb338fade26effe4f9036d5990"
+    },
+    "runtime_ready": false,
+    "runtime_blockers": [
+      "ENROLLED_ISOLATED_VERIFIER_REQUIRED",
+      "TRUSTED_OWNER_CLOCK_AND_PROFILE_BINDINGS_NOT_VERIFIED"
+    ]
+  }
+}
+
+STDERR

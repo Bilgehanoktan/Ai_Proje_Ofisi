@@ -1,0 +1,10 @@
+[Unit]
+Description=Scheduled PostgreSQL 18.6 Basebackup for AI Proje Ofisi
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+Unit=aipof-pg-backup.service
+
+[Install]
+WantedBy=timers.target

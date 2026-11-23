@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "areas": 14,
+  "architecture_modules": 16,
+  "desktop_mobile": "PASS",
+  "navigation": "PASS",
+  "scope": "DOCUMENT_PROGRESS_VIEW_NOT_PRODUCT_ACCEPTANCE",
+  "tests": "12 targeted tests PASS; after wording update2 data/render tests PASS; full product suite not rerun"
+}

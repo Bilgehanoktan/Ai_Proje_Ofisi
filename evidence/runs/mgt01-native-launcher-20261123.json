@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-23",
+  "scope": "MGT-TITLE-NORMALIZATION-01_NATIVE_C_LAUNCHER_VERIFIED",
+  "native_launcher": "r65_spawn_linux.c",
+  "compiled_clean": true,
+  "cgroup_path": "/sys/fs/cgroup/aipof_eval/worker",
+  "child_pid": 414,
+  "child_exit_code": 0,
+  "worker_receipt": {
+    "written": "task_title.py",
+    "sha256": "8f8fe8bfcb4903f90f4c6a8d25cd2315e1d491b6636bd8b991a7d1084c7129ac"
+  },
+  "oracle_id": "mgt01.check_title.13cases.v1",
+  "oracle_outcome": "PASS",
+  "oracle_passed": 13,
+  "oracle_total": 13
+}

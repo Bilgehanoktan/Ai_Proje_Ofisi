@@ -1,0 +1,10 @@
+{
+  "e0_snapshot_sha256": {
+    "company_private.r55_setup_root_enrollments": "99ff11cfbbc52f1273aba37920c33a426abadd5a0a3d8bf6577a08c0a0304395",
+    "company_private.installation_bootstrap_control": "8db0a51c988e9520722ea7557a0f16f55460cf3c9ecd3ceb458c00d996987916",
+    "company_private.bootstrap_receipts": "99eb188b45bcdba73c44d6e04dc6612d613f46da1ec39474905f62e75f27b1f2"
+  },
+  "checked_functions": 46,
+  "missing_or_no_acl": [],
+  "current_clock_bounds_error": "cannot execute SELECT FOR SHARE in a read-only transaction"
+}

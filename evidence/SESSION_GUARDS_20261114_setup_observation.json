@@ -1,0 +1,24 @@
+{
+  "observed_on": "2026-11-14",
+  "scope": "NAMED_PROJECT_LOCATIONS_ONLY_NOT_MACHINE_WIDE_DISCOVERY",
+  "known_locations": [
+    {
+      "path": "/var/lib/ai-proje-ofisi-dbtest/socket",
+      "observed_entries": []
+    },
+    {
+      "path": "/var/lib/ai-proje-ofisi-dbtest/storage/socket",
+      "observed_entries": []
+    },
+    {
+      "path": "/var/run/postgresql",
+      "exists": false
+    }
+  ],
+  "expected_http_profile_present": false,
+  "physical_enrollment": "NOT_VERIFIED",
+  "authorized_session": "NOT_VERIFIED",
+  "user_setup_knowledge": "USER_REPORTED_UNKNOWN",
+  "changes_to_existing_db": false,
+  "application_acceptance": false
+}

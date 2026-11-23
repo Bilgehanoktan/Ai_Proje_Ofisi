@@ -1,0 +1,39 @@
+[
+  {
+    "name": "pytest",
+    "command": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "AiProjeOfisi/tests",
+      "-q",
+      "-rs"
+    ],
+    "exit": 0,
+    "raw_log": "AiProjeOfisi\\evidence\\CODEX_UYGULAMA_20261111_pytest.log",
+    "sha256": "926c967fbef72912535ec2a26ba605322c0999df78cfdbcea63458114d7438b8"
+  },
+  {
+    "name": "preflight",
+    "command": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "AiProjeOfisi/tools/workflow_preflight.py"
+    ],
+    "exit": 2,
+    "raw_log": "AiProjeOfisi\\evidence\\CODEX_UYGULAMA_20261111_preflight.log",
+    "sha256": "acf0050ebb9529691e4a64b167f9a5caa982495bb5818c3d4466ee02a8c5ad8a"
+  },
+  {
+    "name": "wrapper",
+    "command": [
+      "C:\\Python314\\python.exe",
+      "-B",
+      "AiProjeOfisi/tools/run_disposable_e2e_workflow.py"
+    ],
+    "exit": 2,
+    "raw_log": "AiProjeOfisi\\evidence\\CODEX_UYGULAMA_20261111_wrapper.log",
+    "sha256": "a8b5a9887a1c32b9be342ec2653d9a58e3f3c0a1ba8e2d9a35c8b0d156c6a524"
+  }
+]

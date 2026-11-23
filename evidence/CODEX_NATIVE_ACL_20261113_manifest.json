@@ -1,0 +1,13 @@
+{
+  "company_os/bootstrap_readback.py": "6425245d52254ea15b4b8f6e526e1a501d367c189eb94cef367e217b508ada4b",
+  "sql/assembly.json": "9d9c6ba3e054604a7c9e4ebcc5569cf895bf5dd86532f720820a30ae51afecb4",
+  "sql/084_APPLICATION_BOOTSTRAP_READBACK_V1.sql": "b32ac2f4a0c508d5fd6dc6f69c357abd6336d93b5fa788a38b5a1879f1db9875",
+  "sql/README.md": "173a141f6dbcad534dd509d5fd89517f9ef7549e08a20fcdb79f859fe2407904",
+  "tests/security/test_sql_source.py": "d1de3162bb402e0cddda795fe4454eebb19e5f5ccb46710224c69ed8dc05a9be",
+  "tests/unit/test_native_bootstrap_readback.py": "af01d6ebc611c5a5022af27e85c4f5df65dddfa0752dbde34b59188d88bf4d25",
+  "tools/native_bootstrap_acl_fixture.py": "51be5f8598513bee504f204da8ad7f8dc24e194a7f9392a4aec269736d69c26c",
+  "tools/probe_bootstrap_reader_pg.py": "6e64037ef2a10e9b3c10d42590d72afcd9a6c31dde00b336dec10e11b926bdd0",
+  "CODEX_NATIVE_READBACK_ACL_20261113.md": "302b52828e4eb2bb2bfdd35c8b6fc311d04f6b354348276154952f2dfbfb235c",
+  "evidence/CODEX_NATIVE_ACL_20261113_attempt02.json": "effc263e07c3b5e1f65552a7aeb06a1d37f12efe5cf96e20e018ded20ba5f731",
+  "evidence/CODEX_NATIVE_ACL_20261113_regression.json": "0d0f1fe9e442987d9a6e7ad860c1a9d24f241bbc85b498d97c574d13e6f30d2a"
+}

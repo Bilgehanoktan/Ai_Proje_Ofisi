@@ -1,0 +1,8 @@
+{
+  "status": "CURRENT_APPLICATION_LAYOUT_WITH_RETAINED_A_REFERENCE",
+  "current_manifest": "SOURCE_MANIFEST.json",
+  "historical_source_lock": "ARSIV/onceki_kaynaklar/root_files/SOURCE_LOCK.json",
+  "runtime": "NOT_RUN",
+  "reference_manifest": "GUNCEL/SOURCE_MANIFEST.json",
+  "source_to_target": "docs/migration/SOURCE_TO_TARGET.json"
+}

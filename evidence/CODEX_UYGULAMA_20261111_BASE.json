@@ -1,0 +1,16 @@
+{
+  "workspace": "E:\\Projeler\\Ai_Proje_Ofisi",
+  "files": {
+    "company_os/verifier_runner.py": "35a9eb63a7d73ede86c0f68de37e5dcf68505a667ce1885537be6a1a5c3f8aeb",
+    "company_os/candidate_runner.py": "81842ea2f902b0e44099cc0fc3c22943e48ee158d58be44d8e72f52c20e26a86",
+    "company_os/secret_adapter.py": "2bbe36c64b9c91f78790eca942059cd1c758ecda01c4bbcf5149e108f4b91881",
+    "company_os/consent_binding.py": "c7fdd4fe6897f4481e64ac1dc776353920d81811eae7da1d1823c4ab12fa459c",
+    "tests/unit/test_verifier_runner.py": "b28fdb9e0835019e84cf1626e155d1553d4464bf047b07ad8df50f4cea82a642",
+    "tests/unit/test_secret_adapter.py": "9312c9f890e12d3b79db38ea4c8b673e18e0f6bb079d31340adb7a6b8ada8f74",
+    "tests/unit/test_consent_binding.py": "3a1a21c39b127dbeeb6d784bbbbe7167b3590fb46fab50a50426fdee0c65a4ee",
+    "tools/run_disposable_e2e_workflow.py": "8a6af48b04232ff659961002a61a30c63b94e2ccff6deed60a4f90621aa542aa",
+    "tools/disposable_e2e_workflow_trial.py": "562108c0813dfef0b01c830dac50576e97c094fd29a07eda69e0099ebda9bd5a",
+    "PLAN.md": "340c9bcfeec88d9e736df7888efce5a908a8ad101d45bb7eb9dbd34edfc5dadf",
+    "UYGULAMA_DURUM_MATRISI.md": "f71bd2141380cbde37add485f24b6f4d02b0f38f8cef7ffdb61699cdd04e9035"
+  }
+}

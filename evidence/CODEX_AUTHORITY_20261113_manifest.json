@@ -1,0 +1,27 @@
+{
+  "scope": "SOURCE_FAKE_DRIVER_NOT_NATIVE_AUTHORIZATION_ACCEPTANCE",
+  "files": {
+    "company_os/provisioning.py": "8f2e001a9c55c00db9aca537adb47af3fe2497fded97b8ebc534135fc104b962",
+    "company_os/bootstrap_readback.py": "1ea141b979aa5fb1069ff79aef138210a63f6878ff6440abe4e7652ac896d681",
+    "tools/disposable_e2e_workflow_trial.py": "e38a05944893eb5b9fc7dc011cc05f37d1c6691ad8151042dcffde1c52a78bea",
+    "tools/workflow_preflight.py": "135f1b8fc6bf874e61ef40a52061aa52526bc5e06ff8919997c60213e26b901d",
+    "tests/unit/test_authority_adapters.py": "62af02a7c21cdda7944929166a8438d896d7565cf65db36290abd2c571d5f7f1",
+    "tests/unit/test_workflow.py": "6133a1a200280f4b642bf6d7e685f7e8c43b05e7c66fb49192f8c092ca7b1a73",
+    "tests/unit/test_workflow_preflight.py": "bc2a9df7961e704e65f928ebd9f1d4edf799ed0025d9285625bfdc13135c020c",
+    "sql/078_R64_REVOKE_FINALITY.sql": "46df51bddc0986e50721b5d4c07a1635670f6f9919b76b1820eb5b4517c32546",
+    "sql/028_R57_BOOTSTRAP_FINALITY_OVERLAY.sql": "f4fcce54f8bfb8bbc62eac2dc82fceb0755724d12cbbc7d0555d928e6eedf647",
+    "CODEX_YETKI_ADAPTERLERI_20261113.md": "644d9952513a33a270481eb025cecc078868451b425ef55f24cbd4f5c1567d40",
+    "PLAN.md": "d2650c3a40c79fa95329d4418c65d70ba583d2f537f365ceab4164da36fa51fa",
+    "UYGULAMA_DURUM_MATRISI.md": "4798ce87f8e21258f85741201cf3539898e4cf2468ecad147ce218db32a8d25c",
+    "ILERLEME_TAKIBI_20261112.md": "e9429dd487832967f796f1c84782590764c1a0f4075f8567b550fb0328d5967a",
+    "KALAN_ISLER_20261113.md": "0f1cdc584b29122c77a6b1a2c90e986870427aa0ccaf8449c794d2ca1a80c643",
+    "evidence/CODEX_AUTHORITY_20261113_linux_tests.log": "31851625758e0395438e2709b14329d6ef92cad0034d67e6b019ffba122b2d51",
+    "evidence/CODEX_AUTHORITY_20261113_preflight.json": "bfebca3331532ead693c9fd77e20f74604df0976fba7338fc80ba61310fa5e0f",
+    "evidence/CODEX_AUTHORITY_20261113_windows_tests.log": "d2cb04e66a26f6deecca4ce63ca6b7e9934c717abea98dc513fbffb8d1286fe8",
+    "evidence/CODEX_AUTHORITY_20261113_BACKUP/company_os__provisioning.py": "04188a95b106f380e1f6c828a57a7dcc92e0e392549193a15d0c36b50538b606",
+    "evidence/CODEX_AUTHORITY_20261113_BACKUP/tests__unit__test_workflow.py": "15958a0c0834786e7b398e9b114020e310921c2acf996c3a156042317565b337",
+    "evidence/CODEX_AUTHORITY_20261113_BACKUP/tests__unit__test_workflow_preflight.py": "14a19005beb9404cbb79d30a7dea767fb26deca11ac678e3150698c5a810e990",
+    "evidence/CODEX_AUTHORITY_20261113_BACKUP/tools__disposable_e2e_workflow_trial.py": "2a5cce954d83e4b98d41d40607b8ff66a197ce3298d90a12c834bc20ec76e54e",
+    "evidence/CODEX_AUTHORITY_20261113_BACKUP/tools__workflow_preflight.py": "db2438d6938df2b37917c60970f4f109c0d6611fb4e109c1efc875b12b7e23f2"
+  }
+}

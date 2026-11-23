@@ -1,0 +1,17 @@
+{
+  "company_os/provisioning.py": "686689707750019ce20480dbb6b6d098dc9b3ce1946b3de3e054e474588fbcdd",
+  "tests/unit/test_provisioning.py": "91d7e6daf46503e441ab351077b19b30dd3bb81a775af7051538672dc8431527",
+  "tools/native_root_reader_fixture.py": "bbda807a3e16a814de5ac9ef10d45d06ccf9228026b92abf63d6da9705f46f2a",
+  "tools/probe_bootstrap_reader_pg.py": "0eed7d7be9f7b5a413ce157dd6bc6b7f1fa35c0b88cbda9d47765a591b7dc243",
+  "CODEX_ROOT_READER_20261113.md": "60c359f957ecdf49c31ac61e04ae7231feb5bfb4fac837f4b13b860b112666d1",
+  "PLAN.md": "5857bfcea498ddc79cc591622e78821c2b807df28ad61553adca6330234aa8a0",
+  "UYGULAMA_DURUM_MATRISI.md": "c7629afe4d499500871c7768ddc9d1417460cb793103acde39ebe6fe09dfeadd",
+  "ILERLEME_TAKIBI_20261112.md": "4746b2e83d3d7ad4eb311dde4e0712f103ab604295140fe00670cc4c5dd915b6",
+  "KALAN_ISLER_20261113.md": "2ee349b620074be552e43630e44d14c06f1a46427110286d526d0e702237dc6f",
+  "evidence/CODEX_ROOT_READER_20261113_after.json": "b30351bfce964649c8d8ac363eb6bb6d7ed2b025e728940e440e155e9c249590",
+  "evidence/CODEX_ROOT_READER_20261113_before.json": "05c54f50c97390b08f06b5c6995c47287ed3248295247016bf76a0fff69b14ed",
+  "evidence/CODEX_ROOT_READER_20261113_linux.log": "bceb1bc931fa9fb3fe3e62681891fb2d941b690120bb5db7fa0c523f0be36515",
+  "evidence/CODEX_ROOT_READER_20261113_preflight.json": "80107a6c7f6e59bfa48af596582271dde3405124e271afe9bac2f9131d88cd38",
+  "evidence/CODEX_ROOT_READER_20261113_reproduce.json": "2c95fa2e5e4dfe2ce6cdca643442867b8140f033280ec1f24041b3c2b989a3c3",
+  "evidence/CODEX_ROOT_READER_20261113_windows.log": "f6fe3e8e99732c1fc1d2563f20fdfa8531df0e3df2711679ddeca901285cbfb4"
+}

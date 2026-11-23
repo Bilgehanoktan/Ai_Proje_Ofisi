@@ -1,0 +1,28 @@
+{
+  "scope": "SOURCE_AND_DISTINCT_UID_IPC_NOT_ACTUAL_APPLICATION_ACCEPTANCE",
+  "files": {
+    "company_os/peer_rpc.py": "fee014e65de1b59cdef9ab4f00956f31db20652667f03df2e2f1483422285696",
+    "company_os/runtime_verification.py": "ba104af003bd21e00b888644003ab209e147b0e1f0b9a4e4242d87b6f9b74cbc",
+    "company_os/supervisor_service.py": "8318ece6098cc5cfd9d5354b3e3edbb7faa731ed94147b940db83240230ff614",
+    "tools/probe_peer_rpc_identity.py": "670e6fa19932492bfbc24b25dfbf1ff88382a58610e74953417e301585ab5499",
+    "tools/workflow_preflight.py": "db2438d6938df2b37917c60970f4f109c0d6611fb4e109c1efc875b12b7e23f2",
+    "tests/unit/test_peer_rpc.py": "7ecb045ac852356c42fda84ad774dad5c765c3663cfa2d6d50f633e6d0c9892d",
+    "tests/unit/test_runtime_verification.py": "526f6c3f2a929457fc3e2806f9d13fdc9f3f83c4ba42b41b26e5af4cfe564c10",
+    "tests/unit/test_workflow.py": "15958a0c0834786e7b398e9b114020e310921c2acf996c3a156042317565b337",
+    "tests/unit/test_workflow_preflight.py": "14a19005beb9404cbb79d30a7dea767fb26deca11ac678e3150698c5a810e990",
+    "config/README.md": "1ee761393c5a238fe74fd772bd9941cbd5bde4870d5a16d080e0c7af25180900",
+    "CODEX_SERVIS_VERIFIER_20261112.md": "bd557b48f41aa16ec48eee0e7d18c4c8410b469f17fad7dd06510ef366841cb3",
+    "PLAN.md": "7e3e05e353d81449d1451e9f79f4133122df0fe6b013ea680ab8b77c1e8a60fd",
+    "UYGULAMA_DURUM_MATRISI.md": "352c635b3be6a6040d9a5e8c30471e30acefb504c82abca0b9368eb99ce36fe3",
+    "ILERLEME_TAKIBI_20261112.md": "44f2cfe52500a11fd253fc3defaf87561f1b1e5916951360ba67551682ab845a",
+    "evidence/CODEX_SERVICE_20261112_distinct_uid.json": "beaade46598b1c6d05a9558cf5d313daa3871c2807d67216ec9e0f5116172b81",
+    "evidence/CODEX_SERVICE_20261112_inventory.json": "eb302769a9bfa91937709feb7f0e705e485b215757536d7c9481b251aa194e94",
+    "evidence/CODEX_SERVICE_20261112_linux_tests.log": "9ed424ed5e668625562e3edee34b7e2de94ce994f3aa0f2db1eefcab0936e74e",
+    "evidence/CODEX_SERVICE_20261112_preflight.json": "8ae245335c7c47fbd8c6f00028aa957ecc2db223334cbeb72ccb44419b4b5ed1",
+    "evidence/CODEX_SERVICE_20261112_windows_tests.log": "454173d39dd0f093ec083e935917f11adc8894a259ad1c2ab09c7aac26a0de2d",
+    "evidence/CODEX_SERVICE_20261112_BACKUP/config__README.md": "4b95043d94ad799bbc8c2e2d92cc2d6c449184086f7171339bf31e93678e5e4f",
+    "evidence/CODEX_SERVICE_20261112_BACKUP/tests__unit__test_workflow.py": "63f65e654117e9001f0b993f51349e77e4903859e26d782ccdf0f345a6a3e60d",
+    "evidence/CODEX_SERVICE_20261112_BACKUP/tests__unit__test_workflow_preflight.py": "2b0903b9d553dfb05c8317a94b03bc084cd442dee39c10e6d0ab957ba2aaa2d1",
+    "evidence/CODEX_SERVICE_20261112_BACKUP/tools__workflow_preflight.py": "abe7af947c1752e3648897bf6967e960885e5209316f92e16dcc0a85879b91ef"
+  }
+}

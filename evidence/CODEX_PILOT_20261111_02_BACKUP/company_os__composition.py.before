@@ -1,0 +1,59 @@
+"""Explicit assembly for an already-enrolled first-pilot process.
+
+Never starts a service/model/process or supplies credentials/enrollments.
+Native compile, OS isolation and real DB qualification remain external gates.
+"""
+import os,sys,stat
+from .execution_protocol import Denied
+from .kernel_adapters import DbScope
+from .patch_pipeline import PatchProposalProducer,PatchReceiptRecorder,ToolKernel
+from .tool_executor import LinuxSingleFileExecutor,ToolIntentJournal
+from .tool_broker import Broker
+from .engine_bridge import EnginePump,ProducerOutputAdapter
+from .reply_guard import EngineReplyGuard
+
+class CgroupStopRequest:
+ def __init__(self,*,cgroup_fd,expected_inode):
+  if sys.platform!='linux' or os.geteuid()==0:raise Denied('ROOTLESS_LINUX_STOP_REQUIRED')
+  st=os.fstat(cgroup_fd)
+  if not stat.S_ISDIR(st.st_mode) or st.st_ino!=expected_inode:raise Denied('EXACT_ENROLLED_CGROUP_REQUIRED')
+  self.fd=os.dup(cgroup_fd);self.inode=expected_inode;self.used=False
+ def __call__(self,reason):
+  if self.used:return
+  self.used=True
+  try:
+   if os.fstat(self.fd).st_ino!=self.inode:raise Denied('CGROUP_IDENTITY_CHANGED')
+   fd=os.open('cgroup.kill',os.O_WRONLY|os.O_NOFOLLOW,dir_fd=self.fd)
+   try:
+    if os.write(fd,b'1')!=1:raise OSError('CGROUP_STOP_REQUEST_FAILED')
+   finally:os.close(fd)
+  finally:os.close(self.fd)
+  # A kill request alone is never a quiescence/settlement proof.
+
+class PilotSession:
+ def __init__(self,*,connect,worker_auth,controller_auth,controller_id,process_id,binding,proposal_signer,effect_signer,patch_signer,directory_fd,measure_head,source_snapshot,journal,transport,stop_request,lease_state,timeout):
+  signers=[proposal_signer,effect_signer,patch_signer]
+  if any(str(s.issuer)!=str(controller_id) for s in signers) or len({str(s.key_id) for s in signers})!=3:raise Denied('THREE_EXPLICIT_CONTROLLER_PROFILE_KEYS_REQUIRED')
+  for auth in [worker_auth,controller_auth]:
+   if str(auth.get('attempt_id'))!=str(binding.attempt_id) or auth.get('fence')!=binding.fencing_epoch:raise Denied('EXACT_COMPOSITION_ATTEMPT_REQUIRED')
+   if any(str(s.project)!=str(auth['project_id']) for s in signers):raise Denied('SIGNER_PROJECT_SCOPE_REQUIRED')
+  if len({(s.tenant,s.project) for s in signers})!=1:raise Denied('ONE_SIGNER_TENANT_PROJECT_REQUIRED')
+  self.executor=LinuxSingleFileExecutor(directory_fd=directory_fd,measure_head=measure_head)
+  self.closed=False
+  try:
+   recorder=PatchReceiptRecorder(connect=connect,controller_auth=controller_auth,worker_auth=worker_auth,patch_signer=patch_signer)
+   scope=DbScope(connect,controller_auth,timeout_ms=2000)
+   kernel=ToolKernel(connect=connect,worker_auth=worker_auth,controller_scope=scope,process_id=process_id,signer=effect_signer,patch_recorder=recorder)
+   self.broker=Broker(binding=binding,kernel=kernel,journal=ToolIntentJournal(journal),executor=self.executor)
+   producer=PatchProposalProducer(connect=connect,controller_auth=controller_auth,signer=proposal_signer,binding=binding,process_id=process_id,source_snapshot=source_snapshot)
+   handler=ProducerOutputAdapter(producer=producer,broker=self.broker)
+   def remaining_seconds():
+    ns=lease_state.remaining()
+    if type(ns) is not int or ns<=0:raise Denied('ENROLLED_BOOTTIME_LEASE_EXPIRED')
+    return ns/1_000_000_000
+   self.pump=EnginePump(transport=transport,handler=handler,emission_guard=EngineReplyGuard(scope=scope,binding=binding),stop_request=stop_request,lease_remaining=remaining_seconds,timeout=timeout,max_frames=1)
+  except Exception:self.executor.close();self.closed=True;raise
+ def run(self):
+  if self.closed:raise Denied('PILOT_SESSION_ALREADY_CLOSED')
+  try:return self.pump.run()
+  finally:self.executor.close();self.closed=True

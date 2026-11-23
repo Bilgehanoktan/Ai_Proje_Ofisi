@@ -1,0 +1,12 @@
+{
+  "result": "PASS",
+  "distribution_sha256": "745e1a3cffe33f604c04e61a36fda6a3f2f9c0056c32a878d1e8e7bca1e5076f",
+  "test_mode": "ZIP_EXTRACTED_ALONE_ORIGINAL_PROJECT_ACCESS_BLOCKED",
+  "tests_discovered": 440,
+  "tests_passed": 437,
+  "tests_skipped": 3,
+  "source_files_verified": 4376,
+  "G0": "OPEN",
+  "runtime": "NOT_RUN",
+  "first13": "0/13"
+}

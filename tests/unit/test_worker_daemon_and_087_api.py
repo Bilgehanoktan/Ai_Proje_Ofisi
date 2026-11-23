@@ -9,7 +9,12 @@ from io import BytesIO
 from company_os.api.http.app import make_wsgi_app
 from company_os.budget.ledger import ExternalEffectEntry
 from company_os.catalog.extensions_store import Extensions087Store
-from company_os.catalog.memory_promotion import CatalogEntry, CatalogKind, MemoryRecord, PromotionState
+from company_os.catalog.memory_promotion import (
+    CatalogEntry,
+    CatalogKind,
+    MemoryRecord,
+    PromotionState,
+)
 from company_os.runtime.worker_daemon import AutonomousWorkerDaemon, DaemonState
 from company_os.workflows.queue_adapter import MultiWorkTypeQueueRunner
 from company_os.workflows.templates import WorkType

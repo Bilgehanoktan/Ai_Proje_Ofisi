@@ -8,7 +8,7 @@ work/prototype-server.json
 
 .tools/
 .runtime/
-runtime/
+/runtime/
 preparation/mgt01/wheels-*/
 .env.*
 !.env.example

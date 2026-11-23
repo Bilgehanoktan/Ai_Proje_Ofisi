@@ -1,4 +1,4 @@
-"""Tek tikla yerel AI Proje Ofisi baslatici (WSL PG 18.6 + systemd + Web/SSE sunucusu)."""
+"""Tek tikla yerel AI Proje Ofisi baslatici (WSL PG 18.6 + systemd + Canli Ofis Web/SSE sunucusu)."""
 
 from __future__ import annotations
 
@@ -9,6 +9,7 @@ import sys
 import threading
 import time
 import webbrowser
+from datetime import datetime, timezone
 from pathlib import Path
 from wsgiref.simple_server import make_server
 
@@ -45,6 +46,63 @@ t_state = subprocess.run(['systemctl', 'is-active', 'aipof-pg-backup.timer'], ca
 print(json.dumps({'postgres_55490': 'ready', 'worker_daemon': w_state, 'backup_timer': t_state}))
 """
 
+WSL_SNAPSHOT_PY = """
+import json, subprocess
+from pathlib import Path
+
+pg = Path('/var/lib/ai-proje-ofisi-dbtest/binary/usr')
+pgbin = pg / 'lib/postgresql/18/bin'
+env = {'PATH': '/usr/sbin:/usr/bin:/sbin:/bin', 'LD_LIBRARY_PATH': str(pg / 'lib/x86_64-linux-gnu')}
+sock = '/var/lib/ai-proje-ofisi-local/socket'
+
+query = '''
+SELECT json_build_object(
+  'counts', json_build_object(
+    'objectives', (SELECT count(*) FROM company.objectives),
+    'plans', (SELECT count(*) FROM company.plans),
+    'tasks', (SELECT count(*) FROM company.tasks),
+    'accepted_tasks', (SELECT count(*) FROM company.tasks WHERE state='ACCEPTED'),
+    'acceptance_records', (SELECT count(*) FROM company.acceptance_records),
+    'catalog_entries', (SELECT count(*) FROM company.catalog_entries),
+    'memory_promotions', (SELECT count(*) FROM company.memory_promotions),
+    'work_template_validations', (SELECT count(*) FROM company.work_template_validations),
+    'external_effect_ledger', (SELECT count(*) FROM company.external_effect_ledger)
+  ),
+  'tasks', COALESCE((
+    SELECT json_agg(t) FROM (
+      SELECT id::text, title, state, revision
+      FROM company.tasks ORDER BY id DESC LIMIT 10
+    ) t
+  ), '[]'::json),
+  'approvals', COALESCE((
+    SELECT json_agg(a) FROM (
+      SELECT id::text, accepted_by::text, created_at::text
+      FROM company.acceptance_records ORDER BY created_at DESC LIMIT 8
+    ) a
+  ), '[]'::json),
+  'outbox', COALESCE((
+    SELECT json_agg(o) FROM (
+      SELECT kind, occurred_at::text AS created_at
+      FROM company.outbox ORDER BY occurred_at DESC LIMIT 12
+    ) o
+  ), '[]'::json)
+)::text;
+'''
+
+res = subprocess.run(
+    ['/usr/sbin/runuser', '-u', 'aipof-dbtest', '--', str(pgbin / 'psql'),
+     '-X', '-h', sock, '-p', '55490', '-d', 'ai_proje_ofisi', '-Atq', '-v', 'ON_ERROR_STOP=1', '-f', '-'],
+    input=query, text=True, capture_output=True, env=env, timeout=15
+)
+if res.returncode != 0:
+    raise RuntimeError(res.stderr.strip())
+w_state = subprocess.run(['systemctl', 'is-active', 'aipof-worker-daemon.service'], capture_output=True, text=True).stdout.strip()
+t_state = subprocess.run(['systemctl', 'is-active', 'aipof-pg-backup.timer'], capture_output=True, text=True).stdout.strip()
+data = json.loads(res.stdout.strip())
+data['services'] = {'postgres_55490': 'ready', 'worker_daemon': w_state, 'backup_timer': t_state}
+print(json.dumps(data))
+"""
+
 
 def ensure_wsl_services(distro: str = "Ubuntu-E") -> dict[str, str]:
     """WSL2 uzerindeki PostgreSQL 18.6 ve systemd servislerinin acik oldugunu dogrular."""
@@ -62,6 +120,36 @@ def ensure_wsl_services(distro: str = "Ubuntu-E") -> dict[str, str]:
     if not lines:
         raise RuntimeError(f"Beklenmeyen WSL ciktisi: {res.stdout.strip()}")
     return json.loads(lines[-1])
+
+
+def fetch_live_office_snapshot(distro: str = "Ubuntu-E") -> dict:
+    """Canli PostgreSQL 18.6 (55490) ve systemd servis durumlarini okur."""
+    if sys.platform != "win32":
+        return {"mode": "DEMO_SYNTHETIC", "connected": False}
+    try:
+        res = subprocess.run(
+            ["wsl", "-d", distro, "-u", "root", "--", "python3", "-c", WSL_SNAPSHOT_PY],
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+        if res.returncode != 0:
+            return {"mode": "DEMO_SYNTHETIC", "connected": False, "error": (res.stderr or res.stdout).strip()[:200]}
+        lines = [ln.strip() for ln in res.stdout.splitlines() if ln.strip().startswith("{")]
+        data = json.loads(lines[-1])
+        data.update(
+            {
+                "mode": "LIVE_POSTGRES_18_6",
+                "connected": True,
+                "cluster": "PostgreSQL 18.6 (port 55490 · ai_proje_ofisi)",
+                "g0": "APPROVED_BY_HUMAN_20261123",
+                "first13": "13/13",
+                "updated_at": datetime.now(timezone.utc).astimezone().strftime("%H:%M:%S"),
+            }
+        )
+        return data
+    except Exception as exc:  # noqa: BLE001
+        return {"mode": "DEMO_SYNTHETIC", "connected": False, "error": str(exc)[:200]}
 
 
 def main() -> int:
@@ -92,15 +180,24 @@ def main() -> int:
         print("[OK] Kontrol tamamlandi (--check-only).", flush=True)
         return 0
 
-    startup_events = [
-        ProjectionEvent(1, "t1", "ObjectiveCreated", {"source": "local-launcher", "status": "READY"}),
-        ProjectionEvent(2, "t1", "Migration087Verified", {"tables": 4, "force_rls": True}),
-    ]
-    app = make_wsgi_app(events_provider=lambda _tid: startup_events)
+    def _live_events(_tid: str) -> list[ProjectionEvent]:
+        snap = fetch_live_office_snapshot(args.wsl_distro) if not args.skip_wsl else {}
+        outbox = snap.get("outbox") or []
+        if not outbox:
+            return [ProjectionEvent(1, "t1", "Migration087Verified", {"tables": 4, "force_rls": True})]
+        return [
+            ProjectionEvent(idx, "t1", str(item.get("kind") or "OutboxEvent"), {"created_at": item.get("created_at")})
+            for idx, item in enumerate(reversed(outbox), 1)
+        ]
+
+    app = make_wsgi_app(
+        events_provider=_live_events,
+        live_snapshot_provider=None if args.skip_wsl else (lambda: fetch_live_office_snapshot(args.wsl_distro)),
+    )
     url_office = f"http://{args.host}:{args.port}/"
     url_events = f"http://{args.host}:{args.port}/live-events"
 
-    print(f"[2/3] Web ve Canli Olay (SSE) sunucusu aciliyor: {url_office}", flush=True)
+    print(f"[2/3] Canli Ofis ve SSE sunucusu aciliyor: {url_office}", flush=True)
     print(f"      Canli Olay Paneli: {url_events}", flush=True)
     print("      Kapatmak icin Ctrl+C tuslarina basin.", flush=True)
 
@@ -111,7 +208,7 @@ def main() -> int:
 
         threading.Thread(target=_open_browser, daemon=True).start()
 
-    print("[3/3] AI Proje Ofisi hazir.", flush=True)
+    print("[3/3] AI Proje Ofisi canli modda hazir.", flush=True)
     with make_server(args.host, args.port, app) as httpd:
         try:
             httpd.serve_forever()

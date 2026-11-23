@@ -237,8 +237,9 @@ def make_wsgi_app(
     catalog_provider=None,
     promotions_provider=None,
     effects_provider=None,
+    live_snapshot_provider=None,
 ):
-    """Returns a WSGI application serving dynamic read-only status, SSE stream, MOD-012..014 APIs, and preview."""
+    """Returns a WSGI application serving dynamic read-only status, SSE stream, MOD-012..014 APIs, and live office snapshot."""
 
     def _json_response(start_response, payload: dict) -> list[bytes]:
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
@@ -328,6 +329,13 @@ def make_wsgi_app(
                 ],
             )
             return [body]
+
+        if path == "/api/office-live":
+            if live_snapshot_provider is not None:
+                payload = live_snapshot_provider()
+            else:
+                payload = {"mode": "DEMO_SYNTHETIC", "connected": False}
+            return _json_response(start_response, payload)
 
         if path == "/api/catalog":
             tenant_id = _require_tenant_id(environ, start_response)

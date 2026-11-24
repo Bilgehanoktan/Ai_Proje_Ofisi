@@ -238,7 +238,7 @@
       ],
       "evidence_scope": "2026-11-23 gerçek tarayıcıda 8 canlı SSE olayı tüketimi ve ayrı WSGI fixture denemesinde 999 yeniden bağlanmada 1199/1199 olay, imleç sıfırlama ve kaynak pencere kaybı sinyali PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 75,
+      "estimated_percent": 85,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -289,7 +289,7 @@
       ],
       "evidence_scope": "2026-11-23 otonom kuyruk + bağımsız doğrulayıcı + 087 PG 18.6 kalıcılık ve tarayıcı SSE E2E PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 75,
+      "estimated_percent": 85,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -337,7 +337,7 @@
       ],
       "evidence_scope": "2026-11-23 üretim runbook + 087 canlı PG + izole restore/epoch retirement doğrulaması PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 80,
+      "estimated_percent": 85,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -362,7 +362,7 @@
       ],
       "evidence_scope": "2026-11-23 Windows/Linux birim+layout, 087 canlı PG/API, AutonomousWorkerDaemon, native C launcher MGT-01 13/13 ve CI iş akışı hazır.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 85,
+      "estimated_percent": 90,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     }

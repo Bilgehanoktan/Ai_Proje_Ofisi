@@ -1,0 +1,24 @@
+[Unit]
+Description=AI Proje Ofisi AutonomousWorkerDaemon
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=aipof
+Group=aipof
+WorkingDirectory=/opt/aipof/app
+Environment=PYTHONPATH=/opt/aipof/app/product/backend:/opt/aipof/app/contracts/source/python/packages/contracts:/opt/aipof/app/verifier/src
+Environment=AIPOF_CGROUP_PATH=/sys/fs/cgroup/aipof/worker
+ExecStart=/usr/bin/python3 -B /opt/aipof/app/scripts/operations/start_office_local.py --skip-wsl
+Restart=on-failure
+RestartSec=5
+Delegate=yes
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/var/lib/aipof /var/log/aipof
+
+[Install]
+WantedBy=multi-user.target

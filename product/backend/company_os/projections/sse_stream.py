@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import json
+import os
 from collections import deque
 from dataclasses import dataclass
+from pathlib import Path
 from secrets import randbits
 from threading import Lock
 from typing import Any, Iterable, Mapping, Sequence
@@ -27,22 +29,87 @@ class OfficeEventReplay:
         *,
         capacity: int = 512,
         unordered_sources: frozenset[str] = frozenset(),
+        journal_path: Path | None = None,
     ) -> None:
         if capacity < 1:
             raise ValueError("Replay capacity must be positive")
         self._tenant_id = tenant_id
+        self._capacity = capacity
         self._latest = (1 + randbits(32)) << 20
         self._events: deque[ProjectionEvent] = deque(maxlen=capacity)
         self._source_cursors: dict[str, int] = {}
         self._unordered_sources = unordered_sources
         self._seen_source_ids: dict[str, set[int]] = {}
+        self._journal_path = journal_path
+        self._journal_lines = 0
         self._lock = Lock()
+        if self._journal_path is not None:
+            self._load_journal()
+
+    def _load_journal(self) -> None:
+        assert self._journal_path is not None
+        if not self._journal_path.exists():
+            return
+        lines = self._journal_path.read_text(encoding="utf-8").splitlines()
+        self._journal_lines = len(lines)
+        for line in lines[-self._capacity :]:
+            if not line.strip():
+                continue
+            item = json.loads(line)
+            if item.get("tenant_id") != self._tenant_id:
+                continue
+            seq = int(item["sequence"])
+            ev = ProjectionEvent(seq, self._tenant_id, str(item["event_type"]), item["payload"])
+            self._events.append(ev)
+            if seq > self._latest:
+                self._latest = seq
+
+    def _compact_journal(self) -> None:
+        assert self._journal_path is not None
+        tmp = self._journal_path.with_suffix(".tmp")
+        with tmp.open("w", encoding="utf-8") as fh:
+            for ev in self._events:
+                fh.write(
+                    json.dumps(
+                        {
+                            "sequence": ev.sequence,
+                            "tenant_id": ev.tenant_id,
+                            "event_type": ev.event_type,
+                            "payload": dict(ev.payload),
+                        },
+                        ensure_ascii=False,
+                    )
+                    + "\n"
+                )
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(tmp, self._journal_path)
+        self._journal_lines = len(self._events)
 
     def _append(self, event_type: str, payload: Mapping[str, Any]) -> None:
         self._latest += 1
-        self._events.append(
-            ProjectionEvent(self._latest, self._tenant_id, event_type, payload)
-        )
+        ev = ProjectionEvent(self._latest, self._tenant_id, event_type, payload)
+        self._events.append(ev)
+        if self._journal_path is not None:
+            self._journal_path.parent.mkdir(parents=True, exist_ok=True)
+            with self._journal_path.open("a", encoding="utf-8") as fh:
+                fh.write(
+                    json.dumps(
+                        {
+                            "sequence": ev.sequence,
+                            "tenant_id": ev.tenant_id,
+                            "event_type": ev.event_type,
+                            "payload": dict(ev.payload),
+                        },
+                        ensure_ascii=False,
+                    )
+                    + "\n"
+                )
+                fh.flush()
+                os.fsync(fh.fileno())
+            self._journal_lines += 1
+            if self._journal_lines >= self._capacity * 4:
+                self._compact_journal()
 
     def read(
         self,

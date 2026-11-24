@@ -1,0 +1,10 @@
+[Unit]
+Description=AI Proje Ofisi PostgreSQL Physical Backup & Verification
+
+[Service]
+Type=oneshot
+User=postgres
+Group=postgres
+ExecStart=/bin/bash -lc 'set -euo pipefail; DEST="/var/backups/aipof/$(date +%%Y%%m%%d-%%H%%M%%S)"; pg_basebackup -D "$DEST" -Ft -z -P -X stream && pg_verifybackup "$DEST"'
+NoNewPrivileges=yes
+PrivateTmp=yes

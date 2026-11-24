@@ -276,6 +276,63 @@ class OfficeTasksWsgiTests(unittest.TestCase):
             {"relative_path": "task_title.py", "sha256": "abc123"},
         )
 
+    def test_spreadsheet_and_obligation_broker_readers(self) -> None:
+        from company_os.workflows.queue_adapter import MultiWorkTypeQueueRunner
+        from company_os.workflows.templates import WorkType
+
+        queue_runner = MultiWorkTypeQueueRunner(
+            executors={
+                WorkType.SPREADSHEET: lambda t: {
+                    "post_commit_verified": True,
+                    "sheet_digest": "sha256:sheet1",
+                    "read_path": t.get("read_path"),
+                },
+                WorkType.OBLIGATION: lambda t: {
+                    "uncertainty": 0.1,
+                    "checklist": ["ok"],
+                    "read_path": t.get("read_path"),
+                },
+            },
+            allowed_read_paths=frozenset({"budget.xlsx"}),
+        )
+        runner = LiveOfficeTaskRunner(
+            ollama_client=_StubOllama("Tablo ve yükümlülük çıktısı Broker üzerinden doğrulandı."),
+            queue_runner=queue_runner,
+            spreadsheet_broker_reader=lambda path: {"relative_path": path, "sheet_digest": "sha256:sheet1"},
+            obligation_web_reader=lambda path: {"source": path, "uncertainty": 0.1},
+        )
+        t1 = runner.submit_task(
+            {
+                "title": "Tablo Broker testi",
+                "goal": "budget.xlsx dosyasını Broker üzerinden okuyup özetle.",
+                "work_type": "SPREADSHEET",
+                "role_id": "EXP-01",
+                "read_path": "budget.xlsx",
+            }
+        )
+        t2 = runner.submit_task(
+            {
+                "title": "Yükümlülük Web/Broker testi",
+                "goal": "reg_2026.html kaynağını okuyup yükümlülükleri listele.",
+                "work_type": "OBLIGATION",
+                "role_id": "EXP-02",
+                "read_path": "reg_2026.html",
+            }
+        )
+        runner.run_once()
+        runner.run_once()
+        runs = {r["task_id"]: r for r in runner.list_runs()}
+        self.assertEqual(runs[t1["task_id"]]["state"], "ACCEPTED")
+        self.assertEqual(
+            runs[t1["task_id"]]["exec_result"]["broker_read_receipt"],
+            {"relative_path": "budget.xlsx", "sheet_digest": "sha256:sheet1"},
+        )
+        self.assertEqual(runs[t2["task_id"]]["state"], "ACCEPTED")
+        self.assertEqual(
+            runs[t2["task_id"]]["exec_result"]["broker_read_receipt"],
+            {"source": "reg_2026.html", "uncertainty": 0.1},
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

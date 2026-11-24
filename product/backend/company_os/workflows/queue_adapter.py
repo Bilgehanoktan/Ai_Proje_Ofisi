@@ -33,7 +33,7 @@ class MultiWorkTypeQueueRunner:
         if work_type not in self.executors:
             raise ValueError(f"EXECUTOR_NOT_REGISTERED:{work_type.value}")
         read_path = task.get("read_path")
-        if work_type == WorkType.RESEARCH and read_path:
+        if work_type in {WorkType.RESEARCH, WorkType.SPREADSHEET} and read_path:
             if str(read_path) not in self.allowed_read_paths:
                 raise ValueError("PILOT_PATH_OUT_OF_SCOPE")
         output = dict(self.executors[work_type](task))

@@ -51,3 +51,8 @@
 ## 001–088 geçici PostgreSQL kontrolü
 
 24 Kasım 2026 koşusunda `scripts/verification/verify_087_migration_pg.py` pinli 001–088 assembly sırasını geçici Linux PostgreSQL kümesinde rollback ile uyguladı. 087 için dört, 088 için iki FORCE RLS tablosu ve 087 görev ayrılığı kısıtı doğrulandı. Kalıcı temiz kurulum ve 087 → 088 yükseltme provası açık.
+
+## 6. Üretim Systemd Birimleri ve Kalıcı SSE Replay
+- Worker servisi: `ops/systemd/aipof-worker.service` (`/etc/systemd/system/` altına kopyalayıp `systemctl enable --now aipof-worker.service`).
+- Zamanlanmış yedekleme: `ops/systemd/aipof-backup.service` ve `ops/systemd/aipof-backup.timer` (`systemctl enable --now aipof-backup.timer`).
+- Kalıcı SSE Replay: `OfficeEventReplay(..., journal_path=Path("/var/lib/aipof/sse_replay.jsonl"))` ile sunucu yeniden başlatmalarında `Last-Event-ID` sürekliliği korunur.

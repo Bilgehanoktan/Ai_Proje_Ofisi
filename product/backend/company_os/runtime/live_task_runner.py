@@ -132,6 +132,11 @@ def verify_office_task_output(task: dict[str, Any], exec_result: dict[str, Any])
     has_tokens = eval_count > 0
     checks.append({"check": "model_eval_tokens_positive", "passed": has_tokens, "eval_count": eval_count})
 
+    if task.get("read_path"):
+        receipt = exec_result.get("broker_read_receipt")
+        has_receipt = isinstance(receipt, dict) and bool(receipt)
+        checks.append({"check": "broker_read_receipt_present", "passed": has_receipt})
+
     accepted = all(item["passed"] for item in checks)
     reason = "LOCAL_VERIFIER_CHECKS_PASSED" if accepted else next(
         f"FAILED_{item['check'].upper()}" for item in checks if not item["passed"]
@@ -208,6 +213,8 @@ class LiveOfficeTaskRunner:
         registry_tenant_id: str | None = None,
         engineer_pilot_catalog: Extensions087Store | None = None,
         research_broker_reader: Callable[[str], dict[str, Any]] | None = None,
+        spreadsheet_broker_reader: Callable[[str], dict[str, Any]] | None = None,
+        obligation_web_reader: Callable[[str], dict[str, Any]] | None = None,
         queue_runner: Any | None = None,
         project_id: str | None = None,
         verifier: Callable[[dict[str, Any], dict[str, Any]], dict[str, Any]] = verify_office_task_output,
@@ -226,6 +233,8 @@ class LiveOfficeTaskRunner:
             raise ValueError("ENGINEER_PILOT_TENANT_REQUIRED")
         self._engineer_pilot_catalog = engineer_pilot_catalog
         self._research_broker_reader = research_broker_reader
+        self._spreadsheet_broker_reader = spreadsheet_broker_reader
+        self._obligation_web_reader = obligation_web_reader
         self._queue_runner = queue_runner
         self._project_id = project_id
         self._verifier = verifier
@@ -380,6 +389,20 @@ class LiveOfficeTaskRunner:
             if self._research_broker_reader is None:
                 raise OfficeTaskValidationError("RESEARCH_BROKER_READER_NOT_CONFIGURED")
             broker_read_receipt = self._research_broker_reader(read_path)
+        elif task["work_type"] == "SPREADSHEET" and task.get("read_path"):
+            read_path = str(task["read_path"])
+            if self._queue_runner is not None:
+                self._queue_runner.execute_task(task)
+            if self._spreadsheet_broker_reader is None:
+                raise OfficeTaskValidationError("SPREADSHEET_BROKER_READER_NOT_CONFIGURED")
+            broker_read_receipt = self._spreadsheet_broker_reader(read_path)
+        elif task["work_type"] == "OBLIGATION" and task.get("read_path"):
+            read_path = str(task["read_path"])
+            if self._queue_runner is not None:
+                self._queue_runner.execute_task(task)
+            if self._obligation_web_reader is None:
+                raise OfficeTaskValidationError("OBLIGATION_WEB_READER_NOT_CONFIGURED")
+            broker_read_receipt = self._obligation_web_reader(read_path)
         gen = self.ollama.generate(prompt, model=str(task.get("model") or DEFAULT_OLLAMA_MODEL), system=system)
         result = gen.to_dict()
         if broker_read_receipt is not None:

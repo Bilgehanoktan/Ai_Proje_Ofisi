@@ -3,18 +3,33 @@
 <head>
   <meta charset="utf-8">
   <title>AI Proje Ofisi — Canlı Olay Paneli (SSE)</title>
+  <link rel="stylesheet" href="/assets/tokens.css">
   <style>
-    body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; margin: 24px; }
-    h1 { font-size: 1.25rem; margin-bottom: 12px; }
+    body { margin: 0; }
+    main { max-width: 68rem; margin: 0 auto; padding: 24px; }
+    h1 { font-size: 1.35rem; margin-bottom: 12px; }
+    .top-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+    .top-nav a { padding: 6px 10px; border-radius: 6px; color: var(--muted); text-decoration: none; }
+    .top-nav a[aria-current="page"], .top-nav a:hover { background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; }
     .bar { display: flex; gap: 8px; margin-bottom: 16px; }
-    input, button { padding: 8px 12px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #f8fafc; }
-    button { cursor: pointer; background: #2563eb; border-color: #2563eb; }
-    #status { font-size: 0.9rem; color: #94a3b8; margin-bottom: 12px; }
+    input, .bar button { padding: 8px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+    .bar button { cursor: pointer; background: var(--accent); border-color: var(--accent); color: #ffffff; font-weight: 600; }
+    #status { font-size: 0.9rem; color: var(--muted); margin-bottom: 12px; }
     ul { list-style: none; padding: 0; display: grid; gap: 8px; }
-    li { background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 10px 12px; font-family: monospace; font-size: 0.85rem; }
+    li { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; font-family: var(--font-mono); font-size: 0.85rem; }
   </style>
 </head>
 <body>
+  <header class="site-header">
+    <a class="brand" href="/preview"><b aria-hidden="true">⌘</b>AI Proje Ofisi</a>
+    <nav class="top-nav" aria-label="Ana gezinme">
+      <a href="/preview">Sanal ofis</a>
+      <a href="/preview/phaser">Phaser 2.5D</a>
+      <a href="/live-events" aria-current="page">Canlı olaylar</a>
+      <a href="/progress">İlerleme</a>
+    </nav>
+  </header>
+  <main>
   <h1>AI Proje Ofisi — Canlı Olay ve Çoklu Görev Paneli (Salt Okunur SSE)</h1>
   <div class="bar">
     <input id="tenant" value="t1" placeholder="tenant_id">
@@ -45,6 +60,7 @@
         const li = document.createElement("li");
         li.textContent = `[id=${ev.lastEventId} type=${ev.type}] ${ev.data}`;
         listEl.prepend(li);
+        if (listEl.childElementCount > 512) listEl.lastElementChild.remove();
       };
       es.onmessage = appendEvent;
       [
@@ -60,8 +76,19 @@
       ].forEach((t) => {
         es.addEventListener(t, appendEvent);
       });
-      es.onerror = () => { statusEl.textContent = "Durum: Akış kapandı veya bağlantı hatası"; };
+      es.addEventListener("resync_required", () => {
+        listEl.replaceChildren();
+        const notice = document.createElement("li");
+        notice.textContent = "Önceki olayların bir bölümü kullanılamıyor. Güncel olay penceresi gösteriliyor.";
+        listEl.append(notice);
+      });
+      es.onerror = () => {
+        statusEl.textContent = es.readyState === EventSource.CONNECTING
+          ? "Durum: Yeniden bağlanıyor..."
+          : "Durum: Akış kapalı";
+      };
     });
   </script>
+  </main>
 </body>
 </html>

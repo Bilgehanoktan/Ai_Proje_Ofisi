@@ -1,0 +1,65 @@
+{
+  "scope": "LIVE_OFFICE_TASK_SUBMISSION_OLLAMA_WORKER_AND_PG087_READBACK",
+  "date": "2026-11-23",
+  "status": "PASS",
+  "ollama": {
+    "available": true,
+    "base_url": "http://127.0.0.1:11434",
+    "default_model": "qwen2.5-coder:3b",
+    "models": [
+      "bge-m3:latest",
+      "qwen2.5-coder:7b",
+      "qwen2.5-coder:3b"
+    ],
+    "default_model_ready": true,
+    "started_by_launcher": true
+  },
+  "task_id": "25149826-7766-4a55-84f8-ef0eabdb1816",
+  "final_state": "ACCEPTED",
+  "work_type": "RESEARCH",
+  "role_id": "EXP-02",
+  "model_metrics": {
+    "model": "qwen2.5-coder:3b",
+    "eval_count": 527,
+    "prompt_eval_count": 179,
+    "total_duration_ms": 7890,
+    "response_sha256": "69d994054cd3e3a90f898ef515921a05f64493c44a967d54ceb99578c8594c69"
+  },
+  "verification": {
+    "accepted": true,
+    "reason": "LOCAL_VERIFIER_CHECKS_PASSED",
+    "verified_by": "INDEPENDENT_LOCAL_VERIFIER",
+    "work_type": "RESEARCH",
+    "checks": [
+      {
+        "check": "min_response_length_20",
+        "passed": true,
+        "length": 1541
+      },
+      {
+        "check": "response_sha256_integrity",
+        "passed": true
+      },
+      {
+        "check": "model_eval_tokens_positive",
+        "passed": true,
+        "eval_count": 527
+      }
+    ],
+    "verified_at": "2026-11-23 22:25:06"
+  },
+  "pg_087_work_template_validations_count": 1,
+  "worker_stats": {
+    "daemon_state": "RUNNING",
+    "queued": 0,
+    "processed": 1,
+    "accepted": 1,
+    "rejected": 0,
+    "errors": 0
+  },
+  "sse_events_emitted": [
+    "OfficeTaskQueued",
+    "WorkerTaskClaimed",
+    "WorkerTaskAccepted"
+  ]
+}

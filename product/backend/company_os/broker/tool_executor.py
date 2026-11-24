@@ -57,20 +57,30 @@ class ToolIntentJournal:
 
 
 class LinuxSingleFileExecutor:
-    def __init__(self, *, directory_fd, measure_head):
+    def __init__(
+        self,
+        *,
+        directory_fd,
+        measure_head,
+        target_filename: str = "task_title.py",
+    ):
         if sys.platform != "linux" or os.geteuid() == 0:
             raise Denied("ROOTLESS_LINUX_REQUIRED")
         st = os.fstat(directory_fd)
         if not stat.S_ISDIR(st.st_mode) or st.st_uid != os.getuid() or st.st_mode & 0o077:
             raise Denied("PRIVATE_BROKER_DIRECTORY_REQUIRED")
+        if not target_filename or "/" in target_filename or "\\" in target_filename or target_filename in {".", ".."}:
+            raise Denied("PILOT_PATH_OUT_OF_SCOPE")
         self.fd = os.dup(directory_fd)
         self.measure_head = measure_head
+        self.target_filename = target_filename
+        self.allowed_read_paths = frozenset({target_filename})
 
     def close(self):
         os.close(self.fd)
 
     def read(self):
-        fd = os.open("task_title.py", os.O_RDONLY | os.O_NOFOLLOW, dir_fd=self.fd)
+        fd = os.open(self.target_filename, os.O_RDONLY | os.O_NOFOLLOW, dir_fd=self.fd)
         try:
             st = os.fstat(fd)
             if (
@@ -107,7 +117,7 @@ class LinuxSingleFileExecutor:
             base = hashlib.sha256(raw).hexdigest()
             head = self.measure_head()
             if call.tool_id == "workspace.read":
-                if call.arguments.relative_path != "task_title.py":
+                if call.arguments.relative_path not in self.allowed_read_paths:
                     raise Denied("PILOT_PATH_OUT_OF_SCOPE")
                 # Read bytes go only to a trusted artifact writer via Kernel completion.
                 return dict(

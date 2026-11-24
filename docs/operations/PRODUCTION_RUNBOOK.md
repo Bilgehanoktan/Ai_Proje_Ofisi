@@ -47,3 +47,7 @@
   - `GET /api/catalog?tenant_id=<uuid>`
   - `GET /api/memory-promotions?tenant_id=<uuid>`
   - `GET /api/external-effects?tenant_id=<uuid>`
+
+## 001–088 geçici PostgreSQL kontrolü
+
+24 Kasım 2026 koşusunda `scripts/verification/verify_087_migration_pg.py` pinli 001–088 assembly sırasını geçici Linux PostgreSQL kümesinde rollback ile uyguladı. 087 için dört, 088 için iki FORCE RLS tablosu ve 087 görev ayrılığı kısıtı doğrulandı. Kalıcı temiz kurulum ve 087 → 088 yükseltme provası açık.

@@ -1,0 +1,68 @@
+{
+  "scope": "LIVE_PG18_088_AGENT_INSTANCE_RETRY_AND_AUTHORIZED_READ_E2E",
+  "date": "2026-11-23",
+  "status": "PASS",
+  "agent_count": 5,
+  "same_role_distinct_instances": [
+    "11111111-0001-4000-8000-000000000001",
+    "11111111-0001-4000-8000-000000000002"
+  ],
+  "step1_eng1_running": {
+    "agent_instance_id": "11111111-0001-4000-8000-000000000001",
+    "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+    "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+    "role_id": "EXP-01",
+    "display_name": "Engineer #1",
+    "worker_principal": "worker-eng-01",
+    "state": "RUNNING",
+    "active_task_id": "task-live-e2e",
+    "active_attempt_id": "43e978d9-f5fb-4d87-b3dd-a1f5ceafec72",
+    "active_task_title": "Canli Gorev Denemesi 1",
+    "revision": 1,
+    "last_seen_at": "2026-11-23 22:57:02.826315+03"
+  },
+  "step2_retry_eng1_superseded": {
+    "agent_instance_id": "11111111-0001-4000-8000-000000000001",
+    "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+    "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+    "role_id": "EXP-01",
+    "display_name": "Engineer #1",
+    "worker_principal": "worker-eng-01",
+    "state": "IDLE",
+    "active_task_id": null,
+    "active_attempt_id": null,
+    "active_task_title": null,
+    "revision": 2,
+    "last_seen_at": "2026-11-23 22:57:03.013713+03"
+  },
+  "step2_retry_eng2_running": {
+    "agent_instance_id": "11111111-0001-4000-8000-000000000002",
+    "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+    "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+    "role_id": "EXP-01",
+    "display_name": "Engineer #2",
+    "worker_principal": "worker-eng-02",
+    "state": "RUNNING",
+    "active_task_id": "task-live-e2e",
+    "active_attempt_id": "3a0484f9-b6f5-42c1-8a53-ed9270966565",
+    "active_task_title": "Canli Gorev Denemesi 2 (Retry)",
+    "revision": 1,
+    "last_seen_at": "2026-11-23 22:57:03.098794+03"
+  },
+  "step3_eng2_released_idle": {
+    "agent_instance_id": "11111111-0001-4000-8000-000000000002",
+    "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+    "project_id": "37434287-b083-46ef-97fd-7577ee394509",
+    "role_id": "EXP-01",
+    "display_name": "Engineer #2",
+    "worker_principal": "worker-eng-02",
+    "state": "IDLE",
+    "active_task_id": null,
+    "active_attempt_id": null,
+    "active_task_title": null,
+    "revision": 2,
+    "last_seen_at": "2026-11-23 22:57:03.27507+03"
+  },
+  "foreign_project_http_status": 403,
+  "authorized_http_status": 200
+}

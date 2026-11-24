@@ -76,7 +76,7 @@ def parse_matrix_modules() -> list[dict]:
     return modules
 
 
-def generate_preview_html(*, mode: str = "DEMO_SYNTHETIC") -> str:
+def generate_preview_html(*, mode: str = "DEMO_SYNTHETIC", inline_assets: bool = True) -> str:
     """Renders a fully responsive, accessible HTML status dashboard dynamically from UYGULAMA_DURUM_MATRISI.md."""
     modules = parse_matrix_modules()
     matrix_hash = (
@@ -104,11 +104,26 @@ def generate_preview_html(*, mode: str = "DEMO_SYNTHETIC") -> str:
     template = (FRONTEND / "office/scenes/dashboard.html").read_text(encoding="utf-8")
     phases = sorted({m["phase"] for m in modules})
     options = "".join(f'<option value="{esc(p)}">{esc(p)}</option>' for p in phases)
-    return (
-        template.replace(
-            "__OFFICE_SCRIPT__",
-            (FRONTEND / "office/engine/office-preview.js").read_text(encoding="utf-8"),
+
+    if inline_assets:
+        tokens_css = (FRONTEND / "assets/tokens.css").read_text(encoding="utf-8")
+        office_css = (FRONTEND / "assets/office.css").read_text(encoding="utf-8")
+        head_assets = f"<style>\n{tokens_css}\n{office_css}\n</style>"
+        office_entry = (
+            "<script>\n"
+            + (FRONTEND / "office/engine/office-preview.js").read_text(encoding="utf-8")
+            + "\n</script>"
         )
+    else:
+        head_assets = (
+            '<link rel="stylesheet" href="/assets/tokens.css">\n'
+            '  <link rel="stylesheet" href="/assets/office.css">'
+        )
+        office_entry = '<script type="module" src="/office/modules/main.js"></script>'
+
+    return (
+        template.replace("__HEAD_ASSETS__", head_assets)
+        .replace("__OFFICE_ENTRY__", office_entry)
         .replace("__MODULE_ROWS__", rows)
         .replace("__PHASE_OPTIONS__", options)
         .replace("__MODULE_COUNT__", str(len(modules)))

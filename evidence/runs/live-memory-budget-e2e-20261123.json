@@ -1,0 +1,42 @@
+{
+  "scope": "LIVE_MOD012_MEMORY_PROMOTION_AND_MOD014_EXTERNAL_EFFECT_PG087_E2E",
+  "date": "2026-11-23",
+  "status": "PASS",
+  "memory_promotion": {
+    "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+    "record_id": "mem-2ef6bdfa-51d",
+    "summary": "[RESEARCH] Canli 087 Hafiza Terfisi E2E — doğrulanan ajan çıktısı",
+    "evidence_digest": "sha256:ab034de0066787928fe15438a5be8dfa9151bda868f23cbfb7987676c2ad976d",
+    "state": "PROMOTED",
+    "verified_by": "INDEPENDENT_LOCAL_VERIFIER",
+    "promoted_by": "OWNER_HUMAN"
+  },
+  "external_effect": {
+    "effect_id": "eff-1cbc9d27f904",
+    "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+    "idempotency_key": "e2e-hook-63d8b6e9dc",
+    "provider": "local-audit-webhook",
+    "status": "COMMITTED"
+  },
+  "idempotent_replay_verified": true,
+  "webhook_hits": 1,
+  "budget": {
+    "tenant_id": "b7a6faa0-895f-4bdc-8cf7-e4b2c6501d73",
+    "budget_limit_minor": 1000,
+    "spent_minor": 50,
+    "held_minor": 0,
+    "available_minor": 950,
+    "blocked_by_unknown": false
+  },
+  "pg_087_counts": {
+    "memory_promotions": 1,
+    "external_effect_ledger": 1,
+    "work_template_validations": 1
+  },
+  "sse_events": [
+    "MemoryCandidateCreated",
+    "MemoryCandidateVerified",
+    "MemoryPromoted",
+    "ExternalEffectCommitted"
+  ]
+}

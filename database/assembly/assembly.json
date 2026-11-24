@@ -528,6 +528,12 @@
       "sha256": "3d1aacf8254a5e01af77ab69a2b27633b0a9b05b2c7cf9be9d2e0f6fec6c4f69",
       "origin": "application/mod012-mod014-extensions-v1",
       "baseline_sha256": null
+    },
+    {
+      "path": "database/sources/088_AGENT_INSTANCE_REGISTRY_CANDIDATE.sql",
+      "sha256": "035881f972c1be3f123fa61c532fabd76ff4f3662ec30a48e154b26792c9a85a",
+      "origin": "application/agent-instance-registry-v1",
+      "baseline_sha256": null
     }
   ],
   "implementation_status": "SOURCE_ADAPTED_NOT_DEPLOYABLE",
@@ -548,6 +554,7 @@
     "084_APPLICATION_BOOTSTRAP_READBACK_V1: provisioning metadata readback only; no caller table grants or role memberships",
     "085_APPLICATION_BOOTSTRAP_WINDOW_V1: exact-session wrapper for existing r56 trusted clock/root checks; no new authority or writes",
     "086_APPLICATION_OWNER_AUTH_RECOVERY_V1: post-bootstrap owner auth, session revocation and rotation recovery on live project clock; no root expiry extension or grant/membership writes",
-    "087_MOD012_MOD014_EXTENSIONS_CANDIDATE: additive tenant-isolated tables for MOD-012 catalog/memory promotions, MOD-013 work template validations, and MOD-014 external effect ledger with FORCE RLS and separation-of-duties CHECK"
+    "087_MOD012_MOD014_EXTENSIONS_CANDIDATE: additive tenant-isolated tables for MOD-012 catalog/memory promotions, MOD-013 work template validations, and MOD-014 external effect ledger with FORCE RLS and separation-of-duties CHECK",
+    "088_AGENT_INSTANCE_REGISTRY_CANDIDATE: canonical AgentInstance & task attempt binding tables with FORCE RLS, tenant isolation policy, and single-active-attempt uniqueness"
   ]
 }

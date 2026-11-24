@@ -10,6 +10,10 @@ Durum: REVIEW_REQUIRED / CODEX_DUZELTME_GEREKLI
 
 Bu dosya 16 modülün TAMAMINI ve PH-00–PH-06 fazlarını izler. İlk MGT-TITLE-NORMALIZATION-01 akışı ara kabul hedefidir. Hiçbir sonraki faz kapsamdan çıkarılmaz. Kaynak hazırlığı bağımlılıklar izin verdiği ölçüde ilerler; runtime etkinleştirme mevcut kapılara bağlıdır. Bu tablo yeni mimari kararı veya yürütme izni üretmez.
 
+## Güncel kabul kaydı — 2026-11-24
+
+23 Kasım [insan kabul kaydında](../handover/G0_INSAN_ONAYI_KONTROL_LISTESI_20261123.md) G0 onaylı ve MGT-TITLE-NORMALIZATION-01 13/13 kabul edildi. Aşağıdaki eski deneme ve kontrol durumları tarihsel kanıttır. 088 ajan kayıtları değerlendirme kümesinde [kanıtlandı](../evidence/runs/live-agent-instances-e2e-20261123.json). Temiz 001–088 kurulumu, 087 → 088 yükseltmesi ve ek iş türlerinin gerçek araç kabulü açık. Güncel sıra [devir notunda](../handover/NEXT_STEP.md) tutulur.
+
 ## 1. Kaynak ve güncellik
 
 - Ana giriş: [v0.16.2-r68](../GUNCEL/dokumanlar/AI_PROJE_OFISI_ANA_MIMARI_DOKUMANI_v0.16.2-r68.md).
@@ -294,7 +298,7 @@ PH-01→PH-02→PH-03→PH-04 ilk akışın aşamalarıdır; PH-05/06 tam proje 
 | Alt davranışlar: uygulanan / eksik / henüz bağlanmayan | Uygulanan: Acceptance/Release şemaları, geçersiz veya eksik verifier receipt durumunda ret, insan onayı olmadan PROD release'in bloklanması; Eksik: İki taraflı insan onayı (dual custody) arayüzü; Henüz bağlanmayan: Gerçek müşteri teslim ortamına release hook'u |
 | Port bağımlılıkları / görev önkoşulları | MOD-008 verifier receipt'ini alır; MOD-001 üzerinden AcceptanceDecision yazar. Önkoşul: Bağımsız verifier doğrulaması |
 | Antigravity durumu / kanıt sınıfı / kanıt ID | KISMEN/KAYNAK_HAZIR / UNIT, SOURCE_STATIC / EV-20261110-SRC-01, EV-20261110-UNIT-01 |
-| Açık kusur / engel / gereken somut önkoşul | G0 kapısı ve First13 ara kabul kapısı açık (OPEN / 0/13). Antigravity kendi kendine kabul veremez |
+| Açık kusur / engel / gereken somut önkoşul | G0 ve MGT-01 First13 insan kabulü 23 Kasım kaydında tamamlandı. Ek iş türleri için teknik doğrulama ve ilgili kabul açık. |
 | Sıradaki görev / faz / çıkış ölçütü | TASK-20261110-P1-7 / PH-03 / Verifier receipt ile AcceptanceDecision kaydının MOD-001 üzerinden mühürlenmesi |
 | Gerçek test ortamı / pozitif / negatif / kalıcı readback | NOT_VERIFIED; birim testlerde kabul mantığı PASS, operasyonel release koşumu yok (NOT_RUN) |
 | İnsan kabulü / karar kaydı | NOT_VERIFIED; proje sahibi onayı bekleniyor |

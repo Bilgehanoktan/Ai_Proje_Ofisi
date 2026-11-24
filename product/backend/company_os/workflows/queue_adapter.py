@@ -22,6 +22,7 @@ class MultiWorkTypeQueueRunner:
 
     executors: dict[WorkType, Callable[[dict[str, Any]], dict[str, Any]]]
     store: Extensions087Store | None = None
+    allowed_read_paths: frozenset[str] = frozenset()
 
     def execute_task(self, task: dict[str, Any]) -> dict[str, Any]:
         raw_type = task.get("work_type")
@@ -31,6 +32,10 @@ class MultiWorkTypeQueueRunner:
             raise ValueError(f"UNSUPPORTED_WORK_TYPE:{raw_type}") from exc
         if work_type not in self.executors:
             raise ValueError(f"EXECUTOR_NOT_REGISTERED:{work_type.value}")
+        read_path = task.get("read_path")
+        if work_type == WorkType.RESEARCH and read_path:
+            if str(read_path) not in self.allowed_read_paths:
+                raise ValueError("PILOT_PATH_OUT_OF_SCOPE")
         output = dict(self.executors[work_type](task))
         return {
             "work_type": work_type.value,

@@ -17,9 +17,22 @@ from company_os.kernel import command_host as host
 from company_os.kernel.command_host import Blocked
 from company_os.projections.preview_generator import generate_preview_html
 from company_os.projections.sse_stream import ProjectionEvent, stream_tenant_events
+from company_os.runtime.live_task_runner import OfficeTaskValidationError
 from company_os.workflows.templates import TEMPLATES
 
-LIVE_EVENTS_HTML = Path(__file__).resolve().parents[4] / "frontend" / "live-events.html"
+FRONTEND_DIR = Path(__file__).resolve().parents[4] / "frontend"
+LIVE_EVENTS_HTML = FRONTEND_DIR / "live-events.html"
+PHASER_PREVIEW_HTML = FRONTEND_DIR / "office" / "scenes" / "phaser-preview.html"
+STATIC_ASSET_ROOTS = {
+    "/assets/": (FRONTEND_DIR / "assets", frozenset({".css", ".js", ".svg", ".png"})),
+    "/office/modules/": (FRONTEND_DIR / "office" / "modules", frozenset({".js"})),
+}
+STATIC_MIME_TYPES = {
+    ".css": "text/css; charset=utf-8",
+    ".js": "application/javascript; charset=utf-8",
+    ".svg": "image/svg+xml",
+    ".png": "image/png",
+}
 
 DETAIL_RESOURCES = (
     "attempts",
@@ -234,23 +247,76 @@ def make_wsgi_app(
     *,
     static_view_fn=generate_preview_html,
     events_provider=None,
+    event_replay_provider=None,
     catalog_provider=None,
     promotions_provider=None,
     effects_provider=None,
     live_snapshot_provider=None,
+    office_task_submitter=None,
+    office_tasks_provider=None,
+    memory_action_handler=None,
+    external_effect_handler=None,
+    agent_instances_provider=None,
+    detail_readback_provider=None,
 ):
-    """Returns a WSGI application serving dynamic read-only status, SSE stream, MOD-012..014 APIs, and live office snapshot."""
+    """Returns a WSGI application serving read-only views, SSE stream, MOD-012..014 APIs,
+    and optional loopback-checked office task, memory promotion, and external effect handlers."""
 
-    def _json_response(start_response, payload: dict) -> list[bytes]:
+    max_post_bytes = 32768
+
+    def _json_response(start_response, payload: dict, *, status: str = "200 OK") -> list[bytes]:
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         start_response(
-            "200 OK",
+            status,
             [
                 ("Content-Type", "application/json; charset=utf-8"),
                 ("Content-Length", str(len(body))),
+                ("Cache-Control", "no-store"),
             ],
         )
         return [body]
+
+    def _is_allowed_loopback_origin(environ) -> bool:
+        origin = (environ.get("HTTP_ORIGIN") or "").strip()
+        if not origin:
+            return True
+        host_header = (environ.get("HTTP_HOST") or "").strip()
+        if host_header and origin == f"http://{host_header}":
+            return True
+        return origin.startswith("http://127.0.0.1:") or origin.startswith("http://localhost:")
+
+    def _read_loopback_json_post(environ, start_response):
+        if not _is_allowed_loopback_origin(environ):
+            return None, _json_response(
+                start_response, {"error": "ORIGIN_REJECTED"}, status="403 Forbidden"
+            )
+        content_type = (environ.get("CONTENT_TYPE") or "").split(";")[0].strip().lower()
+        if content_type != "application/json":
+            return None, _json_response(
+                start_response, {"error": "JSON_CONTENT_TYPE_REQUIRED"}, status="400 Bad Request"
+            )
+        try:
+            length = int(environ.get("CONTENT_LENGTH") or "0")
+        except ValueError:
+            return None, _json_response(
+                start_response, {"error": "INVALID_CONTENT_LENGTH"}, status="400 Bad Request"
+            )
+        if not 0 < length <= max_post_bytes:
+            return None, _json_response(
+                start_response, {"error": "BODY_SIZE_OUT_OF_BOUNDS"}, status="400 Bad Request"
+            )
+        raw = environ["wsgi.input"].read(length)
+        try:
+            payload = json.loads(raw.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            return None, _json_response(
+                start_response, {"error": "MALFORMED_JSON"}, status="400 Bad Request"
+            )
+        if not isinstance(payload, dict):
+            return None, _json_response(
+                start_response, {"error": "JSON_OBJECT_REQUIRED"}, status="400 Bad Request"
+            )
+        return payload, None
 
     def _require_tenant_id(environ, start_response) -> str | None:
         qs = parse_qs(environ.get("QUERY_STRING", ""))
@@ -260,9 +326,148 @@ def make_wsgi_app(
             return None
         return tenant_id
 
+    def _serve_static_asset(path: str, start_response):
+        for prefix, (root_dir, allowed_exts) in STATIC_ASSET_ROOTS.items():
+            if not path.startswith(prefix):
+                continue
+            rel = path[len(prefix):]
+            if not rel or ".." in rel or "\\" in rel:
+                start_response("403 Forbidden", [("Content-Type", "text/plain; charset=utf-8")])
+                return [b"Forbidden"]
+            root_resolved = root_dir.resolve()
+            candidate = (root_resolved / rel).resolve()
+            if not candidate.is_relative_to(root_resolved) or candidate.suffix.lower() not in allowed_exts:
+                start_response("403 Forbidden", [("Content-Type", "text/plain; charset=utf-8")])
+                return [b"Forbidden"]
+            if not candidate.is_file():
+                start_response("404 Not Found", [("Content-Type", "text/plain; charset=utf-8")])
+                return [b"Not Found"]
+            body = candidate.read_bytes()
+            mime = STATIC_MIME_TYPES.get(candidate.suffix.lower(), "application/octet-stream")
+            start_response(
+                "200 OK",
+                [
+                    ("Content-Type", mime),
+                    ("Content-Length", str(len(body))),
+                    ("X-Content-Type-Options", "nosniff"),
+                    ("Cache-Control", "no-cache"),
+                ],
+            )
+            return [body]
+        return None
+
     def wsgi_app(environ, start_response):
         path = environ.get("PATH_INFO", "/")
         method = environ.get("REQUEST_METHOD", "GET")
+
+        if method == "POST" and path == "/api/office-tasks" and office_task_submitter is not None:
+            payload, err_resp = _read_loopback_json_post(environ, start_response)
+            if err_resp is not None:
+                return err_resp
+            auth_header = (environ.get("HTTP_AUTHORIZATION") or "").strip()
+            bearer = auth_header[7:].strip() if auth_header.startswith("Bearer ") else None
+            try:
+                created = office_task_submitter(payload, bearer)
+            except OfficeTaskValidationError as exc:
+                return _json_response(
+                    start_response, {"error": str(exc)}, status="400 Bad Request"
+                )
+            except (PermissionError, Blocked) as exc:
+                return _json_response(
+                    start_response, {"error": str(exc)}, status="403 Forbidden"
+                )
+            except Exception as exc:  # noqa: BLE001
+                return _json_response(
+                    start_response,
+                    {"error": f"TASK_SUBMISSION_FAILED:{type(exc).__name__}"},
+                    status="503 Service Unavailable",
+                )
+            return _json_response(
+                start_response, {"status": "QUEUED", "task": created}, status="201 Created"
+            )
+
+        if method == "POST" and path == "/api/memory-promotions" and memory_action_handler is not None:
+            payload, err_resp = _read_loopback_json_post(environ, start_response)
+            if err_resp is not None:
+                return err_resp
+            try:
+                updated = memory_action_handler(payload)
+            except (PermissionError, Blocked) as exc:
+                return _json_response(
+                    start_response, {"error": str(exc)}, status="403 Forbidden"
+                )
+            except (ValueError, KeyError) as exc:
+                return _json_response(
+                    start_response, {"error": str(exc)}, status="400 Bad Request"
+                )
+            except Exception as exc:  # noqa: BLE001
+                return _json_response(
+                    start_response,
+                    {"error": f"MEMORY_ACTION_FAILED:{type(exc).__name__}"},
+                    status="503 Service Unavailable",
+                )
+            return _json_response(start_response, {"status": "OK", "record": updated})
+
+        if method == "POST" and path == "/api/external-effects" and external_effect_handler is not None:
+            payload, err_resp = _read_loopback_json_post(environ, start_response)
+            if err_resp is not None:
+                return err_resp
+            try:
+                outcome = external_effect_handler(payload)
+            except (PermissionError, Blocked) as exc:
+                return _json_response(
+                    start_response, {"error": str(exc)}, status="403 Forbidden"
+                )
+            except RuntimeError as exc:
+                return _json_response(
+                    start_response, {"error": str(exc)}, status="409 Conflict"
+                )
+            except (ValueError, KeyError) as exc:
+                return _json_response(
+                    start_response, {"error": str(exc)}, status="400 Bad Request"
+                )
+            except Exception as exc:  # noqa: BLE001
+                return _json_response(
+                    start_response,
+                    {"error": f"EXTERNAL_EFFECT_FAILED:{type(exc).__name__}"},
+                    status="503 Service Unavailable",
+                )
+            return _json_response(
+                start_response, {"status": "OK", "result": outcome}, status="201 Created"
+            )
+
+        if method == "POST" and path == "/api/details":
+            payload, err_resp = _read_loopback_json_post(environ, start_response)
+            if err_resp is not None:
+                return err_resp
+            if detail_readback_provider is None:
+                return _json_response(
+                    start_response,
+                    {"error": "DETAIL_READBACK_NOT_CONFIGURED"},
+                    status="403 Forbidden",
+                )
+            auth_header = (environ.get("HTTP_AUTHORIZATION") or "").strip()
+            bearer = auth_header[7:].strip() if auth_header.startswith("Bearer ") else ""
+            if not bearer:
+                return _json_response(
+                    start_response, {"error": "UI_AUTH_REQUIRED"}, status="403 Forbidden"
+                )
+            resource = str(payload.get("resource") or "").strip()
+            if resource not in DETAIL_RESOURCES:
+                return _json_response(
+                    start_response, {"error": "UNSUPPORTED_DETAIL_RESOURCE"}, status="400 Bad Request"
+                )
+            try:
+                detail = detail_readback_provider(payload, bearer)
+            except (PermissionError, Blocked) as exc:
+                return _json_response(
+                    start_response, {"error": str(exc)}, status="403 Forbidden"
+                )
+            except (ValueError, KeyError) as exc:
+                return _json_response(
+                    start_response, {"error": str(exc)}, status="400 Bad Request"
+                )
+            return _json_response(start_response, {"status": "OK", "detail": detail})
 
         if method != "GET":
             start_response(
@@ -270,8 +475,16 @@ def make_wsgi_app(
             )
             return [b"Method Not Allowed: Read-only presentation service"]
 
+        if path.startswith("/assets/") or path.startswith("/office/modules/"):
+            asset_resp = _serve_static_asset(path, start_response)
+            if asset_resp is not None:
+                return asset_resp
+
         if path in ("/", "/index.html", "/preview"):
-            content = static_view_fn().encode("utf-8")
+            try:
+                content = static_view_fn(inline_assets=False).encode("utf-8")
+            except TypeError:
+                content = static_view_fn().encode("utf-8")
             start_response(
                 "200 OK",
                 [
@@ -282,8 +495,29 @@ def make_wsgi_app(
             )
             return [content]
 
-        if path == "/live-events":
-            content = LIVE_EVENTS_HTML.read_bytes()
+        if path in ("/live-events", "/preview/phaser"):
+            page = LIVE_EVENTS_HTML if path == "/live-events" else PHASER_PREVIEW_HTML
+            content = page.read_bytes()
+            start_response(
+                "200 OK",
+                [
+                    ("Content-Type", "text/html; charset=utf-8"),
+                    ("Content-Length", str(len(content))),
+                    ("Cache-Control", "no-cache, no-store, must-revalidate"),
+                ],
+            )
+            return [content]
+
+        if path == "/api/progress":
+            from company_os.projections.progress import load_progress
+
+            payload = load_progress()
+            return _json_response(start_response, payload)
+
+        if path == "/progress":
+            from company_os.projections.progress import load_progress, render_progress_html
+
+            content = render_progress_html(load_progress()).encode("utf-8")
             start_response(
                 "200 OK",
                 [
@@ -337,6 +571,45 @@ def make_wsgi_app(
                 payload = {"mode": "DEMO_SYNTHETIC", "connected": False}
             return _json_response(start_response, payload)
 
+        if path == "/api/office-tasks":
+            runs = office_tasks_provider() if office_tasks_provider is not None else []
+            return _json_response(start_response, {"runs": list(runs)})
+
+        if path == "/api/agent-instances":
+            qs = parse_qs(environ.get("QUERY_STRING", ""))
+            tenant_id = (qs.get("tenant_id") or [""])[0].strip()
+            project_id = (qs.get("project_id") or [""])[0].strip()
+            if not tenant_id or not project_id:
+                return _json_response(
+                    start_response,
+                    {"error": "TENANT_AND_PROJECT_ID_REQUIRED"},
+                    status="400 Bad Request",
+                )
+            if agent_instances_provider is None:
+                return _json_response(
+                    start_response,
+                    {"error": "AGENT_INSTANCES_NOT_CONFIGURED"},
+                    status="403 Forbidden",
+                )
+            try:
+                items = agent_instances_provider(tenant_id, project_id)
+            except (PermissionError, Blocked) as exc:
+                return _json_response(
+                    start_response, {"error": str(exc)}, status="403 Forbidden"
+                )
+            except ValueError as exc:
+                return _json_response(
+                    start_response, {"error": str(exc)}, status="400 Bad Request"
+                )
+            return _json_response(
+                start_response,
+                {
+                    "tenant_id": tenant_id,
+                    "project_id": project_id,
+                    "agent_instances": list(items),
+                },
+            )
+
         if path == "/api/catalog":
             tenant_id = _require_tenant_id(environ, start_response)
             if tenant_id is None:
@@ -374,10 +647,13 @@ def make_wsgi_app(
             except ValueError:
                 start_response("400 Bad Request", [("Content-Type", "text/plain; charset=utf-8")])
                 return [b"invalid last_event_id"]
-            source_events = events_provider(tenant_id) if events_provider is not None else []
-            frames = stream_tenant_events(
-                source_events, tenant_id=tenant_id, last_event_id=last_event_id
-            )
+            if event_replay_provider is not None:
+                frames = event_replay_provider(tenant_id, last_event_id)
+            else:
+                source_events = events_provider(tenant_id) if events_provider is not None else []
+                frames = stream_tenant_events(
+                    source_events, tenant_id=tenant_id, last_event_id=last_event_id
+                )
             body = "".join(frames).encode("utf-8")
             start_response(
                 "200 OK",

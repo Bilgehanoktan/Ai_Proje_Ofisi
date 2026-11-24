@@ -1,8 +1,8 @@
 {
   "version": 1,
   "canonical_workspace": "E:\\Projeler\\Ai_Proje_Ofisi",
-  "updated_at": "2026-11-23",
-  "summary": "2026-11-23 kullanıcı G0 ve first13 (13/13) insan onayı işlendi (handover/G0_INSAN_ONAYI_KONTROL_LISTESI_20261123.md). 087_MOD012_MOD014_EXTENSIONS_CANDIDATE.sql migration'ı database/assembly/assembly.json içine 87. migration olarak eklendi; temiz PG 18.6 (verify_087_migration_pg.py) ve canlı PG 18.6 değerlendirme kümesinde (/var/lib/ai-proje-ofisi-local, port 55490, 4 FORCE RLS tablosu, 0 devre dışı trigger) doğrulandı. Native C r65_spawn_linux.c + R65NativeLauncher köprüsü delegated cgroup v2 içinde gerçek MGT-TITLE-NORMALIZATION-01 worker yama üretimi ve 13/13 oracle doğrulamasıyla (verify_mgt01_native_launcher.py) PASS verdi. Tüm 16 modül (MOD-001–MOD-016) için temel kaynak, canlı PG readback, SSE, yedek/restore ve native başlatıcı kanıtları tamamlandı; üretim dağıtımı öncesi ek iş türleri ve sürekli otonom daemon geliştirmeleri açık kalır.",
+  "updated_at": "2026-11-24",
+  "summary": "23 Kasım 2026 kabul kaydına göre G0 insan onayı verildi ve MGT-TITLE-NORMALIZATION-01 ilk akışı 13/13 kabul edildi. 087 temiz kurulum ve canlı değerlendirme kümesinde, 088 ajan kayıtları canlı değerlendirme kümesinde doğrulandı. Geçici PostgreSQL üzerinde 001–088 assembly ve 088 FORCE RLS kontrolden geçti. Kalıcı temiz kurulum provası, 087 → 088 yükseltmesi ve ek iş türlerinin gerçek araçla kabulü açık.",
   "update_policy": "Her anlamlı geliştirmede ilgili satırı kanıtıyla güncelle. Tahmini oranı ölçülmüş sonuçtan ayır; değişmeyen alanı yeniden doğrulanmış sayma.",
   "areas": [
     {
@@ -11,20 +11,25 @@
       "modules": [
         "MOD-011"
       ],
-      "status": "Ofis önizlemesi, /live-events çoklu görev SSE akışı ve 087 API'leri tarayıcıdan doğrulandı",
-      "ready": "Panel persistence, 6 /api/details restart readback, /live-events canlı SSE ekranında RESEARCH/SPREADSHEET/OBLIGATION çoklu görev olayları (8 canlı SSE olayı) ve / ana ofis önizlemesi (0 konsol hatası) gerçek tarayıcı E2E ile doğrulandı.",
-      "missing": "Canlı üretim veritabanı kimlik doğrulamasıyla etkileşimli ofis sahnesi yazma aksiyonları açık.",
-      "next_step": "Üretim ortamında authenticated komut istemcisini ofis sahnesine bağlamak.",
-      "last_reviewed": "2026-11-23",
+      "status": "Modüler ES Modules ön yüz, ortak tokens.css, canlı SSE bağlantısı, yerel Phaser 2.5D ve 087/088 PG kalıcılığı doğrulandı",
+      "ready": "Panel persistence, 6 /api/details restart readback, /live-events canlı SSE ekranı, 'Yeni görev ver' formu (POST /api/office-tasks), Onaylar sekmesinde hafıza terfisi & bütçe, Ajanlar sekmesinde ve sahnede gerçek PostgreSQL 18.6 company.agent_instances (088 FORCE RLS) seçimi, güvenli statik asset servisi (/assets/*, /office/modules/*), modüler ES Modules (api-client, sse-client, office-canvas, panels, agent-detail, phaser-scene, main), /progress & /api/progress, ve harici CDN'siz yerel Phaser 3.90.0 doğrulandı.",
+      "missing": "Edge otomasyonunda RESEARCH, SPREADSHEET ve OBLIGATION formdan gerçek HTTP ve worker üzerinden sonuç kartına ulaştı. Test sentetik model kullandı. Canlı ajan geçişi, Broker araçları ve çok kullanıcılı oturum doğrulaması açık.",
+      "next_step": "MOD-013 için gerçek dosya/web/Excel araçlarını Broker üzerinden bağlamak ve Edge otomasyonunu gerçek araç çıktısı ile genişletmek. SOURCE_TO_TARGET.json ve SOURCE_MANIFEST.json pinlerini yeni/değişen frontend dosyaları için gözden geçirmek.",
+      "last_reviewed": "2026-11-24",
       "evidence": [
-        "evidence/runs/browser-multitask-and-restore-20261123.json",
-        "product/frontend/live-events.html",
-        "handover/LIVE_FLOW_VERIFICATION_20261120.md",
-        "product/frontend/previews/preview.html"
+        "scripts/verification/check_office_task_browser.py",
+        "product/frontend/office/scenes/phaser-preview.html",
+        "evidence/runs/live-agent-instances-e2e-20261123.json",
+        "tests/unit/test_agent_instances.py",
+        "product/backend/company_os/runtime/agent_instances.py",
+        "database/sources/088_AGENT_INSTANCE_REGISTRY_CANDIDATE.sql",
+        "evidence/runs/live-office-task-e2e-20261123.json",
+        "product/frontend/office/scenes/dashboard.html",
+        "product/frontend/office/engine/office-preview.js"
       ],
-      "evidence_scope": "2026-11-23 gerçek tarayıcıda /live-events (8 SSE olayı + 3 iş türü) ve / ana ofis önizlemesi (0 konsol hatası) PASS.",
+      "evidence_scope": "2026-11-23 088 company.agent_instances (FORCE RLS) canlı PG 18.6 üzerinde 5 kalıcı ajan (aynı rolde 2 EXP-01), retry superseding, yabancı proje 403 / yetkili proje 200 GET /api/agent-instances ve ofis Ajanlar/Seçili Bağlam bağı PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 75,
+      "estimated_percent": 85,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -35,11 +40,11 @@
         "MOD-001",
         "MOD-002"
       ],
-      "status": "Değerlendirme kümesinde Kernel/Panel/086 canlı zinciri ve birim düzeltmeleri doğrulandı",
+      "status": "Değerlendirme kümesinde Kernel, Panel ve ilk akış doğrulandı",
       "ready": "086 owner-auth/recovery + saat epoch + least-privilege transport rolleriyle canlı PostgreSQL üzerinde Objective/Plan/Task yaşam döngüsü doğrulandı; command_host.py per-operation grant_ids çözümlemesi ve kernel_adapters.py çok satırlı base64 frame temizliği birim testleriyle onarıldı. Üç SQL bulgusu kaynak paketinde düzeltildi. Temiz PostgreSQL kümesinde 86 kaynak rollback ile derlendi. Süreç trigger deneyi ve iki SELECT politikasının katalog kontrolü geçti. 083 politikalarının sentetik satır düzeyi olumlu ve olumsuz testi geçti. Temiz sentetik başlangıçta native bootstrap bir makbuz, bir hedef ve bir plan oluşturdu. İzole sentetik kurulumda R58 saat politikası aktivasyonu ve tekrar çağrısı tek makbuz üretti. Sentetik yetkilendirme ile native workspace komutu ve makbuzu, saat dönemi ve iki örnek doğrulandı.",
-      "missing": "Yetkili PL/pgSQL işlev çağrıları, tam şemada launch delivery ve uzlaştırma komutu, native C başlatıcı ve resmî kabul açık.",
+      "missing": "Temiz 001–088 kurulumunda saat, kimlik ve proje izinlerinin yeniden kurulumu ve uçtan uca kontrolü açık.",
       "next_step": "Temiz kurulumda saat politikası için işlem tanımı ve yetkilendirme kayıtlarının sağlanması, host bağlama, epoch ve örnek kaydı, teknik oturum ve dört işlem için proje izinleri.",
-      "last_reviewed": "2026-11-21",
+      "last_reviewed": "2026-11-24",
       "evidence": [
         "handover/LIVE_FLOW_VERIFICATION_20261120.md",
         "evidence/runs/live-flow-20261120/owner-auth-live-verification.json",
@@ -52,9 +57,11 @@
         "tests/security/test_sql_source.py",
         "evidence/runs/sql-step1-20261120.md",
         "scripts/verification/clock_policy_activation_probe.sql",
-        "scripts/verification/workspace_head_native_probe.sql"
+        "scripts/verification/workspace_head_native_probe.sql",
+        "handover/G0_INSAN_ONAYI_KONTROL_LISTESI_20261123.md",
+        "evidence/runs/mgt01-native-launcher-20261123.json"
       ],
-      "evidence_scope": "Yerel WSL değerlendirme kümesi (55490) canlı PostgreSQL/HTTP doğrulaması ve Windows/Linux birim testleri PASS; G0 OPEN ve resmî runtime kabulü NOT_RUN korunur. Yeni deneme temiz geçici küme ve rollback ile sınırlı. Temiz kurulumda dört işlem için onaylı politika ve eşleşen izin sayısı sıfır. Native proje saat sınırı BLOCKED_TIME_DEPENDENCY verdi.",
+      "evidence_scope": "20–23 Kasım kayıtları canlı PostgreSQL/HTTP ve native MGT-01 kabulünü belgeliyor. Daha eski temiz kurulum denemesinde saat politikası ve işlem izinleri eksikti. Kayıtlar 24 Kasımda karşılaştırıldı.",
       "real_acceptance": "NOT_VERIFIED",
       "estimated_percent": 65,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
@@ -67,20 +74,21 @@
         "MOD-001",
         "MOD-016"
       ],
-      "status": "Canlı 086+087 kurulumu, E0 bütünlüğü, 4 FORCE RLS tablosu ve soğuk restart readback doğrulandı",
+      "status": "087 temiz kurulumda, 087 ve 088 değerlendirme kümesinde kanıtlandı",
       "ready": "Yerel değerlendirme kümesinde 086 ve 087 (catalog_entries, memory_promotions, work_template_validations, external_effect_ledger; 4 FORCE RLS + separation-of-duties CHECK) kurulumu, E0 SHA256 değişmezliği (0 disabled trigger), canlı Objective/Plan/Task/Attempt/Acceptance zinciri, izole pg_basebackup/restore ve PG soğuk restart sonrası veri kalıcılığı doğrulandı.",
-      "missing": "Üretim ortamı kalıcı yedekleme otomasyonu ve uzun süreli yük/regresyon testleri açık.",
-      "next_step": "Üretim ortamı kurulumunda 001..087 assembly sırasını ve otomatik yedekleme/restore prosedürünü devreye almak.",
-      "last_reviewed": "2026-11-23",
+      "missing": "Geçici PostgreSQL üzerinde 001–088 rollback denemesi geçti. Kalıcı temiz kurulum, 087 → 088 yükseltmesi ve üretim yedekleme otomasyonu açık.",
+      "next_step": "001–088 temiz kurulumunu ve 087 → 088 yükseltmesini izole PostgreSQL üzerinde doğrulamak.",
+      "last_reviewed": "2026-11-24",
       "evidence": [
         "evidence/runs/migration-087-live-20261123.json",
         "scripts/verification/verify_087_migration_pg.py",
         "database/assembly/assembly.json",
         "handover/LIVE_FLOW_VERIFICATION_20261120.md",
         "evidence/runs/live-flow-20261120/precheck-functions-e0.json",
-        "evidence/runs/live-flow-20261120/readiness-final.json"
+        "evidence/runs/live-flow-20261120/readiness-final.json",
+        "evidence/runs/live-agent-instances-e2e-20261123.json"
       ],
-      "evidence_scope": "2026-11-23 temiz PG 18.6 (001..087) ve canlı PG 18.6 değerlendirme kümesinde (55490) 087 uygulaması, 4 FORCE RLS tablosu, SoD CHECK ve 0 devre dışı trigger doğrulandı.",
+      "evidence_scope": "2026-11-23 temiz PG 18.6 (001..087) ve canlı PG 18.6 değerlendirme kümesinde (55490) 087 uygulaması, 4 FORCE RLS tablosu, SoD CHECK ve 0 devre dışı trigger doğrulandı. 24 Kasımda geçici Linux PostgreSQL kümesinde pinli 001–088 assembly rollback ile uygulandı. 087 için 4, 088 için 2 FORCE RLS tablosu ve 087 görev ayrılığı CHECK doğrulandı.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
       "estimated_percent": 85,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
@@ -144,19 +152,21 @@
       "modules": [
         "MOD-005"
       ],
-      "status": "Ücretsiz yerel Ollama modeli (qwen2.5-coder:3b) MGT-TITLE-NORMALIZATION-01 akışına bağlandı",
-      "ready": "E:\\ollama_local\\models üzerinden qwen2.5-coder:3b canlı çağrısı (prompt_eval_count: 305, eval_count: 91) ile task_title.py yaması üretildi ve 13/13 oracle'dan geçti.",
-      "missing": "Çoklu iş türleri (MOD-013) ve uzun süreli yerel model oturumu hata/yeniden deneme stratejisi açık.",
-      "next_step": "MOD-013 iş türleri için yerel model adaptör profillerini genişletmek.",
-      "last_reviewed": "2026-11-20",
+      "status": "Ücretsiz yerel Ollama (qwen2.5-coder:3b) otomatik başlatıcı ve LiveOfficeTaskRunner ile canlı ofise bağlandı",
+      "ready": "OllamaClient (loopback-only, stdlib HTTP, otomatik paid fallback yok) + ensure_local_ollama_running (E:\\ollama_local\\bin\\ollama.exe) + LiveOfficeTaskRunner ile ofis ekranından gönderilen görevler qwen2.5-coder:3b üzerinde canlı çalıştırılıp (eval_count: 527, 7890 ms) INDEPENDENT_LOCAL_VERIFIER ile doğrulandı.",
+      "missing": "MOD-013 iş türleri için gerçek dosya/web/Excel araç çağırma profilleri ve uzun süreli oturum yeniden deneme politikası açık.",
+      "next_step": "RESEARCH, SPREADSHEET ve OBLIGATION ajanlarına gerçek dosya/web/Excel broker araçları ve model profilleri bağlamak.",
+      "last_reviewed": "2026-11-23",
       "evidence": [
-        "handover/LIVE_FLOW_VERIFICATION_20261120.md",
-        "evidence/runs/live-flow-20261120/local-model-invocation.json",
-        "evidence/runs/live-flow-20261120/mgt01-live-workflow-acceptance.json"
+        "evidence/runs/live-office-task-e2e-20261123.json",
+        "product/backend/company_os/engine/ollama_adapter.py",
+        "product/backend/company_os/runtime/live_task_runner.py",
+        "tests/unit/test_live_office_tasks.py",
+        "evidence/runs/live-flow-20261120/local-model-invocation.json"
       ],
-      "evidence_scope": "2026-11-20 tek dosya MGT-TITLE-NORMALIZATION-01 yama üretimi yerel Ollama ile doğrulandı; G0/ürün kabulü açık.",
-      "real_acceptance": "NOT_VERIFIED",
-      "estimated_percent": 50,
+      "evidence_scope": "2026-11-23 yerel Ollama otomatik başlatma + POST /api/office-tasks + AutonomousWorkerDaemon + qwen2.5-coder:3b canlı üretimi + PG 18.6 087 doğrulama kaydı PASS.",
+      "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
+      "estimated_percent": 60,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -217,15 +227,16 @@
       ],
       "status": "Outbox/audit, restart readback ve çoklu görev canlı SSE tarayıcı akışı doğrulandı",
       "ready": "ObjectiveCreated/PlanCreated/TaskCreated outbox olayları, restart sonrası 6 /api/details readback ve AutonomousWorkerDaemon'dan üretilen 8 çoklu görev/bütçe/hafıza SSE olayının (/api/events) gerçek tarayıcıda tüketimi doğrulandı.",
-      "missing": "Yüksek hacimli uzun süreli SSE bağlantı kopma/yeniden bağlanma yük testi açık.",
-      "next_step": "Üretim ortamında çoklu istemcili SSE yük ve yeniden bağlanma testini yapmak.",
+      "missing": "Yerel yeniden oynatma penceresi süreç belleğinde tutuluyor. Üretim için kalıcı akış ve uzun süreli ağ üzerinden çoklu istemci yük testi açık.",
+      "next_step": "Üretim için kalıcı olay akışını bağlamak ve uzun süreli çoklu istemci yük testinde yeniden bağlanma ile süreç yeniden başlatmayı ölçmek.",
       "last_reviewed": "2026-11-23",
       "evidence": [
         "evidence/runs/browser-multitask-and-restore-20261123.json",
+        "scripts/verification/probe_office_durability.py",
         "product/frontend/live-events.html",
         "handover/LIVE_FLOW_VERIFICATION_20261120.md"
       ],
-      "evidence_scope": "2026-11-23 gerçek tarayıcıda tenant-scoped 8 canlı SSE olayı tüketimi PASS.",
+      "evidence_scope": "2026-11-23 gerçek tarayıcıda 8 canlı SSE olayı tüketimi ve ayrı WSGI fixture denemesinde 999 yeniden bağlanmada 1199/1199 olay, imleç sıfırlama ve kaynak pencere kaybı sinyali PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
       "estimated_percent": 75,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
@@ -237,21 +248,23 @@
       "modules": [
         "MOD-012"
       ],
-      "status": "087 canlı PG şeması (FORCE RLS + SoD CHECK), Python servisi ve readback doğrulandı",
-      "ready": "TenantCatalogRegistry ve ProductMemoryPromotionPipeline (CANDIDATE->VERIFIED->PROMOTED, tenant izolasyonu ve görev ayrılığı) birim testleri, izole PG 18.6 readback ve 087_MOD012_MOD014_EXTENSIONS_CANDIDATE.sql (company.catalog_entries, company.memory_promotions) canlı PG 18.6 değerlendirme kümesinde (55490) doğrulandı.",
-      "missing": "HTTP/worker uçtan uca otomatik hafıza terfi akışı ve üretim yük testi açık.",
-      "next_step": "MOD-012 katalog/terfi API uçlarını panel ve worker döngüsüne doğrudan bağlamak.",
+      "status": "Canlı görev çıktısından otomatik hafıza adayı, SoD terfi API/UI ve 087 PG kalıcılığı doğrulandı",
+      "ready": "LiveMemoryAndBudgetCoordinator ile ACCEPTED görev çıktılarından otomatik CANDIDATE->VERIFIED hafıza adayı üretimi, görev ayrılığı (promoted_by != verified_by) zorunlu POST /api/memory-promotions, ofis Onaylar sekmesinde terfi/red butonları ve canlı PG 18.6 (55490) 087 company.memory_promotions FORCE RLS kalıcılığı doğrulandı.",
+      "missing": "EXP-01 rol kartı kaynakta mevcut. Üç sentetik görevde gerçek yerel model ile baz 1/3, pilot 2/3 kabul ölçütünü karşıladı. Pilot daha fazla token kullandı ve boş liste hatası ortak kaldı. Mevcut ofis bağlantısıyla salt okunur 087 katalog yetki sorgusu InsufficientPrivilege döndürdü. Canlı pilot kabulü ve katalog yük testi açık.",
+      "next_step": "Yetkili tenant kapsamlı 087 katalog servis bağlantısıyla pilotu görev girişinden doğrulamak. Boş liste regresyonunu çözen kısa rol kartını daha geniş görev kümesinde yeniden ölçmek.",
       "last_reviewed": "2026-11-23",
       "evidence": [
+        "evidence/runs/live-memory-budget-e2e-20261123.json",
+        "product/backend/company_os/catalog/live_lifecycle.py",
+        "tests/unit/test_live_memory_and_budget.py",
         "evidence/runs/migration-087-live-20261123.json",
-        "scripts/verification/verify_087_migration_pg.py",
-        "scripts/verification/verify_mod012_to_mod014_pg.py",
         "product/backend/company_os/catalog/memory_promotion.py",
-        "tests/unit/test_mod011_to_mod014.py"
+        "product/backend/company_os/runtime/live_task_runner.py",
+        "tests/unit/test_live_office_tasks.py"
       ],
-      "evidence_scope": "2026-11-23 birim testi + izole PG readback + 087 canlı PG 18.6 FORCE RLS ve SoD CHECK PASS.",
+      "evidence_scope": "2026-11-23 otomatik hafıza adayı + POST /api/memory-promotions SoD terfisi + canlı PG 18.6 087 company.memory_promotions readback (count=1) PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 50,
+      "estimated_percent": 70,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -263,11 +276,13 @@
       ],
       "status": "RESEARCH/SPREADSHEET/OBLIGATION otonom kuyruk, bağımsız doğrulayıcı ve 087 PG kalıcılığı PASS",
       "ready": "MultiWorkTypeQueueRunner + AutonomousWorkerDaemon ile RESEARCH, SPREADSHEET ve OBLIGATION iş türleri bağımsız validate_work_output doğrulayıcısına bağlandı; birim testleri (kabul+red) ve izole restore PG 18.6 üzerinde 087 company.work_template_validations kalıcılık readback'i PASS.",
-      "missing": "Gerçek dış araştırma/elektronik tablo aracı adaptörleriyle üretim yük testi açık.",
-      "next_step": "Gerçek dosya/web araç adaptörlerini MultiWorkTypeQueueRunner executor portlarına bağlamak.",
+      "missing": "Research için yetkili kaynak okuma ve Edge'de Broker makbuzu ile çıktı doğrulaması açık. Mevcut workspace.read yalnız ilk pilotun task_title.py dosyasına bağlı. Bu oturumda WSL erişimi engellendi ve güncellenen sentetik Edge testi Playwright başlangıcında zaman aşımına uğradı. Web ve Excel adaptörleri açık.",
+      "next_step": "Research için ayrı, sınırlı kaynak okuma yetkisini Kernel ve Broker üzerinden bağla. Yetkili çalışma ortamında Edge kartındaki sonucu aynı görevin kanonik makbuzu ve kaynak özetiyle doğrula.",
       "last_reviewed": "2026-11-23",
       "evidence": [
         "product/backend/company_os/workflows/queue_adapter.py",
+        "scripts/verification/check_office_task_browser.py",
+        "database/sources/057_R60_TOOL_NATIVE.sql",
         "scripts/verification/verify_backup_restore_and_queue_pg.py",
         "evidence/runs/browser-multitask-and-restore-20261123.json",
         "tests/unit/test_worker_daemon_and_087_api.py"
@@ -284,21 +299,21 @@
       "modules": [
         "MOD-014"
       ],
-      "status": "087 external_effect_ledger canlı PG şeması, sıfır olmayan rezervasyon ve UNKNOWN maliyet uzlaştırması PASS",
-      "ready": "0-minor rezervasyon canlıda, sıfır olmayan rezervasyon + UNKNOWN maliyet uzlaştırması + idempotent ExternalEffectLedger birim testi/izole PG readback'i ve 087 company.external_effect_ledger FORCE RLS tablosu canlı PG 18.6 (55490) üzerinde doğrulandı.",
-      "missing": "Gerçek dış ticari sağlayıcı (webhook/API) canlı mutabakatı açık.",
-      "next_step": "MOD-014 external_effect_ledger tablosunu gerçek dış sağlayıcı adaptörleriyle bağlamak.",
+      "status": "Canlı webhook/dış işlem, idempotent bütçe mutabakatı, UNKNOWN kilidi ve 087 PG kalıcılığı PASS",
+      "ready": "LiveMemoryAndBudgetCoordinator + POST /api/external-effects ile izinli host sınırlaması, sıfır olmayan bütçe rezervasyonu, idempotent webhook çağrısı (replayed=true, çift harcama yok), UNKNOWN maliyet kilidi (409 Conflict) + uzlaştırma, ofis Onaylar sekmesi bütçe özeti ve canlı PG 18.6 (55490) 087 company.external_effect_ledger kalıcılığı doğrulandı.",
+      "missing": "Üretim ticari dış API sağlayıcıları için onaylı izinli-host listesi ve uzun dönemli mutabakat yük testi açık.",
+      "next_step": "Onaylı dış sağlayıcı adaptörlerini üretim bütçe politikalarıyla bağlayıp uzun süreli mutabakat testi yapmak.",
       "last_reviewed": "2026-11-23",
       "evidence": [
+        "evidence/runs/live-memory-budget-e2e-20261123.json",
+        "product/backend/company_os/catalog/live_lifecycle.py",
+        "tests/unit/test_live_memory_and_budget.py",
         "evidence/runs/migration-087-live-20261123.json",
-        "scripts/verification/verify_087_migration_pg.py",
-        "scripts/verification/verify_mod012_to_mod014_pg.py",
-        "product/backend/company_os/budget/ledger.py",
-        "tests/unit/test_mod011_to_mod014.py"
+        "product/backend/company_os/budget/ledger.py"
       ],
-      "evidence_scope": "2026-11-23 birim testi + izole PG readback + 087 canlı PG 18.6 FORCE RLS PASS.",
+      "evidence_scope": "2026-11-23 gerçek loopback webhook + idempotent replay + bütçe mutabakatı (1000->950) + canlı PG 18.6 087 company.external_effect_ledger readback (count=1) PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 50,
+      "estimated_percent": 70,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },

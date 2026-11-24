@@ -16,11 +16,20 @@ class RecoveryRequired(RuntimeError):
 
 
 class Broker:
-    def __init__(self, *, binding, kernel, journal, executor):
+    def __init__(
+        self,
+        *,
+        binding,
+        kernel,
+        journal,
+        executor,
+        allowed_read_paths: frozenset[str] = frozenset({"task_title.py"}),
+    ):
         self.binding = binding.model_copy(deep=True)
         self.kernel = kernel
         self.journal = journal
         self.executor = executor
+        self.allowed_read_paths = frozenset(allowed_read_paths)
         self.sequence = 1
         self.halted = False
 
@@ -51,7 +60,7 @@ class Broker:
             return reply("DENIED", error="INDEPENDENT_VERIFIER_ROUTE_REQUIRED")
         if (
             request.call.tool_id == "workspace.read"
-            and request.call.arguments.relative_path != "task_title.py"
+            and request.call.arguments.relative_path not in self.allowed_read_paths
         ):
             self.halted = True
             return reply("DENIED", error="PILOT_PATH_OUT_OF_SCOPE")

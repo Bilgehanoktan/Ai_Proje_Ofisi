@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Phaser 2.5D Ofis — AI Proje Ofisi</title>
+  <link rel="stylesheet" href="/assets/tokens.css">
+  <style>
+    main { max-width: 64rem; margin: 0 auto; padding: 24px; }
+    .top-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+    .top-nav a { padding: 6px 10px; border-radius: 6px; color: var(--muted); text-decoration: none; }
+    .top-nav a[aria-current="page"], .top-nav a:hover { background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; }
+    #scene { max-width: 900px; overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: #1d2a34; }
+    #scene canvas { display: block; max-width: 100%; height: auto; }
+    #agents { padding-inline-start: 1.25rem; margin-top: 14px; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/preview"><b aria-hidden="true">⌘</b>AI Proje Ofisi</a>
+    <nav class="top-nav" aria-label="Ana gezinme">
+      <a href="/preview">Sanal ofis</a>
+      <a href="/preview/phaser" aria-current="page">Phaser 2.5D</a>
+      <a href="/live-events">Canlı olaylar</a>
+      <a href="/progress">İlerleme</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Tek kat Phaser 2.5D ofis</h1>
+    <p id="status" role="status">Phaser yükleniyor…</p>
+    <div id="scene" aria-hidden="true"></div>
+    <ul id="agents" aria-label="Canlı ajanlar"></ul>
+  </main>
+  <script src="/assets/vendor/phaser.min.js"></script>
+  <script type="module">
+    import { mountPhaserOffice } from '/office/modules/phaser-scene.js';
+    mountPhaserOffice({
+      containerEl: document.getElementById('scene'),
+      listEl: document.getElementById('agents'),
+      statusEl: document.getElementById('status'),
+    });
+  </script>
+</body>
+</html>

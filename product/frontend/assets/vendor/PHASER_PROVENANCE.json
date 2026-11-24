@@ -1,0 +1,9 @@
+{
+  "package": "phaser",
+  "version": "3.90.0",
+  "license": "MIT",
+  "source_url": "https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js",
+  "sha384": "AvQiDMZAVLda3VtAoU5MCfBz8pzXhteb2CiUJeKBmPlWzpXj1uJ96Km11+YuFNu/",
+  "sha256": "E92DDEF111BA42E92D316979C732311757093688EA1810591CB7AA2858EBA7A7",
+  "vendored_at": "2026-11-24"
+}

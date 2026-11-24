@@ -106,3 +106,27 @@ Kullanıcı talimatı: Codex ve Antigravity her yeni/değiştirilen kodda [ortak
 ### Temiz SQL deneyi
 
 Linux test hesabında `python3 -B scripts/verification/run_sql_fixture.py --synthetic-owner --probe scripts/verification/first_flow_bootstrap_readiness.sql` komutu geçici bir kümede başlangıç izinlerini kontrol eder. Diğer problar ve kapsamları `evidence/runs/sql-step1-20261120.md` içinde açıklanır.
+
+## Ofis arayuzu (2026-11-23)
+
+Ofis ekraninin yerlesimi ve stilleri [dashboard.html](product/frontend/office/scenes/dashboard.html) icinde. Sablon mevcut sahne ve operasyon betigiyle sunulur. Tasarim dayanagi [B v135 ilk kat tel kafesi](GUNCEL/dokumanlar/hedef-mimari-v1/kaynaklar/B_v135.md#L93386).
+
+## Canlı görev verme ve yerel Ollama ajan koşusu (2026-11-23)
+
+- [ollama_adapter.py](product/backend/company_os/engine/ollama_adapter.py): Loopback-only (`127.0.0.1`), ücretsiz yerel Ollama (`E:\ollama_local\bin\ollama.exe`, `qwen2.5-coder:3b`) istemcisi ve otomatik başlatıcı (otomatik paid fallback yok).
+- [live_task_runner.py](product/backend/company_os/runtime/live_task_runner.py): `LiveOfficeTaskRunner` + `AutonomousWorkerDaemon` + bağımsız `verify_office_task_output` doğrulayıcısı.
+- [app.py](product/backend/company_os/api/http/app.py) ve [start_office_local.py](scripts/operations/start_office_local.py) görev gönderimini, görev okumasını ve yerel SSE akışını sunar. `POST /api/office-tasks` loopback Origin kontrolü uygular. `Bearer` oturumu ile WSL Kernel üzerinden `Objective→Plan→Task` kaydı açılabilir.- Yerel SSE, kaynak olay kimliğini aynı sunucu süreci içinde tek bir imlece bağlar. 512 olaylık pencerenin dışındaki imleç veya gözlenen kaynak boşluğu `resync_required` üretir. Pencere süreç belleğinde tutulur. [Doğrulama betiği](scripts/verification/probe_office_durability.py) kayan pencere, yeniden bağlanma ve geç outbox commit senaryolarını sınar.- Doğrulama: [test_live_office_tasks.py](tests/unit/test_live_office_tasks.py) (306 birim testi PASS), `verify_layout.py` PASS ve [live-office-task-e2e-20261123.json](evidence/runs/live-office-task-e2e-20261123.json).
+
+## Ürün hafızası terfisi ve dış işlem/bütçe canlı döngüsü (2026-11-23)
+
+- [live_lifecycle.py](product/backend/company_os/catalog/live_lifecycle.py): `LiveMemoryAndBudgetCoordinator` — kabul edilen görevlerden otomatik `CANDIDATE→VERIFIED` hafıza adayı üretimi, görev ayrılığı (`promoted_by != verified_by`) ile `PROMOTED` terfisi, izinli-host kontrollü idempotent webhook/dış işlem çağrısı ve `BudgetAndEffectLedger` (`UNKNOWN` kilidi + uzlaştırma).
+- [app.py](product/backend/company_os/api/http/app.py), [start_office_local.py](scripts/operations/start_office_local.py), [dashboard.html](product/frontend/office/scenes/dashboard.html), [office-preview.js](product/frontend/office/engine/office-preview.js): `POST /api/memory-promotions`, `POST /api/external-effects`, ofis `Onaylar` sekmesinde canlı terfi/red butonları ve bütçe özeti, canlı PG 18.6 `087` `company.memory_promotions` ve `company.external_effect_ledger` FORCE RLS kalıcılığı.
+- Doğrulama: [test_live_memory_and_budget.py](tests/unit/test_live_memory_and_budget.py) ve [live-memory-budget-e2e-20261123.json](evidence/runs/live-memory-budget-e2e-20261123.json).
+
+## Kanonik AgentInstance ve görev denemesi bağı (2026-11-23)
+
+- [088_AGENT_INSTANCE_REGISTRY_CANDIDATE.sql](database/sources/088_AGENT_INSTANCE_REGISTRY_CANDIDATE.sql): `company.agent_instances` ve `company.agent_instance_assignments` (2 `FORCE RLS` tablosu, `(tenant_id, project_id)` bileşik FK, `RUNNING` iken `active_task_id`/`active_attempt_id` zorunlu CHECK, tekil aktif deneme indeksi); [assembly.json](database/assembly/assembly.json) 88. sıraya pinlendi ve canlı PG 18.6 (55490) üzerine uygulandı.
+- [agent_instances.py](product/backend/company_os/runtime/agent_instances.py): `AgentInstanceRegistry` — aynı rolde birden fazla ajan örneği, retry sırasında eski denemenin otomatik `SUPERSEDED`/`IDLE` yapılması, bayatlama (`STALE`) tespiti ve proje/tenant kapsamlı yetkili okuma (`GET /api/agent-instances`).
+- [office-preview.js](product/frontend/office/engine/office-preview.js): Ajanlar sekmesi, sahne hotspot seçimi ve Seçili Bağlam paneli gerçek `AgentInstance` kayıtlarına bağlandı; bağlantı kopunca aktif görev izlenimi temizlenir.
+- Doğrulama: [test_agent_instances.py](tests/unit/test_agent_instances.py) ve [live-agent-instances-e2e-20261123.json](evidence/runs/live-agent-instances-e2e-20261123.json).
+## EXP-01 katalog pilotu — 2026-11-23- Başlatıcıdaki `--engineer-pilot-service`, `087` kataloğunda yetkili bir PostgreSQL servis adı alır. Pilot `EXP-01` yazılım görevlerinde etkinleşir. Katalog kaydının tenant, rol, sürüm, etkinlik ve SHA-256 kontrolleri model çağrısından önce yapılır. Birim testi yanlış digest durumunda model çağrısının yapılmadığını doğrular.- Pilot koşusunun sonucu rol sürümünü ve digest bilgisini taşır. Canlı PostgreSQL ve normal görev girişinden pilot kabulü açık.- Sentetik A/B denemesinde gerçek `qwen2.5-coder:3b` ve test kataloğu kullanıldı. Baz koşu 191 giriş/206 çıkış, pilot yeniden denemesi 233 giriş/307 çıkış tokenı üretti. Pilot daha küçük bir fonksiyon önerdi, görev metnini tekrarladı ve testlerin çalıştırılmadığını açıkça belirtmedi. Tek görevde genel kalite artışı doğrulanmadı. İlk pilot çağrısı zaman aşımına uğradı.

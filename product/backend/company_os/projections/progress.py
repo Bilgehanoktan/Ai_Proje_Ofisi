@@ -136,8 +136,7 @@ def render_markdown():
         )
     lines += [
         "",
-        "İlk çalışan yazılım işi ara teslimdir; tam 16 modül/PH-00–PH-06 kapsamı korunur. "
-        "G0 OPEN; first13 0/13. Bu tablo yetki veya kabul üretmez.",
+        "İlk yazılım akışı ara teslimdir. Tam kapsam MOD-001–MOD-016 ve PH-00–PH-06 üzerinden izlenir.",
         "",
     ]
     return "\n".join(lines)

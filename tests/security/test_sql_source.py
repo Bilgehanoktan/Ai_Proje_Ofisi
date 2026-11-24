@@ -34,8 +34,8 @@ class SqlSourceTests(unittest.TestCase):
         manifest = json.loads((ROOT / 'database/assembly/assembly.json').read_text('utf-8'))
         self.assertIs(manifest['automatic_execution'], False)
         rows = manifest['order']
-        self.assertEqual(len(rows), 87)
-        self.assertEqual(len({r['path'] for r in rows}), 87)
+        self.assertEqual(len(rows), 88)
+        self.assertEqual(len({r['path'] for r in rows}), 88)
         for index, row in enumerate(rows, 1):
             with self.subTest(path=row['path']):
                 path = (ROOT / row['path']).resolve()

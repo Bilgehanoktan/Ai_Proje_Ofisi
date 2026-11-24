@@ -1,4 +1,4 @@
-"""Verify 001..086 + 087_MOD012_MOD014_EXTENSIONS_CANDIDATE.sql on a clean PostgreSQL 18.6 cluster."""
+"""Verify extensions 087 and 088 in the pinned assembly on disposable PostgreSQL."""
 
 from __future__ import annotations
 
@@ -35,6 +35,16 @@ BEGIN
         RAISE EXCEPTION 'Expected 4 FORCE RLS tables in 087, got %', v_rls_count;
     END IF;
 
+    SELECT count(*) INTO v_rls_count
+      FROM pg_class c
+      JOIN pg_namespace n ON n.oid = c.relnamespace
+     WHERE n.nspname = 'company'
+       AND c.relname IN ('agent_instances', 'agent_instance_assignments')
+       AND c.relrowsecurity AND c.relforcerowsecurity;
+    IF v_rls_count <> 2 THEN
+        RAISE EXCEPTION 'Expected 2 FORCE RLS tables in 088, got %', v_rls_count;
+    END IF;
+
     INSERT INTO company.tenants(id, name) VALUES (v_tenant, 'Eval 087');
 
     -- Separation-of-duties negative check: verified_by == promoted_by must fail.
@@ -61,6 +71,8 @@ END $chk087$;
 SELECT json_build_object(
     'migration_087_applied', true,
     'force_rls_tables', 4,
+    'migration_088_applied', true,
+    'agent_force_rls_tables', 2,
     'sod_check_enforced', true
 )::text;
 """

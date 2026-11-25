@@ -2,7 +2,7 @@
   "version": 1,
   "canonical_workspace": "E:\\Projeler\\Ai_Proje_Ofisi",
   "updated_at": "2026-11-25",
-  "summary": "23 Kasım 2026 kabul kaydına göre G0 insan onayı verildi ve MGT-TITLE-NORMALIZATION-01 ilk akışı 13/13 kabul edildi. 25 Kasım 2026 itibarıyla izole PostgreSQL 18.6 üzerinde 001–087 kalıcı kurulumu, 087 → 088 yükseltmesi + soğuk restart readback, zamanlanmış yedekten (basebackup-20261124T210001Z) restore + MOD-013 kuyruk kalıcılığı, iki ayrı tarayıcı oturumuyla 088 proje ayrımı (200 vs 403) ve canlı Ollama (qwen2.5-coder:3b) üzerinde EXP-01 baz/pilot rol kartı karşılaştırması (3/3 ACCEPTED) doğrulandı. Hedef üretim sunucusu kurulumu ve gerçek dış araç adaptörleri açık.",
+  "summary": "23 Kasım 2026 kabul kaydına göre G0 insan onayı verildi ve MGT-TITLE-NORMALIZATION-01 ilk akışı 13/13 kabul edildi. 25 Kasım 2026 itibarıyla izole PostgreSQL 18.6 üzerinde 001–087 kalıcı kurulumu, 087 → 088 yükseltmesi + soğuk restart readback, zamanlanmış yedekten (basebackup-20261124T210001Z) restore + MOD-013 kuyruk kalıcılığı, iki ayrı tarayıcı oturumuyla 088 proje ayrımı (200 vs 403), canlı Ollama (qwen2.5-coder:3b) üzerinde EXP-01 baz/pilot rol kartı karşılaştırması (3/3 ACCEPTED) ve GitHub Actions uzak Linux CI hattı (run 45694476289, conclusion: success) doğrulandı. Hedef uzak üretim sunucusu kurulumu ve onaylı dış HTTPS domain listesi açık.",
   "update_policy": "Her anlamlı geliştirmede ilgili satırı kanıtıyla güncelle. Tahmini oranı ölçülmüş sonuçtan ayır; değişmeyen alanı yeniden doğrulanmış sayma.",
   "areas": [
     {
@@ -131,19 +131,20 @@
         "MOD-002",
         "MOD-003"
       ],
-      "status": "MGT-01 uçtan uca akışı ve fail-closed AutonomousWorkerDaemon döngüsü doğrulandı",
-      "ready": "MGT-TITLE-NORMALIZATION-01 için tasks.ready, worker.claim, process.launch_reserve/consume, DeliveryGuard, LaunchActivation, PilotSession.run, ProcessReconciler, process.stop_release ve devre kesicili AutonomousWorkerDaemon (product/backend/company_os/runtime/worker_daemon.py) doğrulandı.",
-      "missing": "Üretim ortamında çoklu eşzamanlı worker ölçekleme ve uzun dönemli soak testi açık.",
-      "next_step": "Üretim ortamında systemd/supervisor altında AutonomousWorkerDaemon servisini başlatıp uzun süreli izleme yapmak.",
-      "last_reviewed": "2026-11-24",
+      "status": "MGT-01 uçtan uca akışı, fail-closed AutonomousWorkerDaemon döngüsü ve 4 eşzamanlı worker (480 görev) soak testi doğrulandı",
+      "ready": "MGT-TITLE-NORMALIZATION-01 için tasks.ready, worker.claim, process.launch_reserve/consume, DeliveryGuard, LaunchActivation, PilotSession.run, ProcessReconciler, process.stop_release, devre kesicili AutonomousWorkerDaemon (product/backend/company_os/runtime/worker_daemon.py) ve 4 eşzamanlı daemon worker ile 480 görevlik (120×4, 0 çift sahiplenme, 0 hata) çoklu worker soak testi (scripts/verification/probe_office_durability.py) doğrulandı.",
+      "missing": "Harici uzak üretim sunucusunda çoklu düğüm (multi-node) worker ölçekleme açık.",
+      "next_step": "Harici uzak üretim sunucusu devreye alındığında çoklu düğüm worker ölçeklemesini izlemek.",
+      "last_reviewed": "2026-11-25",
       "evidence": [
         "product/backend/company_os/runtime/worker_daemon.py",
+        "scripts/verification/probe_office_durability.py",
         "tests/unit/test_worker_daemon_and_087_api.py",
         "evidence/runs/mgt01-native-launcher-20261123.json",
         "handover/LIVE_FLOW_VERIFICATION_20261120.md",
         "evidence/runs/live-flow-20261120/mgt01-live-workflow-acceptance.json"
       ],
-      "evidence_scope": "2026-11-23 AutonomousWorkerDaemon kuyruk + devre kesici birim testleri ve native C launcher MGT-01 13/13 PASS.",
+      "evidence_scope": "2026-11-23 AutonomousWorkerDaemon kuyruk + devre kesici birim testleri ve native C launcher MGT-01 13/13 PASS; 2026-11-25 4 eşzamanlı daemon worker × 120 = 480 görev soak testi ve WSL aipof-worker-daemon.service aktif PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
       "estimated_percent": 80,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
@@ -229,18 +230,19 @@
       "modules": [
         "MOD-010"
       ],
-      "status": "Outbox/audit, restart readback ve çoklu görev canlı SSE tarayıcı akışı doğrulandı",
-      "ready": "ObjectiveCreated/PlanCreated/TaskCreated outbox olayları, restart sonrası 6 /api/details readback ve AutonomousWorkerDaemon'dan üretilen 8 çoklu görev/bütçe/hafıza SSE olayının (/api/events) gerçek tarayıcıda tüketimi doğrulandı.",
-      "missing": "Yerel yeniden oynatma penceresi süreç belleğinde tutuluyor. Üretim için kalıcı akış ve uzun süreli ağ üzerinden çoklu istemci yük testi açık.",
-      "next_step": "Üretim için kalıcı olay akışını bağlamak ve uzun süreli çoklu istemci yük testinde yeniden bağlanma ile süreç yeniden başlatmayı ölçmek.",
-      "last_reviewed": "2026-11-24",
+      "status": "Outbox/audit, restart readback, disk jurnalinden (JSONL) soğuk restart SSE kurtarma ve 8 istemcili soak akışı doğrulandı",
+      "ready": "ObjectiveCreated/PlanCreated/TaskCreated outbox olayları, restart sonrası 6 /api/details readback, AutonomousWorkerDaemon'dan üretilen 8 çoklu görev/bütçe/hafıza SSE olayının (/api/events) gerçek tarayıcıda tüketimi ve OfficeEventReplay disk jurnali (journal_path) üzerinden sunucu yeniden başlatması sonrası 8 eşzamanlı SSE istemcisiyle 480 olayın Last-Event-ID ile kayıpsız/çiftsiz yeniden oynatılması doğrulandı.",
+      "missing": "Harici uzak üretim sunucusunda ağ üzerinden uzun dönemli dış istemci yük testi açık.",
+      "next_step": "Harici uzak üretim sunucusu devreye alındığında ağ üzerinden çoklu istemci yeniden bağlanma metriklerini izlemek.",
+      "last_reviewed": "2026-11-25",
       "evidence": [
         "evidence/runs/browser-multitask-and-restore-20261123.json",
         "scripts/verification/probe_office_durability.py",
+        "product/backend/company_os/projections/sse_stream.py",
         "product/frontend/live-events.html",
         "handover/LIVE_FLOW_VERIFICATION_20261120.md"
       ],
-      "evidence_scope": "2026-11-23 gerçek tarayıcıda 8 canlı SSE olayı tüketimi ve ayrı WSGI fixture denemesinde 999 yeniden bağlanmada 1199/1199 olay, imleç sıfırlama ve kaynak pencere kaybı sinyali PASS.",
+      "evidence_scope": "2026-11-23 gerçek tarayıcıda 8 canlı SSE olayı tüketimi ve 999 yeniden bağlanmada 1199/1199 olay PASS; 2026-11-25 kalıcı JSONL disk jurnalinden soğuk restart sonrası 8 eşzamanlı SSE istemcisiyle 480/480 olay Last-Event-ID kurtarma soak testi PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
       "estimated_percent": 85,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
@@ -356,11 +358,11 @@
       "modules": [
         "MOD-016"
       ],
-      "status": "Birim/layout + 087 API/store + otonom daemon + native C MGT-01 + CI iş akışı PASS",
-      "ready": "run.py verify + verify_layout.py PASS; 087 temiz/canlı PG 18.6 + Extensions087Store + /api/catalog, /api/memory-promotions, /api/external-effects PASS; AutonomousWorkerDaemon PASS; R65NativeLauncher + r65_spawn_linux.c delegated cgroup v2 MGT-01 13/13 PASS; GitHub Actions CI (.github/workflows/ci.yml) eklendi.",
-      "missing": "Uzak GitHub runner üzerinde ilk CI koşusu ve uzun süreli yük/soak testleri açık.",
-      "next_step": "Değişiklikleri uzak depoya gönderip .github/workflows/ci.yml hattının Linux runner üzerinde yeşil geçtiğini teyit etmek.",
-      "last_reviewed": "2026-11-24",
+      "status": "Birim/layout + 087 API/store + otonom daemon + native C MGT-01 + uzak GitHub Actions Linux CI (run 45694476289) PASS",
+      "ready": "run.py verify + verify_layout.py PASS; 087 temiz/canlı PG 18.6 + Extensions087Store + /api/catalog, /api/memory-promotions, /api/external-effects PASS; AutonomousWorkerDaemon PASS; R65NativeLauncher + r65_spawn_linux.c delegated cgroup v2 MGT-01 13/13 PASS; GitHub Actions CI (.github/workflows/ci.yml) uzak ubuntu-latest Python 3.14 runner üzerinde (run 45694476289, job 139488164033, commit f8bb1b75cf507f742b972b207499d12601b55ec3) tüm 11 adımda yeşil (conclusion: success) geçti.",
+      "missing": "Hedef uzak üretim sunucusunda uzun süreli yük/soak testleri açık.",
+      "next_step": "Hedef uzak üretim sunucusu devreye alındığında uzun süreli çoklu worker soak testini çalıştırmak.",
+      "last_reviewed": "2026-11-25",
       "evidence": [
         ".github/workflows/ci.yml",
         "tests/unit/test_worker_daemon_and_087_api.py",
@@ -369,7 +371,7 @@
         "evidence/runs/mgt01-native-launcher-20261123.json",
         "BAKIM_VE_DEGISIKLIK_REHBERI.md"
       ],
-      "evidence_scope": "2026-11-23 Windows/Linux birim+layout, 087 canlı PG/API, AutonomousWorkerDaemon, native C launcher MGT-01 13/13 ve CI iş akışı hazır.",
+      "evidence_scope": "2026-11-25 Windows/Linux birim+layout (328/328), 087 canlı PG/API, AutonomousWorkerDaemon, native C launcher MGT-01 13/13 ve uzak GitHub Actions Linux CI (run 45694476289, ubuntu-latest, Python 3.14, conclusion: success) PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
       "estimated_percent": 90,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",

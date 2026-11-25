@@ -1,8 +1,8 @@
 # AI Proje Ofisi — Üretim İşletim ve Operasyon Rehberi
 
 - Canonical workspace: `E:\Projeler\Ai_Proje_Ofisi`
-- Son güncelleme: 2026-11-23
-- Kapsam: PostgreSQL 18.6 (`001..087`), `OWNER_AUTH` anahtar/oturum rotasyonu, `r65_spawn_linux.c` cgroup v2 delegasyonu, `AutonomousWorkerDaemon` ve yedek/kurtarma.
+- Son güncelleme: 2026-11-25
+- Kapsam: PostgreSQL 18.6 (`001..088`), en az yetkili servis rolleri (`aipof_owner_auth`, `aipof_http_kernel`, `aipof_catalog_087`, `aipof_research_readback`), `OWNER_AUTH` anahtar/oturum rotasyonu, `r65_spawn_linux.c` cgroup v2 delegasyonu, `AutonomousWorkerDaemon` ve yedek/kurtarma.
 
 ## 1. Veritabanı Kurulumu ve Migration Sırası (`001..087`)
 - Resmî sıralama ve SHA256 pinleri: `database/assembly/assembly.json`.
@@ -48,9 +48,9 @@
   - `GET /api/memory-promotions?tenant_id=<uuid>`
   - `GET /api/external-effects?tenant_id=<uuid>`
 
-## 001–088 geçici PostgreSQL kontrolü
+## 001–088 Kalıcı PostgreSQL Kurulumu ve Yükseltme Provası
 
-24 Kasım 2026 koşusunda `scripts/verification/verify_087_migration_pg.py` pinli 001–088 assembly sırasını geçici Linux PostgreSQL kümesinde rollback ile uyguladı. 087 için dört, 088 için iki FORCE RLS tablosu ve 087 görev ayrılığı kısıtı doğrulandı. Kalıcı temiz kurulum ve 087 → 088 yükseltme provası açık.
+25 Kasım 2026 koşusunda `scripts/verification/verify_087_migration_pg.py` pinli `001–088` assembly sırasını hem geçici rollback kontrolünde hem de kalıcı `001–087` `COMMIT` + `087 → 088` yükseltme `COMMIT` + PostgreSQL soğuk restart sonrası readback kontrolünde doğruladı (`rls_087=4`, `rls_088_after=2`, `disabled_user_triggers=0`, `10 tenant × 20 = 200` çoklu tenant katalog yük testi PASS). En az yetkili `aipof_catalog_087` ve `aipof_research_readback` servis rolleri `pg_ident.conf` (`aipof_local`) ve `pg_service.conf` üzerinde etkinleştirildi.
 
 ## 6. Üretim Systemd Birimleri ve Kalıcı SSE Replay
 - Worker servisi: `ops/systemd/aipof-worker.service` (`/etc/systemd/system/` altına kopyalayıp `systemctl enable --now aipof-worker.service`).

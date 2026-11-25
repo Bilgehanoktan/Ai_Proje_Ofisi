@@ -303,6 +303,20 @@ class MultiWorkTypeQueueRunnerTests(unittest.TestCase):
         self.assertFalse(confirm_receipt(lambda: _FakeConn([(True,)]), {**scope, "read_path": ""}, rec_id))
         self.assertFalse(confirm_receipt(lambda: _FakeConn([(True,)]), scope, "not-a-uuid"))
 
+    def test_multi_worker_and_persistent_sse_soak(self):
+        from scripts.verification.probe_office_durability import (
+            run_multi_worker_and_persistent_sse_soak,
+        )
+
+        result = run_multi_worker_and_persistent_sse_soak()
+        self.assertTrue(result["passed"])
+        self.assertEqual(result["workers"], 4)
+        self.assertEqual(result["total_tasks"], 480)
+        self.assertEqual(result["unique_claimed"], 480)
+        self.assertEqual(result["accepted"], 480)
+        self.assertEqual(result["errors"], 0)
+        self.assertTrue(result["journal_restart_recovery_passed"])
+
 
 if __name__ == "__main__":
     unittest.main()

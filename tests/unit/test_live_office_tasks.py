@@ -461,6 +461,9 @@ class OfficeTasksWsgiTests(unittest.TestCase):
 
                     yield _Tx()
 
+                def finalize_patch(self, transaction) -> None:
+                    return None
+
             class _SyntheticReadExecutor:
                 def execute(self, call, *, transaction):
                     raw = (Path(tmpdir) / call.arguments.relative_path).read_bytes()
@@ -626,34 +629,128 @@ class OfficeTasksWsgiTests(unittest.TestCase):
             self.assertEqual(str(ctx.exception), "OBLIGATION_SOURCE_OUT_OF_SCOPE")
 
     def test_multi_file_patch_regression_enforces_scope_and_atomicity(self) -> None:
+        from contextlib import contextmanager
+        from uuid import uuid4
+        from company_os.broker.tool_broker import Broker
+        from packages.contracts.execution import EngineBinding, ToolRequest
+
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()
             (root / "a.py").write_text("x = 1\n", encoding="utf-8")
             (root / "b.py").write_text("y = 2\n", encoding="utf-8")
             allowed = frozenset({"a.py", "b.py"})
 
-            def apply_multi_file_patch(patches: list[tuple[str, str]]) -> dict[str, str]:
-                resolved_targets: list[tuple[str, Path, str]] = []
-                for rel_path, new_content in patches:
+            class _InMemoryJournal:
+                def __init__(self) -> None:
+                    self.reserved: dict[str, dict] = {}
+
+                def reserve(self, key: str, payload: dict) -> None:
+                    self.reserved[key] = payload
+
+            class _InMemoryKernel:
+                def __init__(self) -> None:
+                    self.receipts: list[str] = []
+
+                def consume(self, request, *, frame_digest: str, frame: bytes) -> dict:
+                    return {
+                        "effect_permitted": True,
+                        "frame_digest": frame_digest,
+                        "consume_id": str(uuid4()),
+                    }
+
+                @contextmanager
+                def effect_scope(self, consume_id, request, *, frame_digest: str):
+                    receipt_id = str(uuid4())
+                    self.receipts.append(receipt_id)
+
+                    class _Tx:
+                        def complete(self_tx, c_id, result):
+                            return {
+                                "status": "SUCCEEDED",
+                                "consume_id": str(c_id),
+                                "frame_digest": frame_digest,
+                                "receipt_id": receipt_id,
+                                "artifact_ids": [],
+                            }
+
+                    yield _Tx()
+
+                def finalize_patch(self, transaction) -> None:
+                    return None
+
+            artifact_store: dict[str, tuple[str, str, str]] = {}
+
+            class _ScopedPatchExecutor:
+                def execute(self, call, *, transaction):
+                    rel_path, new_content, expected_sha = artifact_store[str(call.patch_artifact_id)]
                     norm = rel_path.replace("\\", "/").lstrip("/")
                     if norm not in allowed:
                         raise PermissionError(f"PATCH_SCOPE_DENIED:{norm}")
                     target = (root / norm).resolve()
                     if root not in target.parents:
                         raise ValueError(f"PATCH_PATH_ESCAPE:{norm}")
-                    resolved_targets.append((norm, target, new_content))
-                digests: dict[str, str] = {}
-                for norm, target, new_content in resolved_targets:
+                    if hashlib.sha256(target.read_bytes()).hexdigest() != call.expected_source_digest:
+                        raise ValueError("BASE_SHA256_MISMATCH")
+                    digest = hashlib.sha256(new_content.encode("utf-8")).hexdigest()
+                    if digest != expected_sha:
+                        raise ValueError("PATCH_SHA256_MISMATCH")
                     target.write_text(new_content, encoding="utf-8")
-                    digests[norm] = hashlib.sha256(new_content.encode("utf-8")).hexdigest()
-                return digests
+                    return {"kind": "PATCH", "relative_path": norm, "sha256": digest}
 
-            result = apply_multi_file_patch([("a.py", "x = 10\n"), ("b.py", "y = 20\n")])
-            self.assertEqual(len(result), 2)
+            binding_obj = EngineBinding(
+                engine_session_id=uuid4(),
+                attempt_id=uuid4(),
+                fencing_epoch=1,
+                revision=1,
+                tool_manifest_digest="a" * 64,
+            )
+            kernel = _InMemoryKernel()
+            broker = Broker(
+                kernel=kernel,
+                journal=_InMemoryJournal(),
+                executor=_ScopedPatchExecutor(),
+                binding=binding_obj,
+                allowed_read_paths=allowed,
+            )
+
+            def broker_patch_multi(patches: list[tuple[str, str]]) -> list[str]:
+                for rel_path, _ in patches:
+                    norm = rel_path.replace("\\", "/").lstrip("/")
+                    if norm not in allowed:
+                        raise PermissionError(f"PATCH_SCOPE_DENIED:{norm}")
+                receipt_ids: list[str] = []
+                for rel_path, new_content in patches:
+                    art_id = str(uuid4())
+                    sha = hashlib.sha256(new_content.encode("utf-8")).hexdigest()
+                    artifact_store[art_id] = (rel_path, new_content, sha)
+                    req = ToolRequest.model_validate(
+                        {
+                            "protocol": "company-tool/1",
+                            "request_id": str(uuid4()),
+                            "engine_session_id": str(binding_obj.engine_session_id),
+                            "attempt_id": str(binding_obj.attempt_id),
+                            "fencing_epoch": binding_obj.fencing_epoch,
+                            "expected_revision": binding_obj.revision,
+                            "sequence": broker.sequence,
+                            "tool_manifest_digest": binding_obj.tool_manifest_digest,
+                            "call": {
+                                "tool_id": "patch.apply",
+                                "patch_artifact_id": art_id,
+                                "expected_source_digest": hashlib.sha256((root / rel_path).read_bytes()).hexdigest(),
+                            },
+                        }
+                    )
+                    reply = broker.handle((req.model_dump_json() + "\n").encode("utf-8"), channel="BOUND_ENGINE_STDOUT")
+                    self.assertEqual(reply.status, "OK")
+                    receipt_ids.append(str(reply.receipt_id))
+                return receipt_ids
+
+            receipts = broker_patch_multi([("a.py", "x = 10\n"), ("b.py", "y = 20\n")])
+            self.assertEqual(len(receipts), 2)
             self.assertEqual((root / "a.py").read_text(encoding="utf-8"), "x = 10\n")
             self.assertEqual((root / "b.py").read_text(encoding="utf-8"), "y = 20\n")
             with self.assertRaises(PermissionError):
-                apply_multi_file_patch([("a.py", "x = 99\n"), ("../outside.py", "bad\n")])
+                broker_patch_multi([("a.py", "x = 99\n"), ("../outside.py", "bad\n")])
             self.assertEqual((root / "a.py").read_text(encoding="utf-8"), "x = 10\n")
 
 

@@ -153,11 +153,30 @@ def main() -> None:
     def sql(socket: Path, query: str) -> str:
         return run("psql", "-X", "-h", socket, "-d", "postgres", "-Atq", "-v", "ON_ERROR_STOP=1", "-f", "-", query=query)
 
-    # 1. Disposable rollback-only 001..088 assembly check
+    # 1. Disposable rollback-only 001..088 assembly check (including clock policy, epoch, samples, grants & workspace head)
+    clock_policy_sql = (ROOT / "scripts/verification/clock_policy_activation_probe.sql").read_text("utf-8")
+    clock_epoch_lines = [
+        ln
+        for ln in (ROOT / "scripts/verification/clock_epoch_sample_probe.sql").read_text("utf-8").splitlines()
+        if not ln.strip().startswith(r"\i ")
+    ]
+    ws_head_lines = [
+        ln
+        for ln in (ROOT / "scripts/verification/workspace_head_native_probe.sql").read_text("utf-8").splitlines()
+        if not ln.strip().startswith(r"\i ")
+    ]
+    combined_probe_sql = "\n".join(
+        [
+            clock_policy_sql,
+            "\n".join(clock_epoch_lines),
+            "\n".join(ws_head_lines),
+            CHECK_087_SQL,
+        ]
+    )
     with tempfile.TemporaryDirectory(prefix="aipof-087-") as tmpdir:
         work = Path(tmpdir)
         probe_file = work / "check_087.sql"
-        probe_file.write_text(CHECK_087_SQL, encoding="utf-8")
+        probe_file.write_text(combined_probe_sql, encoding="utf-8")
         full_sql = fixture_sql(probe_file, True)
         data, sock = work / "data", work / "sock"
         run("initdb", "-D", data, "--auth=peer", "--locale=C", "--encoding=UTF8")
@@ -165,6 +184,13 @@ def main() -> None:
             wait_for_native_clock(lambda q: sql(sock, q))
             out = sql(sock, full_sql)
 
+    for marker in (
+        "CLOCK_POLICY_ACTIVATION_AND_REPLAY_PASS",
+        "CLOCK_EPOCH_FIRST_SAMPLE_AND_CURRENT_BOUNDS_PASS",
+        "NATIVE_WORKSPACE_HEAD_AND_RECEIPT_PASS",
+    ):
+        if marker not in out:
+            raise RuntimeError(f"Missing clean 001..088 chain marker {marker}: {out}")
     lines = [ln for ln in out.splitlines() if ln.strip().startswith("{")]
     result = json.loads(lines[-1])
 
@@ -334,6 +360,7 @@ def main() -> None:
     result["persistent_upgrade_087_to_088"] = True
     result["cold_restart_readback"] = post_restart
     result["catalog_087_multitenant_load_200"] = True
+    result["clean_001_088_clock_and_workspace_grants"] = True
     print(json.dumps(result))
 
 

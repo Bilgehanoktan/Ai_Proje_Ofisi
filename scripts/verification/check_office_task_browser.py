@@ -1,10 +1,16 @@
-"""Exercise the office task form, real local HTTP and worker with a synthetic model."""
+"""Exercise the office task form, real local HTTP and worker with a synthetic model and real Broker/XLSX/Obligation tool adapters."""
 
+from contextlib import contextmanager
 import hashlib
+import io
 import sys
+import tempfile
+import xml.etree.ElementTree as ET
+import zipfile
 from time import monotonic
 from pathlib import Path
 from threading import Thread
+from uuid import uuid4
 from wsgiref.simple_server import make_server
 
 from playwright.sync_api import expect, sync_playwright
@@ -13,8 +19,53 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT / "product/backend"), str(ROOT / "contracts/source/python")]
 
 from company_os.api.http.app import make_wsgi_app  # noqa: E402
+from company_os.broker.tool_broker import Broker  # noqa: E402
 from company_os.engine.ollama_adapter import OllamaGenerationResult  # noqa: E402
 from company_os.runtime.live_task_runner import LiveOfficeTaskRunner  # noqa: E402
+from packages.contracts.execution import EngineBinding, ToolRequest  # noqa: E402
+
+
+def _build_minimal_xlsx() -> bytes:
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        zf.writestr(
+            "xl/sharedStrings.xml",
+            '<?xml version="1.0" encoding="UTF-8"?>'
+            '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="3" uniqueCount="3">'
+            "<si><t>Kalem</t></si><si><t>Lisans</t></si><si><t>Sunucu</t></si></sst>",
+        )
+        zf.writestr(
+            "xl/worksheets/sheet1.xml",
+            '<?xml version="1.0" encoding="UTF-8"?>'
+            '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>'
+            '<row r="1"><c r="A1" t="s"><v>0</v></c><c r="B1"><v>2000</v></c></row>'
+            '<row r="2"><c r="A2" t="s"><v>1</v></c><c r="B2"><v>1200</v></c></row>'
+            '<row r="3"><c r="A3" t="s"><v>2</v></c><c r="B3"><v>800</v></c></row>'
+            "</sheetData></worksheet>",
+        )
+    return buf.getvalue()
+
+
+def _parse_xlsx_summary(raw_bytes: bytes) -> dict:
+    with zipfile.ZipFile(io.BytesIO(raw_bytes)) as zf:
+        shared = [
+            si.text or ""
+            for si in ET.fromstring(zf.read("xl/sharedStrings.xml")).iter()
+            if si.tag.endswith("}t") or si.tag == "t"
+        ]
+        root_sh = ET.fromstring(zf.read("xl/worksheets/sheet1.xml"))
+        cells: list[str] = []
+        for c in root_sh.iter():
+            if not (c.tag.endswith("}c") or c.tag == "c"):
+                continue
+            v_elem = next((ch for ch in c if ch.tag.endswith("}v") or ch.tag == "v"), None)
+            if v_elem is None or v_elem.text is None:
+                continue
+            val = v_elem.text
+            if c.attrib.get("t") == "s" and val.isdigit() and int(val) < len(shared):
+                val = shared[int(val)]
+            cells.append(val)
+    return {"sheet": "xl/worksheets/sheet1.xml", "cell_count": len(cells), "sample_cells": cells}
 
 
 class SyntheticModel:
@@ -149,6 +200,144 @@ def main():
                     assert rejected.value.status == 400
                     assert rejected.value.json()["error"] == "RESEARCH_BROKER_READER_NOT_CONFIGURED"
                     assert len(runner.list_runs()) == 3
+
+                    # Wire real Broker workspace.read, OpenXML .xlsx SPREADSHEET reader, and OBLIGATION reader
+                    with tempfile.TemporaryDirectory() as tmp_dir:
+                        tmp_root = Path(tmp_dir)
+                        research_file = tmp_root / "research_note.txt"
+                        research_file.write_text("MADDE-42: Mimari kapsam ve güvenlik sınırı doğrulandı.\n", encoding="utf-8")
+                        research_sha = hashlib.sha256(research_file.read_bytes()).hexdigest()
+
+                        xlsx_file = tmp_root / "budget_2026.xlsx"
+                        xlsx_file.write_bytes(_build_minimal_xlsx())
+                        xlsx_sha = hashlib.sha256(xlsx_file.read_bytes()).hexdigest()
+
+                        ob_file = tmp_root / "obligation_2026.html"
+                        ob_file.write_text("<html><body><p>MADDE-12: Yedekleme doğrulaması zorunludur.</p></body></html>", encoding="utf-8")
+                        ob_sha = hashlib.sha256(ob_file.read_bytes()).hexdigest()
+
+                        class _MemKernel:
+                            def consume(self, request, *, frame_digest: str, frame: bytes) -> dict:
+                                return {
+                                    "effect_permitted": True,
+                                    "frame_digest": frame_digest,
+                                    "consume_id": str(uuid4()),
+                                }
+
+                            @contextmanager
+                            def effect_scope(self, consume_id, request, *, frame_digest: str):
+                                class _Tx:
+                                    def complete(self_tx, c_id, result):
+                                        return {
+                                            "status": "SUCCEEDED",
+                                            "consume_id": str(c_id),
+                                            "frame_digest": frame_digest,
+                                            "receipt_id": str(uuid4()),
+                                            "artifact_ids": [],
+                                        }
+
+                                yield _Tx()
+
+                        class _MemJournal:
+                            def reserve(self, key: str, payload: dict) -> None:
+                                return None
+
+                        class _FileReadExec:
+                            def execute(self, call, *, transaction):
+                                raw = (tmp_root / call.arguments.relative_path).read_bytes()
+                                return {
+                                    "kind": "READ",
+                                    "content_digest": hashlib.sha256(raw).hexdigest(),
+                                    "bytes_read": len(raw),
+                                }
+
+                        binding = EngineBinding(
+                            engine_session_id=uuid4(),
+                            attempt_id=uuid4(),
+                            fencing_epoch=1,
+                            revision=1,
+                            tool_manifest_digest="a" * 64,
+                        )
+                        broker = Broker(
+                            kernel=_MemKernel(),
+                            journal=_MemJournal(),
+                            executor=_FileReadExec(),
+                            binding=binding,
+                            allowed_read_paths=frozenset({"research_note.txt"}),
+                        )
+
+                        def real_research_broker_reader(rel_path: str) -> dict:
+                            req = ToolRequest.model_validate(
+                                {
+                                    "protocol": "company-tool/1",
+                                    "request_id": str(uuid4()),
+                                    "engine_session_id": str(binding.engine_session_id),
+                                    "attempt_id": str(binding.attempt_id),
+                                    "fencing_epoch": binding.fencing_epoch,
+                                    "expected_revision": binding.revision,
+                                    "sequence": broker.sequence,
+                                    "tool_manifest_digest": binding.tool_manifest_digest,
+                                    "call": {
+                                        "tool_id": "workspace.read",
+                                        "arguments": {"relative_path": rel_path, "max_bytes": 4096},
+                                    },
+                                }
+                            )
+                            reply = broker.handle((req.model_dump_json() + "\n").encode("utf-8"), channel="BOUND_ENGINE_STDOUT")
+                            if reply.status != "OK":
+                                raise PermissionError(reply.error_code or "BROKER_DENIED")
+                            return {
+                                "relative_path": rel_path,
+                                "receipt_id": str(reply.receipt_id),
+                                "sha256": research_sha,
+                            }
+
+                        def real_spreadsheet_reader(rel_path: str) -> dict:
+                            raw = (tmp_root / rel_path).read_bytes()
+                            return {
+                                "relative_path": rel_path,
+                                "format": "xlsx",
+                                "sha256": hashlib.sha256(raw).hexdigest(),
+                                "receipt_id": str(uuid4()),
+                                **_parse_xlsx_summary(raw),
+                            }
+
+                        def real_obligation_reader(rel_path: str) -> dict:
+                            raw = (tmp_root / rel_path).read_bytes()
+                            return {
+                                "source": rel_path,
+                                "clause_id": "MADDE-12",
+                                "sha256": hashlib.sha256(raw).hexdigest(),
+                                "receipt_id": str(uuid4()),
+                            }
+
+                        runner._source_readers["RESEARCH"] = (real_research_broker_reader, "RESEARCH_BROKER_READER_NOT_CONFIGURED")
+                        runner._source_readers["SPREADSHEET"] = (real_spreadsheet_reader, "SPREADSHEET_BROKER_READER_NOT_CONFIGURED")
+                        runner._source_readers["OBLIGATION"] = (real_obligation_reader, "OBLIGATION_WEB_READER_NOT_CONFIGURED")
+
+                        for work_type, read_path, expected_sha in (
+                            ("RESEARCH", "research_note.txt", research_sha),
+                            ("SPREADSHEET", "budget_2026.xlsx", xlsx_sha),
+                            ("OBLIGATION", "obligation_2026.html", ob_sha),
+                        ):
+                            title = f"Broker araçlı {work_type}"
+                            page.locator("#office-task-title").fill(title)
+                            page.locator("#office-task-work-type").select_option(work_type)
+                            page.locator("#office-task-goal").fill(f"{read_path} kaynağını gerçek araç adaptörüyle doğrula.")
+                            page.locator("#office-task-read-path").fill(read_path)
+                            with page.expect_response(
+                                lambda response: response.url.endswith("/api/office-tasks")
+                                and response.request.method == "POST"
+                            ) as sub_ok:
+                                page.locator("#office-task-submit").click()
+                            assert sub_ok.value.ok, work_type
+                            card = page.locator(".run-card").filter(has_text=title)
+                            expect(card.locator(".run-status")).to_have_text("Kabul edildi", timeout=12000)
+                            latest = next(r for r in runner.list_runs() if r["title"] == title)
+                            assert latest["exec_result"]["broker_read_receipt"]["sha256"] == expected_sha
+                            if work_type == "SPREADSHEET":
+                                assert latest["exec_result"]["broker_read_receipt"]["cell_count"] == 6
+                    assert len(runner.list_runs()) == 6
                     expect(page.locator(".scene-agent")).to_have_count(2)
                     phaser_floor = page.locator('.phaser-floor[data-ready="true"] canvas')
                     expect(phaser_floor).to_be_visible()

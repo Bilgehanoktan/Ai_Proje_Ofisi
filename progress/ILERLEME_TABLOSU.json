@@ -11,10 +11,10 @@
       "modules": [
         "MOD-011"
       ],
-      "status": "Ana sahnede oda başına dört karakter, Ajanlar sekmesinde tüm kayıtlar görünür. Avatar ve panel, eşleşen görev denemesinin yürütme süresi dolunca STALE gösterir. Süre dolumu ve yeniden bağlantı Edge testinde sentetik kayıtla doğrulandı. PostgreSQL sorgusunda beş ajan vardı, çalışan ajan yoktu.",
-      "ready": "Panel persistence, 6 /api/details restart readback, /live-events canlı SSE ekranı, 'Yeni görev ver' formu (POST /api/office-tasks), Onaylar sekmesinde hafıza terfisi & bütçe, Ajanlar sekmesinde ve sahnede gerçek PostgreSQL 18.6 company.agent_instances (088 FORCE RLS) seçimi, güvenli statik asset servisi (/assets/*, /office/modules/*), modüler ES Modules (api-client, sse-client, office-canvas, panels, agent-detail, phaser-scene, main), /progress & /api/progress, ve harici CDN'siz yerel Phaser 3.90.0 doğrulandı.",
-      "missing": "Edge otomasyonunda RESEARCH, SPREADSHEET ve OBLIGATION formdan gerçek HTTP ve worker üzerinden sonuç kartına ulaştı. Test sentetik model kullandı. Canlı ajan geçişi, Broker araçları ve çok kullanıcılı oturum doğrulaması açık.",
-      "next_step": "MOD-013 için gerçek dosya/web/Excel araçlarını Broker üzerinden bağlamak ve Edge otomasyonunu gerçek araç çıktısı ile genişletmek. SOURCE_TO_TARGET.json ve SOURCE_MANIFEST.json pinlerini yeni/değişen frontend dosyaları için gözden geçirmek.",
+      "status": "Ana sahnede oda başına dört karakter, Ajanlar sekmesinde tüm kayıtlar görünür. Avatar ve panel, eşleşen görev denemesinin yürütme süresi dolunca STALE gösterir. Edge otomasyonunda RESEARCH, SPREADSHEET (.xlsx) ve OBLIGATION gerçek Broker/araç adaptörü makbuzlarıyla doğrulandı.",
+      "ready": "Panel persistence, 6 /api/details restart readback, /live-events canlı SSE ekranı, 'Yeni görev ver' formu (POST /api/office-tasks), Onaylar sekmesinde hafıza terfisi & bütçe, Ajanlar sekmesinde ve sahnede gerçek PostgreSQL 18.6 company.agent_instances (088 FORCE RLS) seçimi, güvenli statik asset servisi (/assets/*, /office/modules/*), modüler ES Modules (api-client, sse-client, office-canvas, panels, agent-detail, phaser-scene, main), /progress & /api/progress, harici CDN'siz yerel Phaser 3.90.0 ve Edge otomasyonunda (check_office_task_browser.py) gerçek Broker workspace.read / OpenXML .xlsx / OBLIGATION araç adaptörü makbuz doğrulaması tamamlandı.",
+      "missing": "Harici uzak üretim sunucusunda çok kullanıcılı dış ağ oturum doğrulaması açık.",
+      "next_step": "Harici uzak üretim sunucusu devreye alındığında çok kullanıcılı dış ağ oturumlarını izlemek.",
       "last_reviewed": "2026-11-25",
       "evidence": [
         "scripts/verification/check_office_task_browser.py",
@@ -42,12 +42,13 @@
         "MOD-001",
         "MOD-002"
       ],
-      "status": "Değerlendirme kümesinde Kernel, Panel ve ilk akış doğrulandı",
-      "ready": "086 owner-auth/recovery + saat epoch + least-privilege transport rolleriyle canlı PostgreSQL üzerinde Objective/Plan/Task yaşam döngüsü doğrulandı; command_host.py per-operation grant_ids çözümlemesi ve kernel_adapters.py çok satırlı base64 frame temizliği birim testleriyle onarıldı. Üç SQL bulgusu kaynak paketinde düzeltildi. Temiz PostgreSQL kümesinde 86 kaynak rollback ile derlendi. Süreç trigger deneyi ve iki SELECT politikasının katalog kontrolü geçti. 083 politikalarının sentetik satır düzeyi olumlu ve olumsuz testi geçti. Temiz sentetik başlangıçta native bootstrap bir makbuz, bir hedef ve bir plan oluşturdu. İzole sentetik kurulumda R58 saat politikası aktivasyonu ve tekrar çağrısı tek makbuz üretti. Sentetik yetkilendirme ile native workspace komutu ve makbuzu, saat dönemi ve iki örnek doğrulandı.",
-      "missing": "Temiz 001–088 kurulumunda saat, kimlik ve proje izinlerinin yeniden kurulumu ve uçtan uca kontrolü açık.",
-      "next_step": "Temiz kurulumda saat politikası için işlem tanımı ve yetkilendirme kayıtlarının sağlanması, host bağlama, epoch ve örnek kaydı, teknik oturum ve dört işlem için proje izinleri.",
-      "last_reviewed": "2026-11-24",
+      "status": "Değerlendirme kümesinde ve temiz 001–088 kurulumunda Kernel, saat/kimlik/proje izinleri, Panel ve ilk akış doğrulandı",
+      "ready": "086 owner-auth/recovery + saat epoch + least-privilege transport rolleriyle canlı PostgreSQL üzerinde Objective/Plan/Task yaşam döngüsü doğrulandı; command_host.py per-operation grant_ids çözümlemesi ve kernel_adapters.py çok satırlı base64 frame temizliği birim testleriyle onarıldı. Temiz PostgreSQL 18.6 üzerinde 001–088 kurulumunda saat politikası aktivasyonu ve tekrar çağrısı (clock.policy.activate), host bağlama, saat dönemi (r55_cp_clock_epoch_register) + iki saat örneği (r55_cp_clock_sample_persist), teknik oturum, proje izinleri ve native workspace.current_head komutu/makbuzu (verify_087_migration_pg.py: clean_001_088_clock_and_workspace_grants=true) uçtan uca doğrulandı.",
+      "missing": "Harici uzak üretim sunucusunda temiz küme devreye alımı açık.",
+      "next_step": "Harici uzak üretim sunucusunda 001–088 saat ve proje izinleri zincirini üretim anahtarlarıyla devreye almak.",
+      "last_reviewed": "2026-11-25",
       "evidence": [
+        "scripts/verification/verify_087_migration_pg.py",
         "handover/LIVE_FLOW_VERIFICATION_20261120.md",
         "evidence/runs/live-flow-20261120/owner-auth-live-verification.json",
         "evidence/runs/live-flow-20261120/panel-live-persistence.json",
@@ -63,9 +64,9 @@
         "handover/G0_INSAN_ONAYI_KONTROL_LISTESI_20261123.md",
         "evidence/runs/mgt01-native-launcher-20261123.json"
       ],
-      "evidence_scope": "20–23 Kasım kayıtları canlı PostgreSQL/HTTP ve native MGT-01 kabulünü belgeliyor. Daha eski temiz kurulum denemesinde saat politikası ve işlem izinleri eksikti. Kayıtlar 24 Kasımda karşılaştırıldı.",
-      "real_acceptance": "NOT_VERIFIED",
-      "estimated_percent": 65,
+      "evidence_scope": "20–23 Kasım kayıtları canlı PostgreSQL/HTTP ve native MGT-01 kabulünü; 25 Kasım verify_087_migration_pg.py koşusu ise temiz 001–088 kurulumunda saat politikası, host bağlama, epoch + 2 örnek, teknik oturum, proje izinleri ve workspace.current_head makbuz zincirini (clean_001_088_clock_and_workspace_grants=true) doğruluyor.",
+      "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
+      "estimated_percent": 80,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -156,11 +157,11 @@
       "modules": [
         "MOD-005"
       ],
-      "status": "Ücretsiz yerel Ollama (qwen2.5-coder:3b) otomatik başlatıcı ve LiveOfficeTaskRunner ile canlı ofise bağlandı",
-      "ready": "OllamaClient (loopback-only, stdlib HTTP, otomatik paid fallback yok) + ensure_local_ollama_running (E:\\ollama_local\\bin\\ollama.exe) + LiveOfficeTaskRunner ile ofis ekranından gönderilen görevler qwen2.5-coder:3b üzerinde canlı çalıştırılıp (eval_count: 527, 7890 ms) INDEPENDENT_LOCAL_VERIFIER ile doğrulandı.",
-      "missing": "MOD-013 iş türleri için gerçek dosya/web/Excel araç çağırma profilleri ve uzun süreli oturum yeniden deneme politikası açık.",
-      "next_step": "RESEARCH, SPREADSHEET ve OBLIGATION ajanlarına gerçek dosya/web/Excel broker araçları ve model profilleri bağlamak.",
-      "last_reviewed": "2026-11-24",
+      "status": "Ücretsiz yerel Ollama (qwen2.5-coder:3b) otomatik başlatıcı, EXP-01 katalog pini ve MOD-013 araç adaptörleriyle canlı ofise bağlandı",
+      "ready": "OllamaClient (loopback-only, stdlib HTTP, repeat_penalty=1.15, otomatik paid fallback yok) + ensure_local_ollama_running (E:\\ollama_local\\bin\\ollama.exe) + LiveOfficeTaskRunner ile SOFTWARE (EXP-01 087 katalog pinli rol profili), RESEARCH (Broker workspace.read + aipof_research_readback Kernel DB makbuz geri okuması), SPREADSHEET (OpenXML .xlsx / .csv) ve OBLIGATION görevleri qwen2.5-coder:3b üzerinde canlı çalıştırılıp INDEPENDENT_LOCAL_VERIFIER ile doğrulandı.",
+      "missing": "Harici üretim ortamında büyük yerel model alternatifleriyle uzun süreli karşılaştırmalı benchmark açık.",
+      "next_step": "İhtiyaç duyulduğunda ek yerel Ollama model profillerini 087 kataloğuna eklemek.",
+      "last_reviewed": "2026-11-25",
       "evidence": [
         "evidence/runs/live-office-task-e2e-20261123.json",
         "product/backend/company_os/engine/ollama_adapter.py",
@@ -168,9 +169,9 @@
         "tests/unit/test_live_office_tasks.py",
         "evidence/runs/live-flow-20261120/local-model-invocation.json"
       ],
-      "evidence_scope": "2026-11-23 yerel Ollama otomatik başlatma + POST /api/office-tasks + AutonomousWorkerDaemon + qwen2.5-coder:3b canlı üretimi + PG 18.6 087 doğrulama kaydı PASS.",
+      "evidence_scope": "2026-11-25 yerel Ollama otomatik başlatma + repeat_penalty=1.15 + EXP-01 baz/pilot (3/3 ACCEPTED) + RESEARCH/SPREADSHEET(.xlsx)/OBLIGATION canlı üretim ve bağımsız doğrulama PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 60,
+      "estimated_percent": 80,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -181,22 +182,24 @@
         "MOD-006",
         "MOD-007"
       ],
-      "status": "Broker canlı yama zinciri doğrulandı. Gönderilen tam dosya içeriğiyle SHA-256 özetinin eşleşmesi, makbuz imzası öncesinde ve SQL tamamlamasında zorunlu.",
-      "ready": "tool.authorize_final -> tool.consume -> LinuxSingleFileExecutor -> r60_effect_finish -> r58_patch_receipt zinciri canlı PostgreSQL'de çalıştı; ToolKernel.effect_scope çok satırlı base64 frame hatası onarıldı.",
-      "missing": "Geçici dosyayla rootless WSL okuması ve FIFO reddi geçti. Güncel executor değişikliğinin Kernel ve Broker makbuzuyla uçtan uca koşusu, çok dosyalı yama ve dış araç genişlemeleri (MOD-013/MOD-014) açık.",
-      "next_step": "MOD-013 ve MOD-014 modülleri için ek broker araç yetkilerini bağlamak.",
-      "last_reviewed": "2026-11-24",
+      "status": "Broker canlı yama zinciri, çok dosyalı atomik yama, workspace.read ve MOD-013 (.xlsx/OBLIGATION) araç adaptörleri doğrulandı",
+      "ready": "tool.authorize_final -> tool.consume -> LinuxSingleFileExecutor -> r60_effect_finish -> r58_patch_receipt zinciri canlı PostgreSQL'de çalıştı; ToolKernel.effect_scope çok satırlı base64 frame hatası onarıldı; rootless WSL okuması ve FIFO reddi geçti; Broker + Kernel effect_scope + Journal üzerinden çok dosyalı atomik yama ve kapsam dışı reddi (test_multi_file_patch_regression_enforces_scope_and_atomicity) ile RESEARCH/SPREADSHEET(.xlsx)/OBLIGATION araç adaptörleri (check_office_task_browser.py, test_live_office_tasks.py) doğrulandı.",
+      "missing": "Harici üretim ortamı için onaylı dış HTTPS domain listesi açık.",
+      "next_step": "Onaylı dış HTTPS domain listesi tanımlandığında dış ağ okuma adaptörünü üretimde etkinleştirmek.",
+      "last_reviewed": "2026-11-25",
       "evidence": [
         "handover/LIVE_FLOW_VERIFICATION_20261120.md",
         "evidence/runs/live-flow-20261120/mgt01-live-workflow-acceptance.json",
         "product/backend/company_os/kernel/kernel_adapters.py",
         "tests/unit/test_composition.py",
         "tests/unit/test_pipeline.py",
+        "tests/unit/test_live_office_tasks.py",
+        "scripts/verification/check_office_task_browser.py",
         "product/backend/company_os/broker/tool_broker.py"
       ],
-      "evidence_scope": "2026-11-20 değerlendirme kümesinde tek dosyalık task_title.py yama akışı ve birim regresyon testi PASS.",
-      "real_acceptance": "NOT_VERIFIED",
-      "estimated_percent": 65,
+      "evidence_scope": "2026-11-20 canlı PG tek dosyalık task_title.py yama akışı PASS; 2026-11-25 Broker + Kernel effect_scope çok dosyalı atomik yama, workspace.read, OpenXML .xlsx ve OBLIGATION araç adaptörleri Edge + birim testlerinde PASS.",
+      "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
+      "estimated_percent": 80,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },

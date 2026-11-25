@@ -495,7 +495,7 @@
     },
     {
       "path": "database/sources/082_R65_EFFECT_COMPLETE.sql",
-      "sha256": "68656adac0cb7abfeb8e85aa4f94a07d59b72be8df3e92e22543b1ef4ff3d670",
+      "sha256": "367de5d04742faf485b7bbebfc09e7b14fa50d75b5529799f72b4a6181a1de12",
       "origin": "dokumanlar/g0-tasarim/r65/R65_EFFECT_COMPLETE.sql",
       "baseline_sha256": "68656adac0cb7abfeb8e85aa4f94a07d59b72be8df3e92e22543b1ef4ff3d670"
     },
@@ -525,7 +525,7 @@
     },
     {
       "path": "database/sources/087_MOD012_MOD014_EXTENSIONS_CANDIDATE.sql",
-      "sha256": "3d1aacf8254a5e01af77ab69a2b27633b0a9b05b2c7cf9be9d2e0f6fec6c4f69",
+      "sha256": "8367d4087b6d165adfc61dd7d8299c66e414f536c5b6fc8d40e1753a6dfb0817",
       "origin": "application/mod012-mod014-extensions-v1",
       "baseline_sha256": null
     },

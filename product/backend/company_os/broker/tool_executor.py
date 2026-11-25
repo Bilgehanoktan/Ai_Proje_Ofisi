@@ -80,7 +80,9 @@ class LinuxSingleFileExecutor:
         os.close(self.fd)
 
     def read(self):
-        fd = os.open(self.target_filename, os.O_RDONLY | os.O_NOFOLLOW, dir_fd=self.fd)
+        fd = os.open(
+            self.target_filename, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=self.fd
+        )
         try:
             st = os.fstat(fd)
             if (
@@ -105,6 +107,14 @@ class LinuxSingleFileExecutor:
             os.close(fd)
 
     def execute(self, call, *, transaction):
+        if call.tool_id == "workspace.read":
+            if call.arguments.relative_path not in self.allowed_read_paths:
+                raise Denied("PILOT_PATH_OUT_OF_SCOPE")
+        elif call.tool_id != "patch.apply":
+            raise Denied("TOOL_NOT_IMPLEMENTED")
+        elif self.target_filename != "task_title.py":
+            raise Denied("PILOT_PATCH_TARGET_OUT_OF_SCOPE")
+
         import fcntl
 
         # Broker directory and this lock file are inaccessible to the engine.
@@ -117,8 +127,6 @@ class LinuxSingleFileExecutor:
             base = hashlib.sha256(raw).hexdigest()
             head = self.measure_head()
             if call.tool_id == "workspace.read":
-                if call.arguments.relative_path not in self.allowed_read_paths:
-                    raise Denied("PILOT_PATH_OUT_OF_SCOPE")
                 # Read bytes go only to a trusted artifact writer via Kernel completion.
                 return dict(
                     kind="READ",
@@ -127,8 +135,6 @@ class LinuxSingleFileExecutor:
                     content_digest=base,
                     truncated=len(raw) > call.arguments.max_bytes,
                 )
-            if call.tool_id != "patch.apply":
-                raise Denied("TOOL_NOT_IMPLEMENTED")
             if call.expected_source_digest != head:
                 raise Denied("SOURCE_HEAD_CAS")
             artifact = transaction.read_patch(call.patch_artifact_id)

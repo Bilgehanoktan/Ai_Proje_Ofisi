@@ -1,4 +1,5 @@
 export async function fetchOfficeSnapshot(timeoutMs = 5000) {
+  const requestedAt = performance.now();
   const response = await fetch('/api/office-live', {
     cache: 'no-store',
     signal: AbortSignal.timeout(timeoutMs),
@@ -6,7 +7,35 @@ export async function fetchOfficeSnapshot(timeoutMs = 5000) {
   if (!response.ok) {
     throw new Error(`HTTP_${response.status}`);
   }
-  return response.json();
+  const snapshot = await response.json();
+  snapshot.requestedAt = requestedAt;
+  return snapshot;
+}
+
+// Deduct the whole request time so network and snapshot collection cannot extend a lease.
+export function observeOfficeAgents(snapshot, render) {
+  let timer;
+  function update() {
+    const elapsed = performance.now() - snapshot.requestedAt;
+    let nextExpiry = Infinity;
+    const records = Array.isArray(snapshot.agent_instances) ? snapshot.agent_instances : [];
+    const agents = records.map((agent) => {
+      if (agent.state !== 'RUNNING') return agent;
+      const remaining = agent.lease_remaining_ms;
+      if (agent.active_task_id && agent.active_attempt_id && Number.isFinite(remaining)
+          && remaining > elapsed) {
+        nextExpiry = Math.min(nextExpiry, remaining - elapsed);
+        return agent;
+      }
+      return { ...agent, state: 'STALE', active_task_title: null, active_task_id: null, active_attempt_id: null };
+    });
+    render(agents);
+    if (Number.isFinite(nextExpiry)) {
+      timer = setTimeout(update, Math.min(Math.ceil(nextExpiry), 2147483647));
+    }
+  }
+  update();
+  return () => clearTimeout(timer);
 }
 
 export async function fetchAgentInstances(tenantId, projectId, timeoutMs = 4000) {

@@ -1,11 +1,13 @@
-import { fetchOfficeSnapshot, sendMemoryAction, submitOfficeTask } from './api-client.js';
+import { fetchOfficeSnapshot, observeOfficeAgents, sendMemoryAction, submitOfficeTask } from './api-client.js';
 import { ROLES, SCENE_KEY_TO_ROLE_ID, createOfficeCanvas } from './office-canvas.js';
 import { createPanelsController } from './panels.js';
 import { createOfficeEventStream } from './sse-client.js';
 
 let liveAgentInstances = [];
+let stopObservingAgents;
 let selectedAgentInstanceId = null;
 let taskCommandEnabled = false;
+let lastSubmittedTaskId = null;
 let officeSnapshotPending = false;
 let lastOfficeSnapshotAt = '';
 let zoom = 100;
@@ -17,6 +19,7 @@ const officeCanvas = createOfficeCanvas(
   document.getElementById('office-canvas'),
   document.getElementById('hotspots'),
   {
+    onSelectAgent: (agentId) => selectAgentInstance(agentId),
     onSelectRole: (key) => {
       const rid = SCENE_KEY_TO_ROLE_ID[key];
       if (liveAgentInstances.length && rid) {
@@ -51,6 +54,9 @@ function selectAgentInstance(agentId, switchTab = true) {
     panels.renderAgentContext(found);
     document.querySelectorAll('#role-list button').forEach((btn) => {
       btn.setAttribute('aria-pressed', String(btn.dataset.agentId === agentId));
+    });
+    document.querySelectorAll('.scene-agent').forEach((btn) => {
+      btn.setAttribute('aria-pressed', String(btn.dataset.sceneAgentId === agentId));
     });
     if (switchTab) panels.showTab('context');
   }
@@ -102,9 +108,11 @@ document.querySelectorAll('a[href^="#"]').forEach((a) => {
 });
 
 function handleConnectionLoss() {
+  stopObservingAgents?.();
   taskCommandEnabled = false;
+  liveAgentInstances = [];
   panels.renderConnectionLoss(lastOfficeSnapshotAt);
-  officeCanvas.draw([], []);
+  officeCanvas.draw(null, 'Canlı ajan verisi alınamadı');
 }
 
 function ensureSseStream(tenantId) {
@@ -146,30 +154,39 @@ export async function refreshLiveOffice() {
 
     const ollama = d.ollama || null;
     const oBadge = document.getElementById('ollama-badge');
-    if (oBadge && ollama) {
-      oBadge.textContent = ollama.available
-        ? `Ollama: HAZIR (${ollama.default_model || 'yerel'})`
-        : `Ollama: KAPALI (${ollama.error || 'erişilemiyor'})`;
-      oBadge.classList.toggle('live', Boolean(ollama.available));
+    if (oBadge) {
+      oBadge.textContent = ollama?.available === true
+        ? `Ollama hazır (${ollama.default_model || 'yerel'})`
+        : ollama?.available === false ? 'Ollama erişilemiyor' : 'Ollama durumu bilinmiyor';
+      oBadge.classList.toggle('live', ollama?.available === true);
     }
 
     const fieldset = document.getElementById('office-task-fieldset');
     const panelSub = document.getElementById('task-panel-sub');
     taskCommandEnabled = Boolean(d.command_enabled);
     if (fieldset) fieldset.disabled = !taskCommandEnabled;
-    if (panelSub && taskCommandEnabled) {
-      const wr = d.worker_runner || {};
-      panelSub.textContent = `AutonomousWorkerDaemon (${wr.daemon_state || 'RUNNING'}) + ücretsiz yerel Ollama bağlı. Kuyruk: ${wr.queued || 0}, Tamamlanan: ${wr.processed || 0}.`;
+    if (panelSub) {
+      panelSub.textContent = taskCommandEnabled ? 'Görev gönderimi açık.' : 'Görev gönderimi kapalı.';
     }
 
-    if (Array.isArray(d.office_runs)) panels.renderOfficeRuns(d.office_runs);
-    if (Array.isArray(d.agent_instances) && d.agent_instances.length) {
-      liveAgentInstances = d.agent_instances;
-      panels.renderAgentInstancesList(liveAgentInstances, selectedAgentInstanceId);
-      if (!selectedAgentInstanceId) {
-        const initial = liveAgentInstances.find((a) => a.state === 'RUNNING') || liveAgentInstances[0];
-        selectedAgentInstanceId = initial.agent_instance_id;
-        panels.renderAgentContext(initial);
+    if (Array.isArray(d.office_runs)) {
+      panels.renderOfficeRuns(d.office_runs);
+      if (lastSubmittedTaskId) {
+        const match = d.office_runs.find((r) => r.task_id === lastSubmittedTaskId);
+        const fb = document.getElementById('office-task-feedback');
+        if (match && fb) {
+          const shortId = match.task_id.slice(0, 8);
+          if (match.state === 'ACCEPTED') {
+            fb.textContent = `Tamamlandı (${shortId}): Kabul edildi.`;
+            lastSubmittedTaskId = null;
+          } else if (match.state === 'REJECTED') {
+            fb.textContent = `Tamamlandı (${shortId}): Reddedildi.`;
+            lastSubmittedTaskId = null;
+          } else if (match.state === 'ERROR') {
+            fb.textContent = `Hata (${shortId}): ${match.error || 'bilinmeyen hata'}`;
+            lastSubmittedTaskId = null;
+          }
+        }
       }
     }
     if (Array.isArray(d.memory_promotions)) {
@@ -180,43 +197,38 @@ export async function refreshLiveOffice() {
     const sv = d.services || {};
     const ct = d.counts || {};
     const wr = d.worker_runner || {};
-    officeCanvas.draw(
-      liveAgentInstances,
-      d.office_runs,
-      `Canlı PG 18.6 bağlı · Worker: ${sv.worker_daemon || wr.daemon_state || 'bilinmiyor'}`,
-    );
+    const postgresConnected = d.mode === 'LIVE_POSTGRES_18_6';
+    const sourceLabel = postgresConnected
+      ? 'PostgreSQL bağlı'
+      : d.mode === 'LOCAL_OFFICE_ONLY' ? 'Yerel ofis · UNVERIFIED' : 'Ofis sunucusu bağlı · UNVERIFIED';
+    const workerState = sv.worker_daemon || wr.daemon_state || 'Bilinmiyor';
+    stopObservingAgents?.();
+    stopObservingAgents = observeOfficeAgents(d, (agents) => {
+      liveAgentInstances = agents;
+      if (!agents.some((agent) => agent.agent_instance_id === selectedAgentInstanceId)) {
+        selectedAgentInstanceId = agents[0]?.agent_instance_id ?? null;
+      }
+      panels.renderAgentInstancesList(agents, selectedAgentInstanceId);
+      officeCanvas.draw(agents, sourceLabel, selectedAgentInstanceId);
+    });
 
     const badge = document.getElementById('mode-badge');
     if (badge) {
-      badge.textContent = 'CANLI · PG 18.6 (55490)';
-      badge.classList.add('live');
+      badge.textContent = sourceLabel;
+      badge.classList.toggle('live', postgresConnected);
     }
     const navNote = document.getElementById('nav-note');
-    if (navNote) navNote.textContent = 'Canlı ofis verisi bağlı.';
+    if (navNote) navNote.textContent = sourceLabel;
 
-    document.getElementById('stat-roles').textContent = `${ct.tasks || 0} görev (${ct.accepted_tasks || 0} kabul)`;
-    document.getElementById('stat-live-agent').textContent = `Worker: ${sv.worker_daemon || wr.daemon_state || 'bilinmiyor'}`;
-    document.getElementById('stat-freshness').textContent = d.updated_at || 'Canlı';
-    document.getElementById('office-footer-left').textContent = `● Canlı PostgreSQL 18.6 bağlı · 087 tabloları aktif (${ct.tasks || 0} görev)`;
-    document.getElementById('office-footer-right').textContent = `Yedekleme: ${sv.backup_timer || 'bilinmiyor'} (günlük) · First13 ${d.first13 || 'bilinmiyor'}`;
-
-    if (!liveAgentInstances.length) {
-      const cState = document.getElementById('context-state');
-      cState.textContent = `CANLI · Worker ${sv.worker_daemon || wr.daemon_state || 'bilinmiyor'} · First13 ${d.first13 || 'bilinmiyor'}`;
-      cState.classList.add('live');
-      document.getElementById('context-eyebrow').textContent = 'Seçili ofis rolü';
-      document.getElementById('agents-sub').textContent = 'Çekirdek roller. Canlı ajan örneği bilgisi bu bağlantıda bulunmuyor.';
-      document.querySelectorAll('#role-list small').forEach((el) => {
-        el.textContent = 'Tasarım rolü';
-      });
-      document.getElementById('context-evidence').textContent =
-        `Küme: ${d.cluster || 'yerel'} | Hedef: ${ct.objectives || 0}, Plan: ${ct.plans || 0}, Kabul: ${ct.accepted_tasks || 0}/${ct.tasks || 0} | 087 kayıtları: katalog=${ct.catalog_entries || 0}, terfi=${ct.memory_promotions || 0}, şablon=${ct.work_template_validations || 0}, dış_etki=${ct.external_effect_ledger || 0}`;
-      document.getElementById('context-boundary').textContent =
-        'Tüm sayılar ve kayıtlar canlı PostgreSQL 18.6 (55490) veritabanından okunmaktadır.';
-    }
+    document.getElementById('stat-roles').textContent = Number.isInteger(ct.tasks) ? String(ct.tasks) : 'Veri yok';
+    document.getElementById('stat-live-agent').textContent =
+      Array.isArray(d.agent_instances) ? String(liveAgentInstances.length) : 'Veri yok';
+    document.getElementById('stat-freshness').textContent = lastOfficeSnapshotAt;
+    document.getElementById('office-footer-left').textContent = sourceLabel;
+    document.getElementById('office-footer-right').textContent = `Worker: ${workerState}`;
 
     document.getElementById('office-notice').textContent =
-      `Canlı bağlantı aktif: ${d.cluster || 'yerel'} · Worker: ${sv.worker_daemon || wr.daemon_state} · Yedekleme: ${sv.backup_timer || 'n/a'} · G0: ${d.g0 || 'n/a'} · First13: ${d.first13 || 'bilinmiyor'}.`;
+      `Yedekleme: ${sv.backup_timer || 'bilinmiyor'} · G0: ${d.g0 || 'bilinmiyor'} · İlk akış: ${d.first13 || 'bilinmiyor'}.`;
     document.getElementById('bottom-status').textContent =
       `${d.mode} · G0 ${d.g0 || 'bilinmiyor'} · First13 ${d.first13 || 'bilinmiyor'}`;
 
@@ -287,6 +299,7 @@ if (taskForm) {
         fb.textContent = `Gönderilemedi (${status}): ${data.error || 'bilinmeyen hata'}`;
         return;
       }
+      lastSubmittedTaskId = data.task?.task_id || null;
       fb.textContent = `Kuyruğa alındı (${data.task?.task_id?.slice(0, 8) || 'ok'}). Yerel ajan çalıştırıyor…`;
       document.getElementById('office-task-title').value = '';
       document.getElementById('office-task-goal').value = '';

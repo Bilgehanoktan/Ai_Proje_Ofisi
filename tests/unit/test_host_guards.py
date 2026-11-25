@@ -3,8 +3,33 @@ from types import SimpleNamespace
 from uuid import uuid4
 from company_os.kernel import command_host as host
 from company_os.engine.reply_guard import EngineReplyGuard
+from company_os.kernel.execution_protocol import Denied
+from company_os.kernel.kernel_adapters import EffectTransaction
 from packages.contracts.execution import EngineBinding, ToolReply
 from tests.unit.test_pipeline import Harness, Connection
+
+
+class EffectReadTests(unittest.TestCase):
+    def test_invalid_read_evidence_cannot_reach_signer(self):
+        consume_id = uuid4()
+        original = {
+            "kind": "READ",
+            "head_digest": "head",
+            "content_digest": "0" * 64,
+            "content_base64": "YWJj",
+            "truncated": False,
+        }
+        for patch, expected in (
+            ({}, "READ_CONTENT_DIGEST_MISMATCH"),
+            ({"content_base64": "?"}, "READ_CONTENT_ENCODING_INVALID"),
+            ({"truncated": "false"}, "READ_TRUNCATION_FLAG_REQUIRED"),
+        ):
+            with self.subTest(expected=expected):
+                tx = EffectTransaction(None, {"consume_id": str(consume_id)}, None)
+                with self.assertRaisesRegex(Denied, expected):
+                    tx.complete(consume_id, {**original, **patch})
+
+
 AUTH=dict(token='offline-fixture',project_id='p',kind='PROJECT',resource_id='p',grant_id='g')
 class Cursor:
  def __init__(self,c):self.c=c

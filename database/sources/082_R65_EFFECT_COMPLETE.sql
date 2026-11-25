@@ -25,6 +25,9 @@ BEGIN
   OR jsonb_typeof(j->'effect'->'truncated') IS DISTINCT FROM 'boolean'
   OR length(j->'effect'->>'content_base64')>21848 OR (j->'effect'->>'content_base64') !~ '^[A-Za-z0-9+/]*={0,2}$'
   OR octet_length(decode(j->'effect'->>'content_base64','base64'))>(frame->'call'->'arguments'->>'max_bytes')::bigint
+  OR (j->'effect'->'truncated' = 'false'::jsonb
+      AND encode(sha256(decode(j->'effect'->>'content_base64','base64')),'hex')
+        IS DISTINCT FROM j->'effect'->>'content_digest')
   THEN RAISE EXCEPTION 'R65_EFFECT_READ_BINDING'; END IF;
  ELSE RAISE EXCEPTION 'R65_EFFECT_TOOL_UNSUPPORTED'; END IF;
  c=company_private.r58_begin_command(p_key,p_correlation,jsonb_build_object('consume_id',p_consume,'proof_id',p_proof));

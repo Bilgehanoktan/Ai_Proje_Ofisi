@@ -18,6 +18,7 @@ from company_os.catalog.memory_promotion import (
 from company_os.runtime.worker_daemon import AutonomousWorkerDaemon, DaemonState
 from company_os.workflows.queue_adapter import MultiWorkTypeQueueRunner
 from company_os.workflows.templates import WorkType
+from independent_verifier.research_readback import confirm_receipt, current_read
 
 
 class _FakeCursor:
@@ -25,7 +26,7 @@ class _FakeCursor:
         self._rows = list(rows)
         self.executed = []
 
-    def execute(self, sql, params):
+    def execute(self, sql, params=()):
         self.executed.append((sql, params))
 
     def fetchone(self):
@@ -150,12 +151,20 @@ class Extensions087StoreAndApiTests(unittest.TestCase):
         res = store.upsert_catalog_entry(entry)
         self.assertTrue(conn.committed)
         self.assertEqual(res["name"], "qwen2.5-coder")
+        self.assertEqual(
+            conn.cur.executed[0],
+            ("SELECT set_config('app.tenant_id', %s, true)", (tid,)),
+        )
 
         conn_eff = _FakeConn([(tid, "idem-1", "eff-1", "webhook", "COMMITTED")])
         store_eff = Extensions087Store(connect=lambda: conn_eff)
         eff = ExternalEffectEntry("eff-1", tid, "idem-1", "webhook", "COMMITTED")
         res_eff = store_eff.record_external_effect(eff)
         self.assertEqual(res_eff["status"], "COMMITTED")
+        self.assertEqual(
+            conn_eff.cur.executed[0],
+            ("SELECT set_config('app.tenant_id', %s, true)", (tid,)),
+        )
 
     def test_http_wsgi_endpoints_require_tenant_id_and_return_scoped_json(self):
         app = make_wsgi_app(
@@ -243,6 +252,56 @@ class MultiWorkTypeQueueRunnerTests(unittest.TestCase):
         self.assertEqual(stats.history[3].detail["verify"]["reason"], "RESEARCH_CITATIONS_REQUIRED")
         self.assertEqual(sum(1 for k, _ in emitted if k == "WorkerTaskAccepted"), 3)
         self.assertEqual(sum(1 for k, _ in emitted if k == "WorkerTaskRejected"), 1)
+
+    def test_research_kernel_receipt_readback_current_read_and_confirm_receipt(self):
+        from uuid import uuid4
+
+        tid = str(uuid4())
+        pid = str(uuid4())
+        task_id = str(uuid4())
+        att_id = str(uuid4())
+        rec_id = str(uuid4())
+
+        conn_ok = _FakeConn([(att_id, rec_id, "a" * 64)])
+        res = current_read(
+            lambda: conn_ok,
+            {"tenant_id": tid, "project_id": pid, "task_id": task_id, "read_path": "task_title.py"},
+        )
+        self.assertEqual(
+            res,
+            {
+                "attempt_id": att_id,
+                "receipt_id": rec_id,
+                "relative_path": "task_title.py",
+                "sha256": "a" * 64,
+            },
+        )
+        self.assertEqual(conn_ok.cur.executed[0][0], "SET TRANSACTION READ ONLY")
+
+        # Duplicate or missing rows in current_read must fail-closed
+        for bad_rows in ([], [(att_id, rec_id, "a" * 64), (att_id, rec_id, "b" * 64)]):
+            with self.assertRaisesRegex(ValueError, "UNIQUE_KERNEL_RESEARCH_READ_REQUIRED"):
+                current_read(
+                    lambda rows=bad_rows: _FakeConn(rows),
+                    {"tenant_id": tid, "project_id": pid, "task_id": task_id, "read_path": "task_title.py"},
+                )
+
+        # confirm_receipt checks valid scope, require_current parameter binding, and invalid inputs
+        conn_confirm = _FakeConn([(True,)])
+        scope = {
+            "tenant_id": tid,
+            "project_id": pid,
+            "task_id": task_id,
+            "attempt_id": att_id,
+            "read_path": "task_title.py",
+        }
+        self.assertTrue(confirm_receipt(lambda: conn_confirm, scope, rec_id, require_current=True))
+        self.assertEqual(conn_confirm.cur.executed[0][0], "SET TRANSACTION READ ONLY")
+        self.assertIn("active_attempt_id", conn_confirm.cur.executed[1][0])
+        self.assertEqual(len(conn_confirm.cur.executed[1][1]), 10)
+
+        self.assertFalse(confirm_receipt(lambda: _FakeConn([(True,)]), {**scope, "read_path": ""}, rec_id))
+        self.assertFalse(confirm_receipt(lambda: _FakeConn([(True,)]), scope, "not-a-uuid"))
 
 
 if __name__ == "__main__":

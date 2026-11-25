@@ -1,4 +1,76 @@
-import { fetchOfficeSnapshot } from './api-client.js';
+import { fetchOfficeSnapshot, observeOfficeAgents } from './api-client.js';
+
+export function mountPhaserFloor({ floor, host, getCharacters }) {
+  let scene;
+
+  function refresh() {
+    if (!scene) return;
+    const bounds = floor.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) return;
+    const scaleX = floor.width / bounds.width;
+    const scaleY = floor.height / bounds.height;
+    const art = scene.characterArt;
+    art.clear();
+    for (const { anchor, color } of getCharacters()) {
+      const rect = anchor.getBoundingClientRect();
+      const x = Math.round((rect.left + rect.width / 2 - bounds.left) * scaleX);
+      const y = Math.round((rect.top + rect.height / 2 - bounds.top) * scaleY);
+      const size = Math.min(52, rect.height * scaleY);
+      const pixel = Math.max(1, Math.floor(size / 12));
+      const tile = (dx, dy, w, h, fill) =>
+        art.fillStyle(fill).fillRect(x + dx * pixel, y + dy * pixel, w * pixel, h * pixel);
+      art.fillStyle(0x080d18, 0.75).fillEllipse(x, y + 6 * pixel, 11 * pixel, 4 * pixel);
+      tile(-3, 3, 2, 3, 0x273851);
+      tile(1, 3, 2, 3, 0x273851);
+      tile(-4, -1, 8, 5, color);
+      tile(-3, -5, 6, 5, 0xf4c69c);
+      tile(-3, -6, 6, 2, 0x283043);
+      tile(-2, -3, 1, 1, 0x283043);
+      tile(1, -3, 1, 1, 0x283043);
+      tile(-5, 0, 1, 3, 0xf4c69c);
+      tile(4, 0, 1, 3, 0xf4c69c);
+    }
+  }
+
+  function start() {
+    const Phaser = window.Phaser;
+    if (!Phaser) return;
+    new Phaser.Game({
+      type: Phaser.CANVAS,
+      parent: host,
+      width: floor.width,
+      height: floor.height,
+      pixelArt: true,
+      banner: false,
+      audio: { noAudio: true },
+      scene: {
+        create() {
+          this.textures.addCanvas('office-floor', floor);
+          this.add.image(0, 0, 'office-floor').setOrigin(0, 0);
+          this.characterArt = this.add.graphics();
+          scene = this;
+          host.dataset.ready = 'true';
+          this.game.canvas.setAttribute('aria-hidden', 'true');
+          const observer = new ResizeObserver(refresh);
+          observer.observe(floor);
+          this.events.once('shutdown', () => observer.disconnect());
+          refresh();
+        },
+      },
+    });
+  }
+
+  if (window.Phaser) {
+    start();
+  } else {
+    const script = document.createElement('script');
+    script.src = '/assets/vendor/phaser.min.js';
+    script.addEventListener('load', start, { once: true });
+    document.head.append(script);
+  }
+
+  return { refresh };
+}
 
 const STATE_COLORS = {
   IDLE: 0x28665a,
@@ -15,6 +87,7 @@ const ZONE_SLOTS = {
 };
 
 export function mountPhaserOffice({ containerEl, listEl, statusEl }) {
+  let stopObservingAgents;
   function renderAccessibleList(agents) {
     listEl.replaceChildren();
     agents.forEach((agent) => {
@@ -53,11 +126,14 @@ export function mountPhaserOffice({ containerEl, listEl, statusEl }) {
       if (!snapshot.connected || !Array.isArray(snapshot.agent_instances)) {
         throw new Error('Snapshot unavailable');
       }
-      const agents = snapshot.agent_instances;
-      renderAccessibleList(agents);
-      if (scene) renderMarkers(scene, agents);
-      statusEl.textContent = `${agents.length} canlı ajan · Kat 01 (yerel Phaser)`;
+      stopObservingAgents?.();
+      stopObservingAgents = observeOfficeAgents(snapshot, (agents) => {
+        renderAccessibleList(agents);
+        if (scene) renderMarkers(scene, agents);
+        statusEl.textContent = `${agents.length} canlı ajan · Kat 01 (yerel Phaser)`;
+      });
     } catch {
+      stopObservingAgents?.();
       renderAccessibleList([]);
       if (scene) renderMarkers(scene, []);
       statusEl.textContent = 'Canlı ajan verisine ulaşılamadı.';

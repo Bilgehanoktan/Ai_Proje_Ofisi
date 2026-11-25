@@ -157,15 +157,17 @@ class SqlSourceTests(unittest.TestCase):
         )
         self.assertIn('DESIGN_ONLY_G0_OPEN_NOT_AUTHORIZED', sql)
         self.assertTrue(sql.rstrip().endswith('ROLLBACK;'))
-        for table in (
-            'company.catalog_entries',
-            'company.memory_promotions',
-            'company.work_template_validations',
-            'company.external_effect_ledger',
+        for table, policy in (
+            ('company.catalog_entries', 'catalog_entries_tenant_isolation'),
+            ('company.memory_promotions', 'memory_promotions_tenant_isolation'),
+            ('company.work_template_validations', 'work_template_validations_tenant_isolation'),
+            ('company.external_effect_ledger', 'external_effect_ledger_tenant_isolation'),
         ):
             self.assertIn(f'ALTER TABLE {table} ENABLE ROW LEVEL SECURITY;', sql)
             self.assertIn(f'ALTER TABLE {table} FORCE ROW LEVEL SECURITY;', sql)
             self.assertIn(f'REVOKE ALL ON {table} FROM PUBLIC;', sql)
+            self.assertIn(f'CREATE POLICY {policy} ON {table}', sql)
+        self.assertEqual(sql.count("current_setting('app.tenant_id', true)"), 8)
         self.assertIn('promoted_by <> verified_by', sql)
 
 

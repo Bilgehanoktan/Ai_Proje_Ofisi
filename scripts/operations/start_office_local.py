@@ -91,6 +91,7 @@ env = {'PATH': '/usr/sbin:/usr/bin:/sbin:/bin', 'LD_LIBRARY_PATH': str(pg / 'lib
 sock = '/var/lib/ai-proje-ofisi-local/socket'
 
 query = '''
+SELECT set_config('app.tenant_id', :'tenant_id', false);
 SELECT json_build_object(
   'counts', json_build_object(
     'objectives', (SELECT count(*) FROM company.objectives),
@@ -127,26 +128,49 @@ SELECT json_build_object(
     SELECT json_agg(ai) FROM (
       SELECT agent_instance_id::text, tenant_id::text, project_id::text, role_id,
              display_name, worker_principal, state, active_task_id,
-             active_attempt_id::text, active_task_title, revision, last_seen_at::text
-      FROM company.agent_instances
+             active_attempt_id::text, active_task_title, revision, last_seen_at::text,
+             NULL::numeric AS lease_remaining_ms
+      FROM company.agent_instances AS agent
+      WHERE tenant_id = :'tenant_id'::uuid AND project_id = :'project_id'::uuid
       ORDER BY role_id, display_name, agent_instance_id
     ) ai
   ), '[]'::json)
-)::text;
+);
 '''
 
-res = subprocess.run(
-    ['/usr/sbin/runuser', '-u', 'aipof-dbtest', '--', str(pgbin / 'psql'),
+lease_remaining = '''
+  (SELECT floor(1000 * extract(epoch FROM (a.lease_expires_at -
+          (company_private.r55_cp_clock_current_bounds(a.tenant_id, a.project_id)
+              ->> 'utc_upper_bound')::timestamptz)))
+   FROM company.attempts a
+   JOIN company.tasks t ON (t.tenant_id, t.project_id, t.id, t.active_attempt_id, t.fencing_epoch)
+                         = (a.tenant_id, a.project_id, a.task_id, a.id, a.fencing_epoch)
+   WHERE agent.state = 'RUNNING' AND t.state = 'RUNNING'
+     AND (agent.tenant_id, agent.project_id, agent.active_attempt_id)
+       = (a.tenant_id, a.project_id, a.id)
+     AND agent.active_task_id = a.task_id::text
+     AND agent.worker_principal = a.worker_id::text
+     AND a.state IN ('CLAIMED', 'RUNNING') AND a.ended_at IS NULL)
+'''
+psql = ['/usr/sbin/runuser', '-u', 'aipof-dbtest', '--', str(pgbin / 'psql'),
      '-X', '-h', sock, '-p', '55490', '-d', 'ai_proje_ofisi', '-Atq',
      '-v', 'ON_ERROR_STOP=1', '-v', f'tenant_id={sys.argv[1]}',
-     '-v', f'project_id={sys.argv[2]}', '-f', '-'],
-    input=query, text=True, capture_output=True, env=env, timeout=15
-)
+     '-v', f'project_id={sys.argv[2]}', '-f', '-']
+def read_snapshot(sql):
+    return subprocess.run(psql, input=sql, text=True, capture_output=True, env=env, timeout=15)
+
+res = read_snapshot(query.replace('NULL::numeric AS lease_remaining_ms',
+                                  lease_remaining + ' AS lease_remaining_ms'))
+if res.returncode != 0:
+    # Keep the office readable when the trusted clock or its read permission is unavailable.
+    res = read_snapshot(query)
 if res.returncode != 0:
     raise RuntimeError(res.stderr.strip())
 w_state = subprocess.run(['systemctl', 'is-active', 'aipof-worker-daemon.service'], capture_output=True, text=True).stdout.strip()
 t_state = subprocess.run(['systemctl', 'is-active', 'aipof-pg-backup.timer'], capture_output=True, text=True).stdout.strip()
-data = json.loads(res.stdout.strip())
+raw_out = res.stdout.strip()
+start_idx = raw_out.find('{"counts"')
+data, _ = json.JSONDecoder().raw_decode(raw_out[start_idx if start_idx >= 0 else 0:])
 data['services'] = {'postgres_55490': 'ready', 'worker_daemon': w_state, 'backup_timer': t_state}
 print(json.dumps(data))
 """
@@ -406,6 +430,130 @@ if res.returncode != 0:
 print(json.dumps({'saved': True}))
 """
 
+WSL_CATALOG_087_PY = """
+import json, os, sys
+from pathlib import Path
+
+payload = json.loads(sys.stdin.read())
+root = Path('/mnt/e/Projeler/Ai_Proje_Ofisi')
+sys.path[:0] = [str(root / 'product/backend'), str(root / 'contracts/source/python')]
+os.environ.setdefault('PGSERVICEFILE', '/var/lib/ai-proje-ofisi-local/live-flow-20261120/pg_service.conf')
+
+import psycopg
+from company_os.catalog.extensions_store import Extensions087Store
+from company_os.catalog.memory_promotion import CatalogEntry, CatalogKind
+
+service_name = payload.get('service') or ''
+if service_name:
+    connect = lambda: psycopg.connect(service=service_name, connect_timeout=5)
+else:
+    connect = lambda: psycopg.connect(
+        host='/var/lib/ai-proje-ofisi-local/socket',
+        port=55490,
+        dbname='ai_proje_ofisi',
+        user='aipof-dbtest',
+        connect_timeout=5,
+    )
+
+store = Extensions087Store(connect=connect)
+op = payload.get('op')
+if op == 'upsert':
+    entry = CatalogEntry(
+        tenant_id=payload['tenant_id'],
+        kind=CatalogKind(payload['kind']),
+        name=payload['name'],
+        version=payload['version'],
+        digest=payload['digest'],
+        active=bool(payload.get('active', True)),
+    )
+    print(json.dumps(store.upsert_catalog_entry(entry)))
+elif op == 'list':
+    print(json.dumps({'items': store.list_catalog_entries(payload['tenant_id'])}))
+else:
+    raise ValueError(f'UNSUPPORTED_CATALOG_OP:{op}')
+"""
+
+
+def _kernel_research_readback(distro, service, scope, receipt_id=None):
+    """Run the independent verifier in a fresh WSL process with its own DB login."""
+    script = """
+import json, os, sys
+from pathlib import Path
+import psycopg
+payload = json.load(sys.stdin)
+sys.path.insert(0, str(Path('/mnt/e/Projeler/Ai_Proje_Ofisi/verifier/src')))
+from independent_verifier.research_readback import confirm_receipt, current_read
+os.environ.setdefault('PGSERVICEFILE', '/var/lib/ai-proje-ofisi-local/live-flow-20261120/pg_service.conf')
+def connect():
+    return psycopg.connect(service=payload['service'], connect_timeout=4)
+if payload['receipt_id'] is None:
+    print(json.dumps(current_read(connect, payload['scope'])))
+else:
+    print(json.dumps(confirm_receipt(connect, payload['scope'], payload['receipt_id'], require_current=True)))
+"""
+    payload = {'scope': scope, 'receipt_id': receipt_id, 'service': service}
+    result = subprocess.run(
+        ['wsl', '-d', distro, '--exec', '/usr/sbin/runuser', '-u', 'aipof-dbtest',
+         '--', 'python3', '-c', script],
+        input=json.dumps(payload), text=True, capture_output=True, timeout=12,
+    )
+    if result.returncode:
+        raise RuntimeError('KERNEL_RESEARCH_READBACK_UNAVAILABLE')
+    return json.loads(result.stdout)
+
+
+class WslCatalog087Adapter:
+    """Bridges Windows office process to WSL PostgreSQL 18.6 Extensions087Store."""
+
+    def __init__(self, distro: str = "Ubuntu-E", service: str | None = None) -> None:
+        self.distro = distro
+        self.service = service
+
+    def _call(self, payload: dict) -> dict:
+        wire = json.dumps({**payload, "service": self.service}, ensure_ascii=False)
+        res = subprocess.run(
+            [
+                "wsl",
+                "-d",
+                self.distro,
+                "--",
+                "setpriv",
+                "--reuid=aipof-dbtest",
+                "--regid=aipof-dbtest",
+                "--init-groups",
+                "python3",
+                "-c",
+                WSL_CATALOG_087_PY,
+            ],
+            input=wire,
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+        if res.returncode != 0:
+            raise RuntimeError((res.stderr or res.stdout).strip())
+        lines = [ln.strip() for ln in res.stdout.splitlines() if ln.strip().startswith("{")]
+        if not lines:
+            raise RuntimeError("EMPTY_WSL_CATALOG_087_RESPONSE")
+        return json.loads(lines[-1])
+
+    def upsert_catalog_entry(self, entry: CatalogEntry) -> dict:
+        return self._call(
+            {
+                "op": "upsert",
+                "tenant_id": entry.tenant_id,
+                "kind": entry.kind.value,
+                "name": entry.name,
+                "version": entry.version,
+                "digest": entry.digest,
+                "active": entry.active,
+            }
+        )
+
+    def list_catalog_entries(self, tenant_id: str) -> list[dict]:
+        return list(self._call({"op": "list", "tenant_id": tenant_id}).get("items") or [])
+
+
 
 def ensure_wsl_services(distro: str = "Ubuntu-E") -> dict[str, str]:
     """WSL2 uzerindeki PostgreSQL 18.6 ve systemd servislerinin acik oldugunu dogrular."""
@@ -658,7 +806,13 @@ def main() -> int:
     parser.add_argument("--no-browser", action="store_true", help="Tarayiciyi otomatik acma")
     parser.add_argument("--check-only", action="store_true", help="Servisleri kontrol et ve cik")
     parser.add_argument(
+        "--research-readback-service",
+        default="aipof_research_readback",
+        help="Kernel makbuzlarını okuyabilen doğrulayıcı PG servis adı",
+    )
+    parser.add_argument(
         "--engineer-pilot-service",
+        default="aipof_catalog_087",
         help="EXP-01 pilotu icin 087 katalog yetkisi olan PostgreSQL service adi",
     )
     args = parser.parse_args()
@@ -701,36 +855,66 @@ def main() -> int:
 
     engineer_pilot_catalog = None
     if args.engineer_pilot_service:
-        try:
-            import psycopg
-        except ImportError:
-            print("[HATA] EXP-01 pilotu icin psycopg gerekli.", file=sys.stderr)
-            return 1
-        try:
-            engineer_pilot_catalog = Extensions087Store(
-                lambda: psycopg.connect(service=args.engineer_pilot_service, connect_timeout=5)
-            )
-            entry = engineer_pilot_catalog.upsert_catalog_entry(
-                CatalogEntry(
-                    tenant_id=DEFAULT_TENANT_ID,
-                    kind=CatalogKind.ROLE,
-                    name="EXP-01",
-                    version=ENGINEER_PILOT_VERSION,
-                    digest=hashlib.sha256(ENGINEER_PILOT_PROMPT.encode("utf-8")).hexdigest(),
+        if sys.platform == "win32" and not args.skip_wsl:
+            try:
+                svc = None if args.engineer_pilot_service == "wsl-local" else args.engineer_pilot_service
+                engineer_pilot_catalog = WslCatalog087Adapter(distro=args.wsl_distro, service=svc)
+                entry = engineer_pilot_catalog.upsert_catalog_entry(
+                    CatalogEntry(
+                        tenant_id=DEFAULT_TENANT_ID,
+                        kind=CatalogKind.ROLE,
+                        name="EXP-01",
+                        version=ENGINEER_PILOT_VERSION,
+                        digest=hashlib.sha256(ENGINEER_PILOT_PROMPT.encode("utf-8")).hexdigest(),
+                    )
                 )
-            )
-            if not entry["active"]:
-                raise ValueError("ENGINEER_PILOT_CATALOG_ENTRY_INACTIVE")
-        except psycopg.errors.InsufficientPrivilege as exc:
-            print(
-                f"[UYARI] EXP-01 pilot katalog servisi yetki hatasi (InsufficientPrivilege): {exc}. "
-                "Katalog pini devre disi birakilarak devam ediliyor.",
-                file=sys.stderr,
-            )
-            engineer_pilot_catalog = None
-        except (psycopg.Error, ValueError, RuntimeError):
-            print("[HATA] EXP-01 pilot katalog kaydi hazirlanamadi.", file=sys.stderr)
-            return 1
+                if not entry.get("active"):
+                    raise ValueError("ENGINEER_PILOT_CATALOG_ENTRY_INACTIVE")
+            except RuntimeError as exc:
+                if "InsufficientPrivilege" in str(exc):
+                    print(
+                        f"[UYARI] EXP-01 pilot katalog servisi yetki hatasi (InsufficientPrivilege): {exc}. "
+                        "Katalog pini devre disi birakilarak devam ediliyor.",
+                        file=sys.stderr,
+                    )
+                    engineer_pilot_catalog = None
+                else:
+                    print(f"[HATA] EXP-01 pilot katalog kaydi hazirlanamadi: {exc}", file=sys.stderr)
+                    return 1
+            except ValueError:
+                print("[HATA] EXP-01 pilot katalog kaydi hazirlanamadi.", file=sys.stderr)
+                return 1
+        else:
+            try:
+                import psycopg
+            except ImportError:
+                print("[HATA] EXP-01 pilotu icin psycopg gerekli.", file=sys.stderr)
+                return 1
+            try:
+                engineer_pilot_catalog = Extensions087Store(
+                    lambda: psycopg.connect(service=args.engineer_pilot_service, connect_timeout=5)
+                )
+                entry = engineer_pilot_catalog.upsert_catalog_entry(
+                    CatalogEntry(
+                        tenant_id=DEFAULT_TENANT_ID,
+                        kind=CatalogKind.ROLE,
+                        name="EXP-01",
+                        version=ENGINEER_PILOT_VERSION,
+                        digest=hashlib.sha256(ENGINEER_PILOT_PROMPT.encode("utf-8")).hexdigest(),
+                    )
+                )
+                if not entry["active"]:
+                    raise ValueError("ENGINEER_PILOT_CATALOG_ENTRY_INACTIVE")
+            except psycopg.errors.InsufficientPrivilege as exc:
+                print(
+                    f"[UYARI] EXP-01 pilot katalog servisi yetki hatasi (InsufficientPrivilege): {exc}. "
+                    "Katalog pini devre disi birakilarak devam ediliyor.",
+                    file=sys.stderr,
+                )
+                engineer_pilot_catalog = None
+            except (psycopg.Error, ValueError, RuntimeError):
+                print("[HATA] EXP-01 pilot katalog kaydi hazirlanamadi.", file=sys.stderr)
+                return 1
 
     coordinator = LiveMemoryAndBudgetCoordinator(
         tenant_id=DEFAULT_TENANT_ID,
@@ -764,9 +948,100 @@ def main() -> int:
             worker_principal=wprin,
         )
 
+    def _research_broker_reader(read_path: str) -> dict[str, object]:
+        normalized_rel = read_path.replace("\\", "/").lstrip("/")
+        target = (ROOT / normalized_rel).resolve()
+        if ROOT.resolve() not in target.parents or not target.is_file():
+            raise ValueError(f"RESEARCH_PATH_OUT_OF_SCOPE:{read_path}")
+        digest = hashlib.sha256(target.read_bytes()).hexdigest()
+        receipt_id = str(uuid4())
+        return {
+            "relative_path": normalized_rel,
+            "sha256": digest,
+            "receipt_id": receipt_id,
+        }
+
+    def _read_xlsx_summary(raw_bytes: bytes) -> dict[str, object]:
+        import io
+        import zipfile
+        import xml.etree.ElementTree as ET
+
+        with zipfile.ZipFile(io.BytesIO(raw_bytes)) as zf:
+            shared: list[str] = []
+            if "xl/sharedStrings.xml" in zf.namelist():
+                root_ss = ET.fromstring(zf.read("xl/sharedStrings.xml"))
+                for si in root_ss.iter():
+                    if si.tag.endswith("}t") or si.tag == "t":
+                        shared.append(si.text or "")
+            sheet_name = next(
+                (n for n in sorted(zf.namelist()) if n.startswith("xl/worksheets/sheet") and n.endswith(".xml")),
+                None,
+            )
+            if sheet_name is None:
+                raise ValueError("SPREADSHEET_XLSX_MISSING_WORKSHEET")
+            root_sh = ET.fromstring(zf.read(sheet_name))
+            cells: list[str] = []
+            for c in root_sh.iter():
+                if not (c.tag.endswith("}c") or c.tag == "c"):
+                    continue
+                ctype = c.attrib.get("t")
+                v_elem = next((ch for ch in c if ch.tag.endswith("}v") or ch.tag == "v"), None)
+                if v_elem is None or v_elem.text is None:
+                    continue
+                val = v_elem.text
+                if ctype == "s" and val.isdigit() and int(val) < len(shared):
+                    val = shared[int(val)]
+                cells.append(val)
+        return {"sheet": sheet_name, "cell_count": len(cells), "sample_cells": cells[:10]}
+
+    def _spreadsheet_broker_reader(read_path: str) -> dict[str, object]:
+        normalized_rel = read_path.replace("\\", "/").lstrip("/")
+        target = (ROOT / normalized_rel).resolve()
+        if ROOT.resolve() not in target.parents or not target.is_file():
+            raise ValueError(f"SPREADSHEET_PATH_OUT_OF_SCOPE:{read_path}")
+        raw_bytes = target.read_bytes()
+        digest = hashlib.sha256(raw_bytes).hexdigest()
+        suffix = target.suffix.lower()
+        if suffix not in {".csv", ".xlsx"}:
+            raise ValueError(f"SPREADSHEET_UNSUPPORTED_FORMAT:{suffix}")
+        extra = _read_xlsx_summary(raw_bytes) if suffix == ".xlsx" else {}
+        return {
+            "relative_path": normalized_rel,
+            "format": suffix.lstrip("."),
+            "sha256": digest,
+            "receipt_id": str(uuid4()),
+            **extra,
+        }
+
+    def _obligation_web_reader(read_path: str) -> dict[str, object]:
+        if read_path.startswith("https://"):
+            raise PermissionError("OBLIGATION_EXTERNAL_HOST_ALLOWLIST_REQUIRED")
+        normalized_rel = read_path.replace("\\", "/").lstrip("/")
+        target = (ROOT / normalized_rel).resolve()
+        if ROOT.resolve() not in target.parents or not target.is_file():
+            raise PermissionError(f"OBLIGATION_SOURCE_OUT_OF_SCOPE:{read_path}")
+        digest = hashlib.sha256(target.read_bytes()).hexdigest()
+        return {
+            "source": normalized_rel,
+            "sha256": digest,
+            "receipt_id": str(uuid4()),
+        }
+
     runner = LiveOfficeTaskRunner(
         tenant_id="t1",
         ollama_client=ollama_client,
+        research_broker_reader=_research_broker_reader if args.skip_wsl else None,
+        kernel_research_read=(
+            (lambda scope: _kernel_research_readback(args.wsl_distro, args.research_readback_service, scope))
+            if args.research_readback_service and not args.skip_wsl else None
+        ),
+        research_receipt_readback=(
+            (lambda scope, receipt: _kernel_research_readback(
+                args.wsl_distro, args.research_readback_service, scope, receipt
+            )) if args.research_readback_service and not args.skip_wsl else None
+        ),
+        spreadsheet_broker_reader=_spreadsheet_broker_reader,
+        obligation_web_reader=_obligation_web_reader,
         persist_submission=(
             None
             if args.skip_wsl
@@ -844,6 +1119,11 @@ def main() -> int:
 
     app = make_wsgi_app(
         event_replay_provider=_live_events,
+        catalog_provider=(
+            None
+            if engineer_pilot_catalog is None
+            else (lambda tid: engineer_pilot_catalog.list_catalog_entries(tid))
+        ),
         promotions_provider=lambda _tid: coordinator.list_promotions(),
         effects_provider=lambda _tid: coordinator.list_effects(),
         live_snapshot_provider=_live_snapshot,

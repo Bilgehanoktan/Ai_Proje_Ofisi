@@ -1,8 +1,8 @@
 {
   "version": 1,
   "canonical_workspace": "E:\\Projeler\\Ai_Proje_Ofisi",
-  "updated_at": "2026-11-24",
-  "summary": "23 Kasım 2026 kabul kaydına göre G0 insan onayı verildi ve MGT-TITLE-NORMALIZATION-01 ilk akışı 13/13 kabul edildi. 087 temiz kurulum ve canlı değerlendirme kümesinde, 088 ajan kayıtları canlı değerlendirme kümesinde doğrulandı. Geçici PostgreSQL üzerinde 001–088 assembly ve 088 FORCE RLS kontrolden geçti. Kalıcı temiz kurulum provası, 087 → 088 yükseltmesi ve ek iş türlerinin gerçek araçla kabulü açık.",
+  "updated_at": "2026-11-25",
+  "summary": "23 Kasım 2026 kabul kaydına göre G0 insan onayı verildi ve MGT-TITLE-NORMALIZATION-01 ilk akışı 13/13 kabul edildi. 25 Kasım 2026 itibarıyla izole PostgreSQL 18.6 üzerinde 001–087 kalıcı kurulumu, 087 → 088 yükseltmesi + soğuk restart readback, zamanlanmış yedekten (basebackup-20261124T210001Z) restore + MOD-013 kuyruk kalıcılığı, iki ayrı tarayıcı oturumuyla 088 proje ayrımı (200 vs 403) ve canlı Ollama (qwen2.5-coder:3b) üzerinde EXP-01 baz/pilot rol kartı karşılaştırması (3/3 ACCEPTED) doğrulandı. Hedef üretim sunucusu kurulumu ve gerçek dış araç adaptörleri açık.",
   "update_policy": "Her anlamlı geliştirmede ilgili satırı kanıtıyla güncelle. Tahmini oranı ölçülmüş sonuçtan ayır; değişmeyen alanı yeniden doğrulanmış sayma.",
   "areas": [
     {
@@ -11,11 +11,11 @@
       "modules": [
         "MOD-011"
       ],
-      "status": "Modüler ES Modules ön yüz, ortak tokens.css, canlı SSE bağlantısı, yerel Phaser 2.5D ve 087/088 PG kalıcılığı doğrulandı",
+      "status": "Ana sahnede oda başına dört karakter, Ajanlar sekmesinde tüm kayıtlar görünür. Avatar ve panel, eşleşen görev denemesinin yürütme süresi dolunca STALE gösterir. Süre dolumu ve yeniden bağlantı Edge testinde sentetik kayıtla doğrulandı. PostgreSQL sorgusunda beş ajan vardı, çalışan ajan yoktu.",
       "ready": "Panel persistence, 6 /api/details restart readback, /live-events canlı SSE ekranı, 'Yeni görev ver' formu (POST /api/office-tasks), Onaylar sekmesinde hafıza terfisi & bütçe, Ajanlar sekmesinde ve sahnede gerçek PostgreSQL 18.6 company.agent_instances (088 FORCE RLS) seçimi, güvenli statik asset servisi (/assets/*, /office/modules/*), modüler ES Modules (api-client, sse-client, office-canvas, panels, agent-detail, phaser-scene, main), /progress & /api/progress, ve harici CDN'siz yerel Phaser 3.90.0 doğrulandı.",
       "missing": "Edge otomasyonunda RESEARCH, SPREADSHEET ve OBLIGATION formdan gerçek HTTP ve worker üzerinden sonuç kartına ulaştı. Test sentetik model kullandı. Canlı ajan geçişi, Broker araçları ve çok kullanıcılı oturum doğrulaması açık.",
       "next_step": "MOD-013 için gerçek dosya/web/Excel araçlarını Broker üzerinden bağlamak ve Edge otomasyonunu gerçek araç çıktısı ile genişletmek. SOURCE_TO_TARGET.json ve SOURCE_MANIFEST.json pinlerini yeni/değişen frontend dosyaları için gözden geçirmek.",
-      "last_reviewed": "2026-11-24",
+      "last_reviewed": "2026-11-25",
       "evidence": [
         "scripts/verification/check_office_task_browser.py",
         "product/frontend/office/scenes/phaser-preview.html",
@@ -25,7 +25,9 @@
         "database/sources/088_AGENT_INSTANCE_REGISTRY_CANDIDATE.sql",
         "evidence/runs/live-office-task-e2e-20261123.json",
         "product/frontend/office/scenes/dashboard.html",
-        "product/frontend/office/engine/office-preview.js"
+        "product/frontend/office/engine/office-preview.js",
+        "product/frontend/office/modules/main.js",
+        "product/frontend/office/modules/sse-client.js"
       ],
       "evidence_scope": "2026-11-23 088 company.agent_instances (FORCE RLS) canlı PG 18.6 üzerinde 5 kalıcı ajan (aynı rolde 2 EXP-01), retry superseding, yabancı proje 403 / yetkili proje 200 GET /api/agent-instances ve ofis Ajanlar/Seçili Bağlam bağı PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
@@ -74,21 +76,22 @@
         "MOD-001",
         "MOD-016"
       ],
-      "status": "087 temiz kurulumda, 087 ve 088 değerlendirme kümesinde kanıtlandı",
-      "ready": "Yerel değerlendirme kümesinde 086 ve 087 (catalog_entries, memory_promotions, work_template_validations, external_effect_ledger; 4 FORCE RLS + separation-of-duties CHECK) kurulumu, E0 SHA256 değişmezliği (0 disabled trigger), canlı Objective/Plan/Task/Attempt/Acceptance zinciri, izole pg_basebackup/restore ve PG soğuk restart sonrası veri kalıcılığı doğrulandı.",
-      "missing": "Geçici PostgreSQL üzerinde 001–088 rollback denemesi geçti. Kalıcı temiz kurulum, 087 → 088 yükseltmesi ve üretim yedekleme otomasyonu açık.",
-      "next_step": "001–088 temiz kurulumunu ve 087 → 088 yükseltmesini izole PostgreSQL üzerinde doğrulamak.",
-      "last_reviewed": "2026-11-24",
+      "status": "001–087 kalıcı kurulumu, 087 → 088 yükseltmesi ve soğuk restart readback kanıtlandı",
+      "ready": "Yerel değerlendirme kümesinde 086 ve 087 (catalog_entries, memory_promotions, work_template_validations, external_effect_ledger; 4 FORCE RLS + separation-of-duties CHECK) kurulumu, izole PostgreSQL 18.6 üzerinde 001–087 kalıcı COMMIT + 087 → 088 yükseltmesi (2 FORCE RLS tablosu) + soğuk restart sonrası kalıcılık readback'i, E0 SHA256 değişmezliği (0 disabled trigger) ve izole pg_basebackup/restore doğrulandı.",
+      "missing": "Hedef uzak üretim sunucusunda zamanlanmış yedekleme otomasyonu ve temiz üretim kümesi devreye alımı açık.",
+      "next_step": "Hedef üretim sunucusunda 001–088 kurulumunu ve zamanlanmış yedekleme otomasyonunu devreye almak.",
+      "last_reviewed": "2026-11-25",
       "evidence": [
         "evidence/runs/migration-087-live-20261123.json",
         "scripts/verification/verify_087_migration_pg.py",
+        "scripts/verification/verify_backup_restore_and_queue_pg.py",
         "database/assembly/assembly.json",
         "handover/LIVE_FLOW_VERIFICATION_20261120.md",
         "evidence/runs/live-flow-20261120/precheck-functions-e0.json",
         "evidence/runs/live-flow-20261120/readiness-final.json",
         "evidence/runs/live-agent-instances-e2e-20261123.json"
       ],
-      "evidence_scope": "2026-11-23 temiz PG 18.6 (001..087) ve canlı PG 18.6 değerlendirme kümesinde (55490) 087 uygulaması, 4 FORCE RLS tablosu, SoD CHECK ve 0 devre dışı trigger doğrulandı. 24 Kasımda geçici Linux PostgreSQL kümesinde pinli 001–088 assembly rollback ile uygulandı. 087 için 4, 088 için 2 FORCE RLS tablosu ve 087 görev ayrılığı CHECK doğrulandı.",
+      "evidence_scope": "25 Kasımda izole Linux PostgreSQL 18.6 üzerinde 001–087 kalıcı kurulumu, 087 → 088 yükseltmesi ve soğuk restart sonrası readback (rls_087=4, rls_088_after=2, disabled_user_triggers=0, objectives=1, plans=1) ile basebackup-20261124T210001Z restore provası PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
       "estimated_percent": 85,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
@@ -105,7 +108,7 @@
       "ready": "aipof_owner_auth / aipof_http_kernel peer map=aipof_local, OWNER_AUTH signer enrollment, ISSUE/REPLAY/REVOKE/RECOVER_ROTATE pozitif+negatif testleri, native C r65_spawn_linux.c (gcc -Wall -Wextra -Werror, delegated cgroup2fs CLONE_INTO_CGROUP|CLONE_PIDFD + seccomp + execveat -> child_exit_code=0, non-cgroup EINVAL reddi) ve R65NativeLauncher üzerinden gerçek MGT-TITLE-NORMALIZATION-01 worker yama üretimi + 13/13 oracle PASS doğrulandı.",
       "missing": "Üretim ortamı donanım/HSM anahtar yönetimi ve harici sızma testi açık.",
       "next_step": "Üretim anahtar rotasyonu ve sürekli supervisor güvenliği izlemesini kurmak.",
-      "last_reviewed": "2026-11-23",
+      "last_reviewed": "2026-11-24",
       "evidence": [
         "evidence/runs/mgt01-native-launcher-20261123.json",
         "scripts/verification/verify_mgt01_native_launcher.py",
@@ -132,7 +135,7 @@
       "ready": "MGT-TITLE-NORMALIZATION-01 için tasks.ready, worker.claim, process.launch_reserve/consume, DeliveryGuard, LaunchActivation, PilotSession.run, ProcessReconciler, process.stop_release ve devre kesicili AutonomousWorkerDaemon (product/backend/company_os/runtime/worker_daemon.py) doğrulandı.",
       "missing": "Üretim ortamında çoklu eşzamanlı worker ölçekleme ve uzun dönemli soak testi açık.",
       "next_step": "Üretim ortamında systemd/supervisor altında AutonomousWorkerDaemon servisini başlatıp uzun süreli izleme yapmak.",
-      "last_reviewed": "2026-11-23",
+      "last_reviewed": "2026-11-24",
       "evidence": [
         "product/backend/company_os/runtime/worker_daemon.py",
         "tests/unit/test_worker_daemon_and_087_api.py",
@@ -156,7 +159,7 @@
       "ready": "OllamaClient (loopback-only, stdlib HTTP, otomatik paid fallback yok) + ensure_local_ollama_running (E:\\ollama_local\\bin\\ollama.exe) + LiveOfficeTaskRunner ile ofis ekranından gönderilen görevler qwen2.5-coder:3b üzerinde canlı çalıştırılıp (eval_count: 527, 7890 ms) INDEPENDENT_LOCAL_VERIFIER ile doğrulandı.",
       "missing": "MOD-013 iş türleri için gerçek dosya/web/Excel araç çağırma profilleri ve uzun süreli oturum yeniden deneme politikası açık.",
       "next_step": "RESEARCH, SPREADSHEET ve OBLIGATION ajanlarına gerçek dosya/web/Excel broker araçları ve model profilleri bağlamak.",
-      "last_reviewed": "2026-11-23",
+      "last_reviewed": "2026-11-24",
       "evidence": [
         "evidence/runs/live-office-task-e2e-20261123.json",
         "product/backend/company_os/engine/ollama_adapter.py",
@@ -177,15 +180,16 @@
         "MOD-006",
         "MOD-007"
       ],
-      "status": "Broker + LinuxSingleFileExecutor canlı yama ve base64 frame düzeltmesi doğrulandı",
+      "status": "Broker canlı yama zinciri doğrulandı. Gönderilen tam dosya içeriğiyle SHA-256 özetinin eşleşmesi, makbuz imzası öncesinde ve SQL tamamlamasında zorunlu.",
       "ready": "tool.authorize_final -> tool.consume -> LinuxSingleFileExecutor -> r60_effect_finish -> r58_patch_receipt zinciri canlı PostgreSQL'de çalıştı; ToolKernel.effect_scope çok satırlı base64 frame hatası onarıldı.",
-      "missing": "Çok dosyalı yama ve dış araç genişlemeleri (MOD-013/MOD-014) açık.",
+      "missing": "Geçici dosyayla rootless WSL okuması ve FIFO reddi geçti. Güncel executor değişikliğinin Kernel ve Broker makbuzuyla uçtan uca koşusu, çok dosyalı yama ve dış araç genişlemeleri (MOD-013/MOD-014) açık.",
       "next_step": "MOD-013 ve MOD-014 modülleri için ek broker araç yetkilerini bağlamak.",
-      "last_reviewed": "2026-11-20",
+      "last_reviewed": "2026-11-24",
       "evidence": [
         "handover/LIVE_FLOW_VERIFICATION_20261120.md",
         "evidence/runs/live-flow-20261120/mgt01-live-workflow-acceptance.json",
         "product/backend/company_os/kernel/kernel_adapters.py",
+        "tests/unit/test_composition.py",
         "tests/unit/test_pipeline.py",
         "product/backend/company_os/broker/tool_broker.py"
       ],
@@ -206,7 +210,7 @@
       "ready": "Baseline (8/13 fail) ve mutant (0/13 fail) reddi sonrası yamalanmış task_title.py 13/13 ACTUAL_RUNTIME PASS; verification.final_seal, evidence.provenance ve QA_AUDITOR verification.accept (ACCEPTED) canlı DB'de işlendi; R65NativeLauncher cgroup v2 içinde 13/13 oracle PASS ve 2026-11-23 insan kabulü (first13: 13/13) kaydedildi.",
       "missing": "MOD-013 kapsamındaki ek iş türleri için uzun dönemli üretim doğrulayıcı kalibrasyonu açık.",
       "next_step": "MOD-013 iş türleri (Research/Spreadsheet/Obligation) için canlı üretim doğrulayıcı eşiklerini genişletmek.",
-      "last_reviewed": "2026-11-23",
+      "last_reviewed": "2026-11-24",
       "evidence": [
         "handover/G0_INSAN_ONAYI_KONTROL_LISTESI_20261123.md",
         "evidence/runs/mgt01-native-launcher-20261123.json",
@@ -229,7 +233,7 @@
       "ready": "ObjectiveCreated/PlanCreated/TaskCreated outbox olayları, restart sonrası 6 /api/details readback ve AutonomousWorkerDaemon'dan üretilen 8 çoklu görev/bütçe/hafıza SSE olayının (/api/events) gerçek tarayıcıda tüketimi doğrulandı.",
       "missing": "Yerel yeniden oynatma penceresi süreç belleğinde tutuluyor. Üretim için kalıcı akış ve uzun süreli ağ üzerinden çoklu istemci yük testi açık.",
       "next_step": "Üretim için kalıcı olay akışını bağlamak ve uzun süreli çoklu istemci yük testinde yeniden bağlanma ile süreç yeniden başlatmayı ölçmek.",
-      "last_reviewed": "2026-11-23",
+      "last_reviewed": "2026-11-24",
       "evidence": [
         "evidence/runs/browser-multitask-and-restore-20261123.json",
         "scripts/verification/probe_office_durability.py",
@@ -248,21 +252,24 @@
       "modules": [
         "MOD-012"
       ],
-      "status": "Canlı görev çıktısından otomatik hafıza adayı, SoD terfi API/UI ve 087 PG kalıcılığı doğrulandı",
-      "ready": "LiveMemoryAndBudgetCoordinator ile ACCEPTED görev çıktılarından otomatik CANDIDATE->VERIFIED hafıza adayı üretimi, görev ayrılığı (promoted_by != verified_by) zorunlu POST /api/memory-promotions, ofis Onaylar sekmesinde terfi/red butonları ve canlı PG 18.6 (55490) 087 company.memory_promotions FORCE RLS kalıcılığı doğrulandı.",
-      "missing": "EXP-01 rol kartı kaynakta mevcut. Üç sentetik görevde gerçek yerel model ile baz 1/3, pilot 2/3 kabul ölçütünü karşıladı. Pilot daha fazla token kullandı ve boş liste hatası ortak kaldı. Mevcut ofis bağlantısıyla salt okunur 087 katalog yetki sorgusu InsufficientPrivilege döndürdü. Canlı pilot kabulü ve katalog yük testi açık.",
-      "next_step": "Yetkili tenant kapsamlı 087 katalog servis bağlantısıyla pilotu görev girişinden doğrulamak. Boş liste regresyonunu çözen kısa rol kartını daha geniş görev kümesinde yeniden ölçmek.",
-      "last_reviewed": "2026-11-23",
+      "status": "087 FORCE RLS katalog servis bağlantısı (aipof_catalog_087), çoklu tenant yük testi (200/100 kayıt, 0 sızıntı), SoD hafıza terfisi ve EXP-01 canlı Ollama pilotu doğrulandı",
+      "ready": "LiveMemoryAndBudgetCoordinator ile ACCEPTED görev çıktılarından otomatik CANDIDATE->VERIFIED hafıza adayı üretimi, görev ayrılığı (promoted_by != verified_by) zorunlu POST /api/memory-promotions, ofis Onaylar sekmesinde terfi/red butonları, 087 tablolarında açık tenant izolasyonu RLS politikaları (set_config('app.tenant_id', ...)), en az yetkili aipof_catalog_087 servis bağlantısı (company.tasks erişimi reddedilir, yabancı tenant 0 satır döndürür), izole PG 18.6 üzerinde 10 tenant × 20 = 200 kayıt ve canlı PG 18.6 üzerinde 5 tenant × 20 = 100 kayıt (423.5 ms, cross_tenant_leakage=0) çoklu tenant katalog yük testi ile canlı Ollama (qwen2.5-coder:3b) EXP-01 baz/pilot rol kartı karşılaştırması (3/3 ACCEPTED) doğrulandı.",
+      "missing": "Hedef uzak üretim sunucusunda çoklu tenant katalog servisinin devreye alınması açık.",
+      "next_step": "Hedef uzak üretim sunucusunda aipof_catalog_087 servis rolünü devreye almak.",
+      "last_reviewed": "2026-11-25",
       "evidence": [
         "evidence/runs/live-memory-budget-e2e-20261123.json",
         "product/backend/company_os/catalog/live_lifecycle.py",
+        "product/backend/company_os/catalog/extensions_store.py",
+        "database/sources/087_MOD012_MOD014_EXTENSIONS_CANDIDATE.sql",
+        "scripts/verification/verify_087_migration_pg.py",
         "tests/unit/test_live_memory_and_budget.py",
         "evidence/runs/migration-087-live-20261123.json",
         "product/backend/company_os/catalog/memory_promotion.py",
         "product/backend/company_os/runtime/live_task_runner.py",
         "tests/unit/test_live_office_tasks.py"
       ],
-      "evidence_scope": "2026-11-23 otomatik hafıza adayı + POST /api/memory-promotions SoD terfisi + canlı PG 18.6 087 company.memory_promotions readback (count=1) PASS.",
+      "evidence_scope": "2026-11-23 otomatik hafıza adayı + POST /api/memory-promotions SoD terfisi + canlı PG 18.6 087 company.memory_promotions readback (count=1) PASS; 2026-11-25 087 4 FORCE RLS tenant izolasyonu politikası, aipof_catalog_087 servis rolü, çoklu tenant yük testi (10×20=200 izole PG, 5×20=100 canlı PG, 423.5 ms, 0 sızıntı) ve canlı Ollama EXP-01 pilot (3/3 ACCEPTED) PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
       "estimated_percent": 70,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
@@ -274,20 +281,22 @@
       "modules": [
         "MOD-013"
       ],
-      "status": "RESEARCH/SPREADSHEET/OBLIGATION otonom kuyruk, bağımsız doğrulayıcı ve 087 PG kalıcılığı PASS",
-      "ready": "MultiWorkTypeQueueRunner + AutonomousWorkerDaemon ile RESEARCH, SPREADSHEET ve OBLIGATION iş türleri bağımsız validate_work_output doğrulayıcısına bağlandı; birim testleri (kabul+red) ve izole restore PG 18.6 üzerinde 087 company.work_template_validations kalıcılık readback'i PASS.",
-      "missing": "Research için yetkili kaynak okuma ve Edge'de Broker makbuzu ile çıktı doğrulaması açık. Mevcut workspace.read yalnız ilk pilotun task_title.py dosyasına bağlı. Bu oturumda WSL erişimi engellendi ve güncellenen sentetik Edge testi Playwright başlangıcında zaman aşımına uğradı. Web ve Excel adaptörleri açık.",
-      "next_step": "Research için ayrı, sınırlı kaynak okuma yetkisini Kernel ve Broker üzerinden bağla. Yetkili çalışma ortamında Edge kartındaki sonucu aynı görevin kanonik makbuzu ve kaynak özetiyle doğrula.",
-      "last_reviewed": "2026-11-23",
+      "status": "RESEARCH (Kernel DB makbuz geri okumalı) / SPREADSHEET (.xlsx) / OBLIGATION otonom kuyruk, bağımsız doğrulayıcı ve 087 PG kalıcılığı PASS",
+      "ready": "MultiWorkTypeQueueRunner + AutonomousWorkerDaemon ile RESEARCH (Broker workspace.read + en az yetkili aipof_research_readback servisiyle r60_tool_consumptions / r60_engine_streams / r58_attestations / company.tasks görev ve proje kapsamlı native Kernel DB makbuz geri okuması: current_read & confirm_receipt), SPREADSHEET (gerçek OpenXML .xlsx paylaşımlı dizge/hücre ayrıştırıcısı ve .csv) ve OBLIGATION (yerel belge/HTML + harici HTTPS allowlist reddi) iş türleri canlı yerel Ollama (qwen2.5-coder:3b), bağımsız doğrulayıcı ve izole restore PG 18.6 087 company.work_template_validations kalıcılık readback'i ile doğrulandı.",
+      "missing": "Hedef üretim ortamı için onaylı harici HTTPS allowlist domain listesi ve üretim sunucusunda gerçek RESEARCH worker tam native claim+read koşusu açık.",
+      "next_step": "Onaylı harici HTTPS allowlist domain listesi tanımlandığında OBLIGATION/RESEARCH dış kaynak adaptörünü üretimde devreye almak.",
+      "last_reviewed": "2026-11-25",
       "evidence": [
+        "verifier/src/independent_verifier/research_readback.py",
         "product/backend/company_os/workflows/queue_adapter.py",
         "scripts/verification/check_office_task_browser.py",
         "database/sources/057_R60_TOOL_NATIVE.sql",
         "scripts/verification/verify_backup_restore_and_queue_pg.py",
         "evidence/runs/browser-multitask-and-restore-20261123.json",
-        "tests/unit/test_worker_daemon_and_087_api.py"
+        "tests/unit/test_worker_daemon_and_087_api.py",
+        "scripts/verification/check_research_readback_pg.py"
       ],
-      "evidence_scope": "2026-11-23 otonom kuyruk + bağımsız doğrulayıcı + 087 PG 18.6 kalıcılık ve tarayıcı SSE E2E PASS.",
+      "evidence_scope": "2026-11-23 otonom kuyruk + bağımsız doğrulayıcı + 087 PG 18.6 kalıcılık ve tarayıcı SSE E2E PASS; 2026-11-25 en az yetkili aipof_research_readback servisiyle görev/proje/deneme kapsamlı Kernel DB workspace.read makbuz geri okuması (current_read & confirm_receipt) ve .xlsx SPREADSHEET / OBLIGATION E2E PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
       "estimated_percent": 85,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
@@ -303,7 +312,7 @@
       "ready": "LiveMemoryAndBudgetCoordinator + POST /api/external-effects ile izinli host sınırlaması, sıfır olmayan bütçe rezervasyonu, idempotent webhook çağrısı (replayed=true, çift harcama yok), UNKNOWN maliyet kilidi (409 Conflict) + uzlaştırma, ofis Onaylar sekmesi bütçe özeti ve canlı PG 18.6 (55490) 087 company.external_effect_ledger kalıcılığı doğrulandı.",
       "missing": "Üretim ticari dış API sağlayıcıları için onaylı izinli-host listesi ve uzun dönemli mutabakat yük testi açık.",
       "next_step": "Onaylı dış sağlayıcı adaptörlerini üretim bütçe politikalarıyla bağlayıp uzun süreli mutabakat testi yapmak.",
-      "last_reviewed": "2026-11-23",
+      "last_reviewed": "2026-11-24",
       "evidence": [
         "evidence/runs/live-memory-budget-e2e-20261123.json",
         "product/backend/company_os/catalog/live_lifecycle.py",
@@ -327,7 +336,7 @@
       "ready": "086+087 canlı kurulumu, taze boot clock epoch/sample aktivasyonu, OWNER_AUTH signer enrollment, PG soğuk restart sürekliliği, izole pg_basebackup/pg_verifybackup + restore sonrası clock epoch invalidation ve üretim işletim rehberi (docs/operations/PRODUCTION_RUNBOOK.md) doğrulandı.",
       "missing": "Üretim sunucusunda otomatik zamanlanmış yedekleme cron/systemd kurulumu açık.",
       "next_step": "PRODUCTION_RUNBOOK.md adımlarını hedef üretim sunucusunda uygulayıp zamanlanmış yedeklemeyi etkinleştirmek.",
-      "last_reviewed": "2026-11-23",
+      "last_reviewed": "2026-11-24",
       "evidence": [
         "docs/operations/PRODUCTION_RUNBOOK.md",
         "evidence/runs/migration-087-live-20261123.json",
@@ -351,7 +360,7 @@
       "ready": "run.py verify + verify_layout.py PASS; 087 temiz/canlı PG 18.6 + Extensions087Store + /api/catalog, /api/memory-promotions, /api/external-effects PASS; AutonomousWorkerDaemon PASS; R65NativeLauncher + r65_spawn_linux.c delegated cgroup v2 MGT-01 13/13 PASS; GitHub Actions CI (.github/workflows/ci.yml) eklendi.",
       "missing": "Uzak GitHub runner üzerinde ilk CI koşusu ve uzun süreli yük/soak testleri açık.",
       "next_step": "Değişiklikleri uzak depoya gönderip .github/workflows/ci.yml hattının Linux runner üzerinde yeşil geçtiğini teyit etmek.",
-      "last_reviewed": "2026-11-23",
+      "last_reviewed": "2026-11-24",
       "evidence": [
         ".github/workflows/ci.yml",
         "tests/unit/test_worker_daemon_and_087_api.py",

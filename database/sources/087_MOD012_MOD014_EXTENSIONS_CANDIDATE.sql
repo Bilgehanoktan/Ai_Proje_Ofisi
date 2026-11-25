@@ -17,6 +17,11 @@ ALTER TABLE company.catalog_entries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE company.catalog_entries FORCE ROW LEVEL SECURITY;
 REVOKE ALL ON company.catalog_entries FROM PUBLIC;
 
+DROP POLICY IF EXISTS catalog_entries_tenant_isolation ON company.catalog_entries;
+CREATE POLICY catalog_entries_tenant_isolation ON company.catalog_entries
+    USING (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid)
+    WITH CHECK (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid);
+
 CREATE TABLE IF NOT EXISTS company.memory_promotions (
     tenant_id uuid NOT NULL REFERENCES company.tenants(id),
     record_id text NOT NULL CHECK (length(trim(record_id)) > 0),
@@ -33,6 +38,11 @@ ALTER TABLE company.memory_promotions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE company.memory_promotions FORCE ROW LEVEL SECURITY;
 REVOKE ALL ON company.memory_promotions FROM PUBLIC;
 
+DROP POLICY IF EXISTS memory_promotions_tenant_isolation ON company.memory_promotions;
+CREATE POLICY memory_promotions_tenant_isolation ON company.memory_promotions
+    USING (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid)
+    WITH CHECK (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid);
+
 CREATE TABLE IF NOT EXISTS company.work_template_validations (
     id bigserial PRIMARY KEY,
     tenant_id uuid NOT NULL REFERENCES company.tenants(id),
@@ -47,6 +57,11 @@ ALTER TABLE company.work_template_validations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE company.work_template_validations FORCE ROW LEVEL SECURITY;
 REVOKE ALL ON company.work_template_validations FROM PUBLIC;
 
+DROP POLICY IF EXISTS work_template_validations_tenant_isolation ON company.work_template_validations;
+CREATE POLICY work_template_validations_tenant_isolation ON company.work_template_validations
+    USING (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid)
+    WITH CHECK (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid);
+
 CREATE TABLE IF NOT EXISTS company.external_effect_ledger (
     tenant_id uuid NOT NULL REFERENCES company.tenants(id),
     idempotency_key text NOT NULL CHECK (length(trim(idempotency_key)) > 0),
@@ -59,5 +74,10 @@ CREATE TABLE IF NOT EXISTS company.external_effect_ledger (
 ALTER TABLE company.external_effect_ledger ENABLE ROW LEVEL SECURITY;
 ALTER TABLE company.external_effect_ledger FORCE ROW LEVEL SECURITY;
 REVOKE ALL ON company.external_effect_ledger FROM PUBLIC;
+
+DROP POLICY IF EXISTS external_effect_ledger_tenant_isolation ON company.external_effect_ledger;
+CREATE POLICY external_effect_ledger_tenant_isolation ON company.external_effect_ledger
+    USING (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid)
+    WITH CHECK (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid);
 
 ROLLBACK;

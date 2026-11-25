@@ -134,8 +134,9 @@ def verify_office_task_output(task: dict[str, Any], exec_result: dict[str, Any])
 
     if task.get("read_path"):
         receipt = exec_result.get("broker_read_receipt")
-        has_receipt = isinstance(receipt, dict) and bool(receipt)
-        checks.append({"check": "broker_read_receipt_present", "passed": has_receipt})
+        source_key = "source" if task.get("work_type") == "OBLIGATION" else "relative_path"
+        source_matches = isinstance(receipt, dict) and receipt.get(source_key) == task["read_path"]
+        checks.append({"check": "broker_read_receipt_source_match", "passed": source_matches})
 
     accepted = all(item["passed"] for item in checks)
     reason = "LOCAL_VERIFIER_CHECKS_PASSED" if accepted else next(
@@ -213,6 +214,8 @@ class LiveOfficeTaskRunner:
         registry_tenant_id: str | None = None,
         engineer_pilot_catalog: Extensions087Store | None = None,
         research_broker_reader: Callable[[str], dict[str, Any]] | None = None,
+        kernel_research_read: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
+        research_receipt_readback: Callable[[dict[str, Any], str], bool] | None = None,
         spreadsheet_broker_reader: Callable[[str], dict[str, Any]] | None = None,
         obligation_web_reader: Callable[[str], dict[str, Any]] | None = None,
         queue_runner: Any | None = None,
@@ -232,9 +235,13 @@ class LiveOfficeTaskRunner:
         if engineer_pilot_catalog is not None and not registry_tenant_id:
             raise ValueError("ENGINEER_PILOT_TENANT_REQUIRED")
         self._engineer_pilot_catalog = engineer_pilot_catalog
-        self._research_broker_reader = research_broker_reader
-        self._spreadsheet_broker_reader = spreadsheet_broker_reader
-        self._obligation_web_reader = obligation_web_reader
+        self._research_receipt_readback = research_receipt_readback
+        self._kernel_research_read = kernel_research_read
+        self._source_readers = {
+            "RESEARCH": (research_broker_reader, "RESEARCH_BROKER_READER_NOT_CONFIGURED"),
+            "SPREADSHEET": (spreadsheet_broker_reader, "SPREADSHEET_BROKER_READER_NOT_CONFIGURED"),
+            "OBLIGATION": (obligation_web_reader, "OBLIGATION_WEB_READER_NOT_CONFIGURED"),
+        }
         self._queue_runner = queue_runner
         self._project_id = project_id
         self._verifier = verifier
@@ -266,11 +273,28 @@ class LiveOfficeTaskRunner:
                 )
             )
 
+    def _require_source_reader(self, work_type: str) -> Callable[[str], dict[str, Any]]:
+        if work_type not in self._source_readers:
+            raise OfficeTaskValidationError("SOURCE_READ_UNSUPPORTED_FOR_WORK_TYPE")
+        reader, unavailable_error = self._source_readers[work_type]
+        if reader is None:
+            raise OfficeTaskValidationError(unavailable_error)
+        return reader
+
     def submit_task(
         self, payload: dict[str, Any], *, bearer_token: str | None = None
     ) -> dict[str, Any]:
         """Validate, optionally persist to DB/Kernel, and enqueue for worker execution."""
         normalized = validate_office_task_payload(payload)
+        if normalized["read_path"]:
+            if normalized["work_type"] != "RESEARCH" or self._kernel_research_read is None:
+                self._require_source_reader(normalized["work_type"])
+            if (
+                normalized["work_type"] == "RESEARCH"
+                and self._persist_submission is not None
+                and self._research_receipt_readback is None
+            ):
+                raise OfficeTaskValidationError("RESEARCH_RECEIPT_READBACK_NOT_CONFIGURED")
         db_receipt: dict[str, Any] | None = None
         db_persisted = False
         task_id = str(uuid4())
@@ -324,7 +348,8 @@ class LiveOfficeTaskRunner:
             record.updated_at = _now_iso()
             role_id = record.role_id
             title = record.title
-        if self._agent_registry is not None and self._registry_tenant_id and self._project_id:
+        native_read = record.work_type == "RESEARCH" and record.read_path and self._kernel_research_read
+        if not native_read and self._agent_registry is not None and self._registry_tenant_id and self._project_id:
             chosen = self._agent_registry.select_idle_for_role(
                 tenant_id=self._registry_tenant_id,
                 project_id=self._project_id,
@@ -382,27 +407,20 @@ class LiveOfficeTaskRunner:
                 raise OfficeTaskValidationError("ENGINEER_PILOT_CATALOG_PIN_MISSING_OR_INVALID")
             system = ENGINEER_PILOT_PROMPT
         broker_read_receipt = None
-        if task["work_type"] == "RESEARCH" and task.get("read_path"):
-            read_path = str(task["read_path"])
+        if task.get("read_path") and task["work_type"] == "RESEARCH" and self._kernel_research_read:
+            if task.get("db_persisted") is not True:
+                raise OfficeTaskValidationError("PERSISTED_KERNEL_RESEARCH_TASK_REQUIRED")
+            scope = {"tenant_id": self._registry_tenant_id or task["tenant_id"],
+                     "project_id": self._project_id, "task_id": task["task_id"], "read_path": task["read_path"]}
+            broker_read_receipt = self._kernel_research_read(scope)
+            task["attempt_id"] = broker_read_receipt["attempt_id"]
+            with self._lock:
+                self._tasks[task["task_id"]].attempt_id = task["attempt_id"]
+        elif task.get("read_path"):
+            reader = self._require_source_reader(task["work_type"])
             if self._queue_runner is not None:
                 self._queue_runner.execute_task(task)
-            if self._research_broker_reader is None:
-                raise OfficeTaskValidationError("RESEARCH_BROKER_READER_NOT_CONFIGURED")
-            broker_read_receipt = self._research_broker_reader(read_path)
-        elif task["work_type"] == "SPREADSHEET" and task.get("read_path"):
-            read_path = str(task["read_path"])
-            if self._queue_runner is not None:
-                self._queue_runner.execute_task(task)
-            if self._spreadsheet_broker_reader is None:
-                raise OfficeTaskValidationError("SPREADSHEET_BROKER_READER_NOT_CONFIGURED")
-            broker_read_receipt = self._spreadsheet_broker_reader(read_path)
-        elif task["work_type"] == "OBLIGATION" and task.get("read_path"):
-            read_path = str(task["read_path"])
-            if self._queue_runner is not None:
-                self._queue_runner.execute_task(task)
-            if self._obligation_web_reader is None:
-                raise OfficeTaskValidationError("OBLIGATION_WEB_READER_NOT_CONFIGURED")
-            broker_read_receipt = self._obligation_web_reader(read_path)
+            broker_read_receipt = reader(str(task["read_path"]))
         gen = self.ollama.generate(prompt, model=str(task.get("model") or DEFAULT_OLLAMA_MODEL), system=system)
         result = gen.to_dict()
         if broker_read_receipt is not None:
@@ -422,6 +440,28 @@ class LiveOfficeTaskRunner:
 
     def _verify_task(self, task: dict[str, Any], exec_result: dict[str, Any]) -> dict[str, Any]:
         verdict = self._verifier(task, exec_result)
+        if task["work_type"] == "RESEARCH" and task.get("read_path") and self._persist_submission is not None:
+            receipt = exec_result.get("broker_read_receipt")
+            receipt_id = receipt.get("receipt_id") if isinstance(receipt, dict) else None
+            readback = self._research_receipt_readback
+            scope = {
+                "tenant_id": self._registry_tenant_id or task.get("tenant_id"),
+                "project_id": self._project_id,
+                "task_id": task.get("task_id"),
+                "attempt_id": task.get("attempt_id"),
+                "read_path": task["read_path"],
+            }
+            confirmed = (
+                verdict.get("accepted") is True
+                and task.get("db_persisted") is True
+                and all(scope.values())
+                and isinstance(receipt_id, str)
+                and bool(receipt_id)
+                and readback is not None
+                and readback(scope, receipt_id) is True
+            )
+            if not confirmed and verdict.get("accepted"):
+                verdict = {**verdict, "accepted": False, "reason": "RESEARCH_RECEIPT_NOT_CONFIRMED"}
         with self._lock:
             rec = self._tasks.get(str(task["task_id"]))
             if rec is not None:

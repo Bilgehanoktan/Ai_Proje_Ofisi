@@ -211,6 +211,15 @@ class EffectTransaction:
             head = result["head_digest"]
             effect_digest = result["content_digest"]
             base = head
+            truncated = result.get("truncated")
+            if type(truncated) is not bool:
+                raise Denied("READ_TRUNCATION_FLAG_REQUIRED")
+            try:
+                content = base64.b64decode(result["content_base64"], validate=True)
+            except (KeyError, TypeError, ValueError):
+                raise Denied("READ_CONTENT_ENCODING_INVALID") from None
+            if not truncated and hashlib.sha256(content).hexdigest() != effect_digest:
+                raise Denied("READ_CONTENT_DIGEST_MISMATCH")
         else:
             raise Denied("BOUNDED_EFFECT_KIND_REQUIRED")
         if base != self.guard["base_head"]:

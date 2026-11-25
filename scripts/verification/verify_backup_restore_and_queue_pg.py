@@ -13,10 +13,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "product/backend"))
+sys.path.insert(0, str(ROOT / "verifier/src"))
 
 from company_os.runtime.worker_daemon import AutonomousWorkerDaemon  # noqa: E402
 from company_os.workflows.queue_adapter import MultiWorkTypeQueueRunner  # noqa: E402
 from company_os.workflows.templates import WorkType  # noqa: E402
+from independent_verifier.research_readback import confirm_receipt, current_read  # noqa: E402
 
 
 def main() -> None:
@@ -152,17 +154,188 @@ def main() -> None:
                     f"('{tenant_id}'::uuid, '{v['work_type']}', '{v['template_id']}', '{v['version']}', true, '{dig}')"
                 )
             psql(
+                f"BEGIN; SELECT set_config('app.tenant_id', '{tenant_id}', true); "
                 "INSERT INTO company.work_template_validations"
                 "(tenant_id, work_type, template_id, template_version, validated, evidence_digest) VALUES "
                 + ", ".join(values)
-                + ";"
+                + "; COMMIT;"
+            )
+            raw_types = psql(
+                f"BEGIN; SELECT set_config('app.tenant_id', '{tenant_id}', true); "
+                "SELECT json_agg(work_type ORDER BY work_type)::text "
+                "FROM company.work_template_validations WHERE validated = true; COMMIT;"
             )
             persisted_types = json.loads(
+                [ln.strip() for ln in raw_types.splitlines() if ln.strip().startswith("[")][-1]
+            )
+
+            # 4. Verify least-privilege aipof_research_readback Kernel DB receipt readback on restored cluster
+            import base64
+            import hashlib
+            from uuid import uuid4
+            import psycopg
+
+            psql(
+                """
+                BEGIN;
+                DO $$
+                BEGIN
+                    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'aipof_research_readback') THEN
+                        CREATE ROLE aipof_research_readback LOGIN NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE NOINHERIT;
+                    END IF;
+                END $$;
+                GRANT USAGE ON SCHEMA company, company_private TO aipof_research_readback;
+                GRANT SELECT (tenant_id, project_id, id, active_attempt_id, fencing_epoch) ON company.tasks TO aipof_research_readback;
+                GRANT SELECT (tenant_id, project_id, engine_session_id, task_id, attempt_id, fence, process_id) ON company_private.r60_engine_streams TO aipof_research_readback;
+                GRANT SELECT (tenant_id, project_id, id, engine_session_id, process_id, sequence, frame_digest, frame_bytes, state, effect_attestation_id) ON company_private.r60_tool_consumptions TO aipof_research_readback;
+                GRANT SELECT (tenant_id, project_id, id, profile, payload) ON company_private.r58_attestations TO aipof_research_readback;
+
+                DROP POLICY IF EXISTS research_readback_tasks_read ON company.tasks;
+                CREATE POLICY research_readback_tasks_read ON company.tasks
+                    FOR SELECT TO aipof_research_readback USING (session_user = 'aipof_research_readback');
+                DROP POLICY IF EXISTS research_readback_streams_read ON company_private.r60_engine_streams;
+                CREATE POLICY research_readback_streams_read ON company_private.r60_engine_streams
+                    FOR SELECT TO aipof_research_readback USING (session_user = 'aipof_research_readback');
+                DROP POLICY IF EXISTS research_readback_consumptions_read ON company_private.r60_tool_consumptions;
+                CREATE POLICY research_readback_consumptions_read ON company_private.r60_tool_consumptions
+                    FOR SELECT TO aipof_research_readback USING (session_user = 'aipof_research_readback');
+                DROP POLICY IF EXISTS research_readback_attestations_read ON company_private.r58_attestations;
+                CREATE POLICY research_readback_attestations_read ON company_private.r58_attestations
+                    FOR SELECT TO aipof_research_readback USING (session_user = 'aipof_research_readback' AND profile = 'r60.tool-effect.v1');
+                COMMIT;
+                """
+            )
+            ident_path = restore_data / "pg_ident.conf"
+            ident_txt = ident_path.read_text("utf-8")
+            map_line = "aipof_local     aipof-dbtest            aipof_research_readback"
+            if map_line not in ident_txt:
+                ident_path.write_text(ident_txt.rstrip() + "\n" + map_line + "\n", encoding="utf-8")
+            psql("SELECT pg_reload_conf();")
+
+            stream_info = json.loads(
                 psql(
-                    "SELECT json_agg(work_type ORDER BY work_type)::text "
-                    "FROM company.work_template_validations WHERE validated = true;"
+                    """SELECT json_build_object(
+                        'tenant_id', s.tenant_id::text,
+                        'project_id', s.project_id::text,
+                        'task_id', s.task_id::text,
+                        'attempt_id', s.attempt_id::text,
+                        'engine_session_id', s.engine_session_id::text,
+                        'process_id', s.process_id::text,
+                        'manifest_digest', s.manifest_digest,
+                        'command_id', (SELECT id::text FROM company.commands LIMIT 1),
+                        'issuer_id', (SELECT id::text FROM company.principals WHERE kind='WORKER' LIMIT 1)
+                    )::text
+                    FROM company_private.r60_engine_streams s
+                    ORDER BY s.next_sequence DESC LIMIT 1;"""
                 )
             )
+            consume_id = str(uuid4())
+            proof_id = str(uuid4())
+            req_id = str(uuid4())
+            kreq_id = str(uuid4())
+            content_raw = b"def normalize_title(v):\n    return ' '.join(v.split())\n"
+            content_digest = hashlib.sha256(content_raw).hexdigest()
+            frame_obj = {
+                "protocol": "company-tool/1",
+                "request_id": req_id,
+                "engine_session_id": stream_info["engine_session_id"],
+                "attempt_id": stream_info["attempt_id"],
+                "fencing_epoch": 1,
+                "expected_revision": 1,
+                "sequence": 99,
+                "tool_manifest_digest": stream_info["manifest_digest"],
+                "call": {
+                    "tool_id": "workspace.read",
+                    "arguments": {"relative_path": "task_title.py", "max_bytes": 4096},
+                },
+            }
+            frame_bytes = (json.dumps(frame_obj, separators=(",", ":")) + "\n").encode("utf-8")
+            frame_digest = hashlib.sha256(frame_bytes).hexdigest()
+            att_payload = {
+                "consume_id": consume_id,
+                "frame_digest": frame_digest,
+                "process_id": stream_info["process_id"],
+                "base_head": content_digest,
+                "result_head": content_digest,
+                "effect_digest": content_digest,
+                "outcome": "SUCCEEDED",
+                "effect": {
+                    "kind": "READ",
+                    "head_digest": content_digest,
+                    "content_base64": base64.b64encode(content_raw).decode("ascii"),
+                    "content_digest": content_digest,
+                    "truncated": False,
+                },
+            }
+            att_bytes = json.dumps(att_payload, separators=(",", ":")).encode("utf-8")
+            att_digest = hashlib.sha256(att_bytes).hexdigest()
+
+            with psycopg.connect(
+                host=str(restore_sock), port=55499, dbname="ai_proje_ofisi", user="aipof-dbtest"
+            ) as aconn:
+                with aconn.cursor() as cur:
+                    cur.execute(
+                        """INSERT INTO company_private.r58_attestations
+                           (tenant_id, project_id, id, issuer_id, key_id, enrollment_revision,
+                            profile, raw_digest, raw_bytes, auth_tag, payload)
+                           VALUES (%s, %s, %s, %s, %s, 1, 'r60.tool-effect.v1', %s, %s, %s, %s::jsonb)""",
+                        (
+                            stream_info["tenant_id"],
+                            stream_info["project_id"],
+                            proof_id,
+                            stream_info["issuer_id"],
+                            str(uuid4()),
+                            att_digest,
+                            att_bytes,
+                            "d" * 64,
+                            json.dumps(att_payload),
+                        ),
+                    )
+                    cur.execute(
+                        """INSERT INTO company_private.r60_tool_consumptions
+                           (tenant_id, project_id, id, engine_session_id, engine_request_id,
+                            kernel_request_id, sequence, process_id, frame_digest, frame_bytes,
+                            state, effect_attestation_id, command_id)
+                           VALUES (%s, %s, %s, %s, %s, %s, 99, %s, %s, %s, 'SUCCEEDED', %s, %s)""",
+                        (
+                            stream_info["tenant_id"],
+                            stream_info["project_id"],
+                            consume_id,
+                            stream_info["engine_session_id"],
+                            req_id,
+                            kreq_id,
+                            stream_info["process_id"],
+                            frame_digest,
+                            frame_bytes,
+                            proof_id,
+                            stream_info["command_id"],
+                        ),
+                    )
+                aconn.commit()
+
+            rb_conn = lambda: psycopg.connect(
+                host=str(restore_sock), port=55499, dbname="ai_proje_ofisi", user="aipof_research_readback"
+            )
+            scope = {
+                "tenant_id": stream_info["tenant_id"],
+                "project_id": stream_info["project_id"],
+                "task_id": stream_info["task_id"],
+                "read_path": "task_title.py",
+            }
+            cur_read = current_read(rb_conn, scope)
+            if (
+                cur_read["attempt_id"] != stream_info["attempt_id"]
+                or cur_read["receipt_id"] != proof_id
+                or cur_read["sha256"] != content_digest
+            ):
+                raise RuntimeError(f"Unexpected current_read: {cur_read}")
+            full_scope = {**scope, "attempt_id": stream_info["attempt_id"]}
+            if not confirm_receipt(rb_conn, full_scope, proof_id, require_current=True):
+                raise RuntimeError("confirm_receipt failed for valid RESEARCH receipt")
+            if confirm_receipt(rb_conn, {**full_scope, "read_path": "wrong.py"}, proof_id, require_current=True):
+                raise RuntimeError("confirm_receipt accepted wrong read_path")
+            if confirm_receipt(rb_conn, {**full_scope, "project_id": str(uuid4())}, proof_id, require_current=True):
+                raise RuntimeError("confirm_receipt accepted foreign project_id")
 
     print(
         json.dumps(
@@ -173,6 +346,7 @@ def main() -> None:
                 "daemon_processed": stats.processed,
                 "daemon_accepted": stats.accepted,
                 "persisted_work_types": persisted_types,
+                "research_kernel_receipt_readback": "PASS",
             },
             ensure_ascii=False,
             indent=2,

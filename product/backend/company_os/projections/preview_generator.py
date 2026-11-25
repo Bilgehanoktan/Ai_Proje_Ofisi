@@ -102,8 +102,6 @@ def generate_preview_html(*, mode: str = "DEMO_SYNTHETIC", inline_assets: bool =
         """
 
     template = (FRONTEND / "office/scenes/dashboard.html").read_text(encoding="utf-8")
-    phases = sorted({m["phase"] for m in modules})
-    options = "".join(f'<option value="{esc(p)}">{esc(p)}</option>' for p in phases)
 
     if inline_assets:
         tokens_css = (FRONTEND / "assets/tokens.css").read_text(encoding="utf-8")
@@ -121,13 +119,22 @@ def generate_preview_html(*, mode: str = "DEMO_SYNTHETIC", inline_assets: bool =
         )
         office_entry = '<script type="module" src="/office/modules/main.js"></script>'
 
+    for slot, content in (("HEAD", head_assets), ("ENTRY", office_entry)):
+        template = re.sub(
+            rf"<!-- OFFICE_{slot}_START -->.*?<!-- OFFICE_{slot}_END -->",
+            lambda _: content,
+            template,
+            flags=re.DOTALL,
+            count=1,
+        )
     return (
-        template.replace("__HEAD_ASSETS__", head_assets)
-        .replace("__OFFICE_ENTRY__", office_entry)
-        .replace("__MODULE_ROWS__", rows)
-        .replace("__PHASE_OPTIONS__", options)
-        .replace("__MODULE_COUNT__", str(len(modules)))
-        .replace("__MATRIX_HASH__", esc(matrix_hash))
+        template.replace(" data-file-preview", "", 1)
+        .replace("<!-- OFFICE_MODULE_ROWS -->", rows)
+        .replace("<!-- OFFICE_MODULE_COUNT -->", f" · {len(modules)} modül")
+        .replace(
+            "<!-- OFFICE_MATRIX_HASH -->",
+            f'<p class="source">Matris SHA256: <code>{esc(matrix_hash)}</code></p>',
+        )
     )
 
 

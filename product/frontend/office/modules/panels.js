@@ -70,18 +70,30 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
     const cState = doc.getElementById('context-state');
     cState.textContent = AGENT_STATE_LABELS[agent.state] || agent.state;
     cState.classList.toggle('live', agent.state === 'RUNNING' || agent.state === 'IDLE');
-    doc.getElementById('role-description').textContent =
-      agent.state === 'RUNNING' && agent.active_task_title
-        ? `Aktif görev: ${agent.active_task_title}`
-        : role.description;
-    const taskInfo =
-      agent.state === 'RUNNING'
-        ? `active_task_id: ${agent.active_task_id || '-'} | active_attempt_id: ${agent.active_attempt_id || '-'}`
-        : 'Aktif görev yok';
-    doc.getElementById('context-evidence').textContent =
-      `agent_instance_id: ${agent.agent_instance_id} | ${taskInfo} | rev: ${agent.revision} | son görülme: ${agent.last_seen_at || '-'}`;
+    doc.getElementById('role-description').textContent = role.description;
+    const taskTitle = agent.state === 'RUNNING' && agent.active_task_id ? agent.active_task_title : '';
+    doc.getElementById('context-task-title').textContent = taskTitle || '';
+    doc.getElementById('context-task').hidden = !taskTitle;
+    const evidence = doc.getElementById('context-evidence');
+    evidence.replaceChildren();
+    for (const [label, value] of [
+      ['Ajan kaydı', agent.agent_instance_id],
+      ['Aktif görev', agent.active_task_id],
+      ['Aktif deneme', agent.active_attempt_id],
+      ['Kayıt sürümü', agent.revision],
+      ['Son görülme', agent.last_seen_at],
+    ]) {
+      const row = doc.createElement('span');
+      row.className = 'agent-evidence-row';
+      const name = doc.createElement('strong');
+      name.textContent = label;
+      const detail = doc.createElement('span');
+      detail.textContent = value ?? 'Kayıt yok';
+      row.append(name, detail);
+      evidence.append(row);
+    }
     doc.getElementById('context-boundary').textContent =
-      'Bu kayıt PostgreSQL 18.6 company.agent_instances (088 FORCE RLS) tablosundan okunmaktadır.';
+      'Bilgiler son alınan ajan kaydından gösteriliyor.';
     doc.querySelectorAll('.hotspot').forEach((btn) => {
       btn.setAttribute('aria-pressed', String(btn.dataset.role === sceneKey));
     });
@@ -90,6 +102,13 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
   function renderSampleRoleContext(key) {
     const role = ROLES[key];
     if (!role) return;
+    doc.getElementById('context-task').hidden = true;
+    doc.getElementById('context-eyebrow').textContent = 'Seçili örnek rol';
+    const state = doc.getElementById('context-state');
+    state.textContent = 'UNVERIFIED';
+    state.classList.remove('live');
+    doc.getElementById('context-evidence').textContent = 'Bu rol için ajan veya görev kaydı yok.';
+    doc.getElementById('context-boundary').textContent = 'Görseldeki rol, ajan etkinliğini temsil etmez.';
     doc.getElementById('role-title').textContent = role.name;
     doc.getElementById('role-sub').textContent = role.sub;
     doc.getElementById('role-description').textContent = role.description;
@@ -102,10 +121,26 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
 
   function renderAgentInstancesList(instances, selectedId) {
     const list = doc.getElementById('role-list');
-    if (!list || !Array.isArray(instances) || !instances.length) return;
+    if (!list) return;
+    const focusedId = doc.activeElement?.dataset.agentId;
     list.replaceChildren();
+    if (!instances.length) {
+      doc.getElementById('context-task').hidden = true;
+      doc.getElementById('agents-sub').textContent = 'Bu bağlantıda ajan kaydı görünmüyor.';
+      doc.getElementById('context-eyebrow').textContent = 'Ajan bağlamı';
+      doc.getElementById('role-title').textContent = 'Seçili ajan yok';
+      doc.getElementById('role-icon').textContent = '◇';
+      const state = doc.getElementById('context-state');
+      state.textContent = 'UNVERIFIED';
+      state.classList.remove('live');
+      for (const id of ['role-sub', 'role-description', 'context-evidence', 'context-boundary']) {
+        doc.getElementById(id).textContent = '';
+      }
+      doc.querySelectorAll('.hotspot').forEach((button) => button.setAttribute('aria-pressed', 'false'));
+      return;
+    }
     doc.getElementById('agents-sub').textContent =
-      `Canlı PostgreSQL 18.6 üzerinde ${instances.length} kalıcı AgentInstance kaydı izleniyor.`;
+      `Son ofis verisinde ${instances.length} ajan kaydı var.`;
     instances.forEach((a) => {
       const btn = doc.createElement('button');
       btn.type = 'button';
@@ -118,6 +153,7 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
       btn.append(small);
       btn.addEventListener('click', () => onSelectAgent(a.agent_instance_id, true));
       list.append(btn);
+      if (focusedId === a.agent_instance_id) btn.focus({ preventScroll: true });
     });
     if (selectedId) {
       const cur = instances.find((a) => a.agent_instance_id === selectedId);
@@ -128,43 +164,77 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
   function renderOfficeRuns(runs) {
     const box = doc.getElementById('office-runs-list');
     if (!box) return;
-    box.replaceChildren();
-    if (!Array.isArray(runs) || !runs.length) return;
-    runs.forEach((run) => {
-      const card = doc.createElement('div');
-      card.className = `run-card ${run.state === 'ERROR' ? 'error' : (run.state === 'REJECTED' ? 'rejected' : '')}`;
-      const head = doc.createElement('strong');
-      head.textContent = `[${run.state}] ${run.title} (${run.work_type} · ${run.role_id})`;
-      card.append(head);
-
-      const meta = doc.createElement('div');
-      meta.className = 'run-meta';
+    const cards = new Map(Array.from(box.querySelectorAll('.run-card'),
+      (card) => [card.dataset.taskId, card]));
+    if (!Array.isArray(runs) || !runs.length) {
+      if (box.firstElementChild?.matches('p') && !cards.size) return;
+      const empty = doc.createElement('p');
+      empty.textContent = 'Henüz görev yok.';
+      box.replaceChildren(empty);
+      return;
+    }
+    box.querySelector(':scope > p')?.remove();
+    const stateLabels = new Map([
+      ['QUEUED', 'Kuyrukta'],
+      ['RUNNING', 'Çalışıyor'],
+      ['ACCEPTED', 'Kabul edildi'],
+      ['REJECTED', 'Reddedildi'],
+      ['ERROR', 'Hata'],
+    ]);
+    runs.forEach((run, index) => {
+      let card = cards.get(run.task_id);
+      if (!card) {
+        card = doc.createElement('article');
+        card.className = 'run-card';
+        card.dataset.taskId = run.task_id;
+        card.innerHTML = '<div class="run-card-head"><h3></h3><span class="run-status"></span></div>'
+          + '<p class="run-context"></p><details><summary></summary><div class="run-meta"></div></details>';
+        card.querySelector('details').dataset.taskId = run.task_id;
+      }
+      cards.delete(run.task_id);
+      if (box.children[index] !== card) box.insertBefore(card, box.children[index] ?? null);
+      card.dataset.state = run.state;
+      card.querySelector('h3').textContent = run.title;
+      card.querySelector('.run-status').textContent = stateLabels.get(run.state) ?? run.state;
+      card.querySelector('.run-context').textContent = `${run.work_type} · ${run.role_id}`;
+      const result = card.querySelector('details');
+      const meta = result.querySelector('.run-meta');
       const dbNote = run.db_persisted ? 'Kernel PG kaydedildi' : 'Yerel ajan koşusu (Kernel oturumu yok)';
       const verNote = run.verification
         ? `Doğrulama: ${run.verification.reason} (${run.verification.verified_by})`
-        : (run.error ? `Hata: ${run.error}` : 'Ajan çalışıyor / kuyrukta...');
+        : (run.error ? `Hata: ${run.error}` : '');
       const tokNote = run.exec_result
         ? ` · Model: ${run.exec_result.model} · ${run.exec_result.eval_count || 0} token · ${run.exec_result.total_duration_ms || 0} ms`
         : '';
-      meta.textContent = `${dbNote} · ${verNote}${tokNote}`;
-      card.append(meta);
+      meta.textContent = [dbNote, verNote].filter(Boolean).join(' · ') + tokNote;
+      const response = run.exec_result?.response;
+      result.querySelector('summary').textContent = response ? 'Görev çıktısı' : 'Görev ayrıntıları';
+      let pre = result.querySelector('.run-output');
+      if (response) {
+        if (!pre) {
+          pre = doc.createElement('pre');
+          pre.className = 'run-output';
+          result.insertBefore(pre, meta);
+        }
+        if (pre.textContent !== response) pre.textContent = response;
+      } else {
+        pre?.remove();
+      }
 
+      let receiptEl = result.querySelector('.run-receipt');
       if (run.broker_receipt) {
-        const receiptEl = doc.createElement('div');
-        receiptEl.className = 'run-meta';
+        if (!receiptEl) {
+          receiptEl = doc.createElement('div');
+          receiptEl.className = 'run-meta run-receipt';
+          result.append(receiptEl);
+        }
         const digest = String(run.broker_receipt.source_digest || '').slice(0, 12);
         receiptEl.textContent = `Broker Makbuzu: ${run.broker_receipt.receipt_id || '-'} · digest=${digest || '-'} · doğrulayan=${run.broker_receipt.verified_by || '-'}`;
-        card.append(receiptEl);
+      } else {
+        receiptEl?.remove();
       }
-
-      if (run.exec_result && run.exec_result.response) {
-        const pre = doc.createElement('pre');
-        pre.className = 'run-output';
-        pre.textContent = run.exec_result.response;
-        card.append(pre);
-      }
-      box.append(card);
     });
+    for (const removed of cards.values()) removed.remove();
   }
 
   function renderMemoryPromotions(items, enabled) {
@@ -235,6 +305,7 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
   }
 
   function renderConnectionLoss(lastSnapshotAt) {
+    doc.getElementById('context-task').hidden = true;
     const badge = doc.getElementById('mode-badge');
     badge.classList.remove('live');
     badge.textContent = lastSnapshotAt ? 'Bağlantı kesildi' : 'Canlı veri yok';
@@ -244,6 +315,11 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
     doc.getElementById('office-footer-left').textContent = lastSnapshotAt
       ? 'Son alınan ofis verisi gösteriliyor.'
       : 'Canlı ofis verisi alınamadı.';
+    doc.getElementById('office-footer-right').textContent = '';
+    doc.getElementById('task-panel-sub').textContent = 'Bağlantı bekleniyor. Görev gönderimi kapalı.';
+    doc.getElementById('office-notice').textContent = lastSnapshotAt
+      ? 'Ekrandaki son kayıtlar güncel değil.'
+      : 'Ofis sunucusundan veri alınamadı.';
     const cState = doc.getElementById('context-state');
     cState.classList.remove('live');
     cState.textContent = 'Bağlantı kesildi · güncel durum doğrulanamıyor';
@@ -252,7 +328,9 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
     doc.querySelectorAll('#role-list small').forEach((el) => {
       el.textContent = 'Güncel değil · bağlantı bekleniyor';
     });
-    doc.getElementById('ollama-badge')?.classList.remove('live');
+    const ollama = doc.getElementById('ollama-badge');
+    ollama.classList.remove('live');
+    ollama.textContent = 'Ollama durumu bilinmiyor';
     doc.getElementById('nav-note').textContent = 'Canlı bağlantı bekleniyor.';
     const fieldset = doc.getElementById('office-task-fieldset');
     if (fieldset) fieldset.disabled = true;

@@ -101,4 +101,11 @@ const ollama=d.ollama||null;const oBadge=document.getElementById('ollama-badge')
 }
 const taskForm=document.getElementById('office-task-form');
 if(taskForm){taskForm.addEventListener('submit',async ev=>{ev.preventDefault();if(!taskCommandEnabled)return;const fb=document.getElementById('office-task-feedback');const btn=document.getElementById('office-task-submit');const tokenEl=document.getElementById('office-task-token');const token=(tokenEl?.value||'').trim();const readPathEl=document.getElementById('office-task-read-path');const readPath=(readPathEl?.value||'').trim();const payload={title:document.getElementById('office-task-title').value.trim(),work_type:document.getElementById('office-task-work-type').value,role_id:document.getElementById('office-task-role').value,goal:document.getElementById('office-task-goal').value.trim(),acceptance_criteria:document.getElementById('office-task-criteria').value.split('\n').map(s=>s.trim()).filter(Boolean)};if(readPath){payload.read_path=readPath}btn.disabled=true;fb.textContent='Görev kuyruğa alınıyor…';try{const headers={'Content-Type':'application/json'};if(token){headers['Authorization']='Bearer '+token}const resp=await fetch('/api/office-tasks',{method:'POST',credentials:'omit',cache:'no-store',headers,body:JSON.stringify(payload)});const data=await resp.json();if(!resp.ok){fb.textContent=`Gönderilemedi (${resp.status}): ${data.error||'bilinmeyen hata'}`;return}fb.textContent=`Kuyruğa alındı (${data.task?.task_id?.slice(0,8)||'ok'}). Yerel ajan çalıştırıyor…`;document.getElementById('office-task-title').value='';document.getElementById('office-task-goal').value='';document.getElementById('office-task-criteria').value='';await refreshLiveOffice()}catch(_e){fb.textContent='Sunucuya ulaşılamadı.'}finally{if(tokenEl)tokenEl.value='';btn.disabled=false}})}
-refreshLiveOffice();setInterval(refreshLiveOffice,2500);
+if (location.protocol !== 'file:') {
+  refreshLiveOffice();
+  setInterval(refreshLiveOffice, 2500);
+} else {
+  document.querySelectorAll('nav a[href^="/"]').forEach((link) => {
+    link.href = new URL(link.getAttribute('href'), 'http://127.0.0.1:8765/').href;
+  });
+}

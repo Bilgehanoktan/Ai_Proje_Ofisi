@@ -279,6 +279,47 @@ class LifecycleWsgiRoutesTests(unittest.TestCase):
         )
         self.assertTrue(st_u2.startswith("409"))
 
+    def test_foreign_tenant_catalog_pin_rejected(self):
+        from company_os.runtime.live_task_runner import (
+            ENGINEER_PILOT_PROMPT,
+            ENGINEER_PILOT_VERSION,
+        )
+
+        pilot_digest = hashlib.sha256(ENGINEER_PILOT_PROMPT.encode("utf-8")).hexdigest()
+
+        class _ForeignTenantCatalog:
+            def list_catalog_entries(self, tenant_id: str) -> list[dict]:
+                return [
+                    {
+                        "tenant_id": "22222222-2222-4222-8222-222222222222",
+                        "kind": "ROLE",
+                        "name": "EXP-01",
+                        "version": ENGINEER_PILOT_VERSION,
+                        "digest": pilot_digest,
+                        "active": True,
+                    }
+                ]
+
+        runner = LiveOfficeTaskRunner(
+            tenant_id="11111111-1111-4111-8111-111111111111",
+            registry_tenant_id="11111111-1111-4111-8111-111111111111",
+            ollama_client=_StubOllama("1. Katalog testi."),  # type: ignore[arg-type]
+            engineer_pilot_catalog=_ForeignTenantCatalog(),
+            poll_interval_seconds=0.0,
+        )
+        submitted = runner.submit_task(
+            {
+                "title": "Yabancı tenant katalog reddi",
+                "goal": "Yabancı tenant katalog pini kabul edilmemelidir.",
+                "work_type": "SOFTWARE",
+                "role_id": "EXP-01",
+            }
+        )
+        runner.run_once()
+        runs = {r["task_id"]: r for r in runner.list_runs()}
+        self.assertEqual(runs[submitted["task_id"]]["state"], "ERROR")
+        self.assertEqual(runs[submitted["task_id"]].get("error"), "OfficeTaskValidationError")
+
 
 if __name__ == "__main__":
     unittest.main()

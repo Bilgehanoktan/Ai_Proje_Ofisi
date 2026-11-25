@@ -10,10 +10,29 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
+from company_os.broker.tool_executor import LinuxSingleFileExecutor
 from company_os.composition import composition
 from company_os.kernel.execution_protocol import Denied, Unknown
 from tests.unit.test_pipeline import Harness, Cursor, SOURCE, CANDIDATE, digest, uid
 from tests.unit.test_engine_bridge import Transport
+
+
+class BrokerExecutorScopeTests(unittest.TestCase):
+    def test_scope_rejection_precedes_filesystem_access(self):
+        executor = object.__new__(LinuxSingleFileExecutor)
+        executor.target_filename = "research_note.txt"
+        executor.allowed_read_paths = frozenset({executor.target_filename})
+        disallowed_read = SimpleNamespace(
+            tool_id="workspace.read",
+            arguments=SimpleNamespace(relative_path="other_note.txt"),
+        )
+        patch_call = SimpleNamespace(tool_id="patch.apply")
+        with patch("company_os.broker.tool_executor.os.open") as open_file:
+            with self.assertRaisesRegex(Denied, "PILOT_PATH_OUT_OF_SCOPE"):
+                executor.execute(disallowed_read, transaction=None)
+            with self.assertRaisesRegex(Denied, "PILOT_PATCH_TARGET_OUT_OF_SCOPE"):
+                executor.execute(patch_call, transaction=None)
+        open_file.assert_not_called()
 
 
 class CompositionTests(unittest.TestCase):

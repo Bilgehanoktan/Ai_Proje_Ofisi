@@ -18,7 +18,14 @@ export function createOfficeEventStream({
   onError,
 }) {
   let es = null;
+  const storageKey = tenantId ? `office_sse_last_event_id_${tenantId}` : null;
   let lastEventId = 0;
+  if (storageKey && typeof sessionStorage !== 'undefined') {
+    const saved = Number.parseInt(sessionStorage.getItem(storageKey) || '0', 10);
+    if (Number.isFinite(saved) && saved > 0) {
+      lastEventId = saved;
+    }
+  }
 
   function connect() {
     if (!tenantId || typeof EventSource === 'undefined') return;
@@ -33,8 +40,14 @@ export function createOfficeEventStream({
     const handleEvent = (ev) => {
       if (ev.lastEventId) {
         const parsed = Number.parseInt(ev.lastEventId, 10);
-        if (Number.isFinite(parsed) && parsed > lastEventId) {
+        if (Number.isFinite(parsed)) {
+          if (parsed <= lastEventId) {
+            return;
+          }
           lastEventId = parsed;
+          if (storageKey && typeof sessionStorage !== 'undefined') {
+            sessionStorage.setItem(storageKey, String(lastEventId));
+          }
         }
       }
       if (onEvent) onEvent(ev);

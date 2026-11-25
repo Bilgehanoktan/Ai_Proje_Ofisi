@@ -20,6 +20,11 @@ def _require_non_empty(value: str, field_name: str) -> str:
     return value.strip()
 
 
+def _bind_tenant_context(cur: Any, tenant_id: str) -> None:
+    """Bind app.tenant_id within the current transaction for 087 FORCE RLS policies."""
+    cur.execute("SELECT set_config('app.tenant_id', %s, true)", (tenant_id,))
+
+
 @dataclass
 class Extensions087Store:
     """Parameterized DB adapter for 087 MOD-012..MOD-014 tables."""
@@ -37,6 +42,7 @@ class Extensions087Store:
         """
         with self.connect() as conn:
             with conn.cursor() as cur:
+                _bind_tenant_context(cur, tenant_id)
                 cur.execute(
                     sql,
                     (
@@ -81,6 +87,7 @@ class Extensions087Store:
         """
         with self.connect() as conn:
             with conn.cursor() as cur:
+                _bind_tenant_context(cur, tid)
                 cur.execute(sql, (tid,))
                 rows = cur.fetchall()
         return [
@@ -111,6 +118,7 @@ class Extensions087Store:
         """
         with self.connect() as conn:
             with conn.cursor() as cur:
+                _bind_tenant_context(cur, tid)
                 cur.execute(
                     sql,
                     (
@@ -145,6 +153,7 @@ class Extensions087Store:
         """
         with self.connect() as conn:
             with conn.cursor() as cur:
+                _bind_tenant_context(cur, tid)
                 cur.execute(sql, (tid,))
                 rows = cur.fetchall()
         return [
@@ -179,6 +188,7 @@ class Extensions087Store:
         """
         with self.connect() as conn:
             with conn.cursor() as cur:
+                _bind_tenant_context(cur, tid)
                 cur.execute(
                     sql,
                     (
@@ -213,6 +223,7 @@ class Extensions087Store:
         """
         with self.connect() as conn:
             with conn.cursor() as cur:
+                _bind_tenant_context(cur, tid)
                 cur.execute(
                     sql,
                     (
@@ -250,6 +261,7 @@ class Extensions087Store:
         """
         with self.connect() as conn:
             with conn.cursor() as cur:
+                _bind_tenant_context(cur, tid)
                 cur.execute(sql, (tid,))
                 rows = cur.fetchall()
         return [

@@ -4,21 +4,25 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>AI Proje Ofisi — Hibrit ofis</title>
-  __HEAD_ASSETS__
+  <!-- OFFICE_HEAD_START -->
+  <link rel="stylesheet" href="../../assets/tokens.css">
+  <link rel="stylesheet" href="../../assets/office.css">
+  <!-- OFFICE_HEAD_END -->
 </head>
-<body>
+<body class="office-dashboard" data-file-preview>
   <header class="site-header">
     <div class="brand"><b aria-hidden="true">⌘</b>AI Proje Ofisi</div>
     <div class="context">
       <span>Yerel çalışma alanı</span>
       <span>Kat 01 · Çekirdek ofis</span>
-      <span class="demo" id="mode-badge">DEMO / UNVERIFIED</span>
+      <span class="demo" id="mode-badge" role="status">DEMO / UNVERIFIED</span>
     </div>
   </header>
 
   <div class="app">
     <nav aria-label="Ana gezinme">
-      <a href="#office" aria-current="page">Sanal ofis</a>
+      <a href="#live-task-panel" aria-current="page">Görevler</a>
+      <a href="#office">Sanal ofis</a>
       <a href="/preview/phaser">Phaser 2.5D</a>
       <a href="/live-events">Canlı olaylar</a>
       <a href="/progress">İlerleme</a>
@@ -28,17 +32,79 @@
     </nav>
 
     <main>
+      <aside class="notice file-preview-guide" aria-label="Dosya önizlemesi">
+        <strong>Dosya önizlemesi.</strong> Görev göndermek için proje klasöründeki
+        <code>OFISI_BASLAT.bat</code> dosyasını çalıştır, ardından
+        <a href="http://127.0.0.1:8765/">canlı ofisi aç</a>.
+      </aside>
       <div class="heading">
         <div>
-          <h1>Çekirdek ofis</h1>
-          <p>Çalışma alanları ve operasyon durumu</p>
+          <h1>Proje çalışma alanı</h1>
+          <p>Görevleri başlat, ajan durumunu izle ve sonuçları incele.</p>
         </div>
         <div class="stats">
-          <span>Görsel rol<strong id="stat-roles">4 örnek</strong></span>
-          <span>Canlı ajan<strong id="stat-live-agent">Veri yok</strong></span>
-          <span>Veri tazeliği<strong id="stat-freshness">Bağlı değil</strong></span>
+          <span>Kayıtlı görev<strong id="stat-roles">Veri yok</strong></span>
+          <span>Ajan kaydı<strong id="stat-live-agent">Veri yok</strong></span>
+          <span>Son veri<strong id="stat-freshness">Bağlı değil</strong></span>
         </div>
       </div>
+
+      <section class="task-card" id="live-task-panel" aria-label="Canlı görev verme ve ajan çalıştırma">
+        <div class="task-card-head">
+          <div>
+            <h2>Yeni görev</h2>
+            <p id="task-panel-sub">Canlı sunucu (<code>OFISI_BASLAT.bat</code>) bağlı değil; görev gönderimi kapalı.</p>
+          </div>
+          <span class="state" id="ollama-badge">Ollama durumu bilinmiyor</span>
+        </div>
+        <form class="task-form" id="office-task-form">
+          <fieldset id="office-task-fieldset" class="task-fieldset" disabled>
+            <div class="task-grid">
+              <label>Görev başlığı
+                <input id="office-task-title" type="text" minlength="3" maxlength="200" required placeholder="Örn: Başlık normalizasyonu kontrol listesi">
+              </label>
+              <label>İş türü
+                <select id="office-task-work-type">
+                  <option value="SOFTWARE">SOFTWARE (Yazılım)</option>
+                  <option value="RESEARCH">RESEARCH (Araştırma)</option>
+                  <option value="SPREADSHEET">SPREADSHEET (Tablo / Excel)</option>
+                  <option value="OBLIGATION">OBLIGATION (Yükümlülük)</option>
+                </select>
+              </label>
+            </div>
+            <div class="task-grid">
+              <label>Ajan rolü
+                <select id="office-task-role">
+                  <option value="EXP-01">EXP-01 · Engineer</option>
+                  <option value="EXP-02">EXP-02 · Research</option>
+                  <option value="MGR-01">MGR-01 · Orchestrator</option>
+                  <option value="QA-01">QA-01 · QA</option>
+                </select>
+              </label>
+              <label>Kernel oturum anahtarı (opsiyonel · saklanmaz)
+                <input id="office-task-token" type="password" autocomplete="off" maxlength="8192" placeholder="Girilirse Kernel PG kaydı da açılır">
+              </label>
+            </div>
+            <label>Ne yapılmasını istiyorsun?
+              <textarea id="office-task-goal" rows="3" minlength="10" maxlength="4000" required placeholder="Ajanın yapacağı işi ve beklediğin çıktıyı yaz."></textarea>
+            </label>
+            <label>Kabul ölçütleri (opsiyonel, satır başına bir ölçüt)
+              <textarea id="office-task-criteria" rows="2" maxlength="2000" placeholder="Örn: Somut adımlar ve doğrulama kontrolü içermeli."></textarea>
+            </label>
+            <label>Okunacak dosya (RESEARCH · opsiyonel)
+              <input id="office-task-read-path" type="text" maxlength="120" placeholder="Örn: task_title.py">
+            </label>
+            <div class="task-actions">
+              <button type="submit" class="btn-primary" id="office-task-submit">Görevi gönder ve ajanı çalıştır</button>
+              <span class="task-feedback" id="office-task-feedback" role="status" aria-live="polite"></span>
+            </div>
+          </fieldset>
+        </form>
+        <section class="task-results" aria-labelledby="task-results-heading">
+          <h2 id="task-results-heading">Görev sonuçları</h2>
+          <div id="office-runs-list"><p>Henüz görev yok.</p></div>
+        </section>
+      </section>
 
       <div class="layout">
         <section class="office" id="office" aria-label="Hibrit ofis sahnesi">
@@ -98,74 +164,29 @@
           </section>
 
           <section class="panel" id="context" role="tabpanel" aria-labelledby="tab-context">
-            <span class="eyebrow" id="context-eyebrow">Seçili örnek rol</span>
-            <div class="role-icon" id="role-icon" aria-hidden="true">◇</div>
-            <h2 id="role-title">Orchestrator</h2>
-            <p id="role-sub">Merkez koordinasyon alanı</p>
-            <span class="state" id="context-state">UNVERIFIED · Canlı run yok</span>
+            <div class="agent-context-header">
+              <div class="role-icon" id="role-icon" aria-hidden="true">◇</div>
+              <div>
+                <span class="eyebrow" id="context-eyebrow">Seçili örnek rol</span>
+                <h2 id="role-title">Orchestrator</h2>
+                <p id="role-sub">Merkez koordinasyon alanı</p>
+              </div>
+              <span class="state" id="context-state">UNVERIFIED</span>
+            </div>
+            <div class="agent-current-task" id="context-task" hidden>
+              <h3>Aktif görev</h3>
+              <p id="context-task-title"></p>
+            </div>
             <h3>Sorumluluk</h3>
             <p id="role-description">Planlama, delegasyon ve koordinasyon.</p>
-            <h3>Bağlam ve kanıt</h3>
-            <p id="context-evidence">agent_instance_id: bağlı değil<br>run_id: bağlı değil<br>Bağımsız doğrulama: veri yok</p>
-            <h3>Görsel sınır</h3>
-            <p id="context-boundary">Örnek karakter çalışıyor anlamına gelmez. QA incelemesi bağımsız Verifier kabulü değildir.</p>
+            <details class="agent-record">
+              <summary>Ajan kaydı ve görev kimlikleri</summary>
+              <p id="context-evidence">Bu örnek rol için ajan veya görev kaydı yok.</p>
+            </details>
+            <p id="context-boundary">Örnek rol, ajan etkinliğini göstermez.</p>
           </section>
         </aside>
       </div>
-
-      <section class="task-card" id="live-task-panel" aria-label="Canlı görev verme ve ajan çalıştırma">
-        <div class="task-card-head">
-          <div>
-            <h2>Yeni görev ver ve yerel ajanı çalıştır</h2>
-            <p id="task-panel-sub">Canlı sunucu (<code>OFISI_BASLAT.bat</code>) bağlı değil; görev gönderimi kapalı.</p>
-          </div>
-          <span class="state" id="ollama-badge">Ollama: kontrol ediliyor</span>
-        </div>
-        <form class="task-form" id="office-task-form">
-          <fieldset id="office-task-fieldset" class="task-fieldset" disabled>
-            <div class="task-grid">
-              <label>Görev başlığı
-                <input id="office-task-title" type="text" minlength="3" maxlength="200" required placeholder="Örn: Başlık normalizasyonu kontrol listesi">
-              </label>
-              <label>İş türü
-                <select id="office-task-work-type">
-                  <option value="SOFTWARE">SOFTWARE (Yazılım)</option>
-                  <option value="RESEARCH">RESEARCH (Araştırma)</option>
-                  <option value="SPREADSHEET">SPREADSHEET (Tablo / Excel)</option>
-                  <option value="OBLIGATION">OBLIGATION (Yükümlülük)</option>
-                </select>
-              </label>
-            </div>
-            <div class="task-grid">
-              <label>Ajan rolü
-                <select id="office-task-role">
-                  <option value="EXP-01">EXP-01 · Engineer</option>
-                  <option value="EXP-02">EXP-02 · Research</option>
-                  <option value="MGR-01">MGR-01 · Orchestrator</option>
-                  <option value="QA-01">QA-01 · QA</option>
-                </select>
-              </label>
-              <label>Kernel oturum anahtarı (opsiyonel · saklanmaz)
-                <input id="office-task-token" type="password" autocomplete="off" maxlength="8192" placeholder="Girilirse Kernel PG kaydı da açılır">
-              </label>
-            </div>
-            <label>Ne yapılmasını istiyorsun?
-              <textarea id="office-task-goal" rows="3" minlength="10" maxlength="4000" required placeholder="Ajanın yapacağı işi ve beklediğin çıktıyı yaz."></textarea>
-            </label>
-            <label>Kabul ölçütleri (opsiyonel, satır başına bir ölçüt)
-              <textarea id="office-task-criteria" rows="2" maxlength="2000" placeholder="Örn: Somut adımlar ve doğrulama kontrolü içermeli."></textarea>
-            </label>
-            <label>Okunacak dosya (RESEARCH · opsiyonel)
-              <input id="office-task-read-path" type="text" maxlength="120" placeholder="Örn: task_title.py">
-            </label>
-            <div class="task-actions">
-              <button type="submit" class="btn-primary" id="office-task-submit">Görevi gönder ve ajanı çalıştır</button>
-              <span class="task-feedback" id="office-task-feedback" role="status" aria-live="polite"></span>
-            </div>
-          </fieldset>
-        </form>
-        <div id="office-runs-list"></div>
-      </section>
 
       <div class="notice" id="office-notice">Dört çekirdek rol ve hibrit yerleşim kaynak tasarımdan alınmıştır. Bu sürüm özgün Canvas çizimleriyle hazırlanmış görsel önizlemedir; hedef Phaser 2.5D renderer ve sunucu projection entegrasyonu henüz uygulanmış değildir.</div>
       <div class="bottom">
@@ -174,7 +195,7 @@
       </div>
 
       <details id="modules">
-        <summary>Mimari durum matrisi · __MODULE_COUNT__ modül</summary>
+        <summary>Mimari durum matrisi<!-- OFFICE_MODULE_COUNT --></summary>
         <div class="table-scroll" role="region" aria-label="Modül tablosu" tabindex="0">
           <table>
             <thead>
@@ -187,7 +208,7 @@
                 <th>Açık kusur / notlar</th>
               </tr>
             </thead>
-            <tbody>__MODULE_ROWS__</tbody>
+            <tbody><!-- OFFICE_MODULE_ROWS --></tbody>
           </table>
         </div>
       </details>
@@ -196,11 +217,13 @@
         <summary>Yerleşimin kaynakları ve uygulama sınırı</summary>
         <p class="source">B_v135.md §v134-02..05: büyük merkez sahne, hibrit ilk kat, dört çekirdek rol ve sağ panelde dört sabit sekme. ENTEGRASYON_KARAR_MATRISI.md DEC-014..017, DEC-297..301: seçili görsel dalda uyarlama; tarihsel B onayı A için genel UI kabulü değildir. Bu önizleme geometri freeze veya insan kabulü üretmez.</p>
         <p class="source">Palet: duvar #8c9b9e, zemin #d6c5a5, Research #799a8b, Orchestrator #788eaa, Engineer #b79368, QA #978ba5. Yerleşim kavramsaldır; yayımlanmış FloorGeometryVersion değildir.</p>
-        <p class="source">Matris SHA256: <code>__MATRIX_HASH__</code></p>
+        <!-- OFFICE_MATRIX_HASH -->
       </details>
     </main>
   </div>
 
-  __OFFICE_ENTRY__
+  <!-- OFFICE_ENTRY_START -->
+  <script src="../engine/office-preview.js"></script>
+  <!-- OFFICE_ENTRY_END -->
 </body>
 </html>

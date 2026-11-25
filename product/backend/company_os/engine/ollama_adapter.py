@@ -157,6 +157,7 @@ class OllamaClient:
         system: str | None = None,
         temperature: float = 0.2,
         num_predict: int = 768,
+        repeat_penalty: float = 1.15,
     ) -> OllamaGenerationResult:
         """Invoke local Ollama /api/generate synchronously and validate output."""
         if type(prompt) is not str or not prompt.strip():
@@ -166,6 +167,8 @@ class OllamaClient:
             raise OllamaError("OLLAMA_MODEL_REQUIRED")
         if not isinstance(num_predict, int) or isinstance(num_predict, bool) or num_predict < 32 or num_predict > 4096:
             raise OllamaError("OLLAMA_NUM_PREDICT_OUT_OF_RANGE")
+        if isinstance(repeat_penalty, bool) or not isinstance(repeat_penalty, (int, float)) or repeat_penalty < 1.0 or repeat_penalty > 2.0:
+            raise OllamaError("OLLAMA_REPEAT_PENALTY_OUT_OF_RANGE")
 
         body: dict[str, Any] = {
             "model": chosen_model,
@@ -174,6 +177,7 @@ class OllamaClient:
             "options": {
                 "temperature": float(temperature),
                 "num_predict": int(num_predict),
+                "repeat_penalty": float(repeat_penalty),
             },
         }
         if system and system.strip():

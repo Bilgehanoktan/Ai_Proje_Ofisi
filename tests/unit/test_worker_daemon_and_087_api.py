@@ -378,6 +378,110 @@ class MultiWorkTypeQueueRunnerTests(unittest.TestCase):
         self.assertEqual(result["errors"], 0)
         self.assertTrue(result["journal_restart_recovery_passed"])
 
+    def test_daemon_claim_next_error_emits_detail_and_respects_circuit_breaker(self):
+        events: list[tuple[str, dict]] = []
+
+        def _failing_claim():
+            raise RuntimeError("WSL_PG_TRANSIENT_FAILURE")
+
+        daemon = AutonomousWorkerDaemon(
+            claim_next=_failing_claim,
+            execute_task=lambda _t: {},
+            verify_task=lambda _t, _e: {"accepted": True},
+            on_event=lambda kind, payload: events.append((kind, payload)),
+            max_consecutive_errors=2,
+        )
+        s1 = daemon.run_once()
+        self.assertIsNotNone(s1)
+        self.assertEqual(s1.outcome, "ERROR")
+        self.assertEqual(daemon.stats.errors, 1)
+        self.assertNotEqual(daemon.stats.state, DaemonState.HALTED_ON_ERRORS)
+        self.assertEqual(events[-1][0], "WorkerTaskError")
+        self.assertEqual(events[-1][1]["error_type"], "RuntimeError")
+        self.assertEqual(events[-1][1]["error"], "WSL_PG_TRANSIENT_FAILURE")
+
+        s2 = daemon.run_once()
+        self.assertIsNotNone(s2)
+        self.assertEqual(daemon.stats.state, DaemonState.HALTED_ON_ERRORS)
+
+    def test_default_agent_specs_register_cleanly_against_088_pattern(self):
+        from company_os.runtime.agent_instances import AgentInstanceRegistry
+        from scripts.operations.start_office_local import (
+            DEFAULT_AGENT_SPECS,
+            DEFAULT_PROJECT_ID,
+            DEFAULT_TENANT_ID,
+        )
+
+        reg = AgentInstanceRegistry()
+        for aid, rid, dname, wprin in DEFAULT_AGENT_SPECS:
+            rec = reg.register_agent(
+                agent_instance_id=aid,
+                tenant_id=DEFAULT_TENANT_ID,
+                project_id=DEFAULT_PROJECT_ID,
+                role_id=rid,
+                display_name=dname,
+                worker_principal=wprin,
+            )
+            self.assertEqual(rec["role_id"], rid)
+        self.assertGreaterEqual(len(DEFAULT_AGENT_SPECS), 7)
+
+    def test_assign_task_failure_does_not_stall_live_task_runner(self):
+        from company_os.runtime.agent_instances import AgentInstanceRegistry
+        from company_os.runtime.live_task_runner import LiveOfficeTaskRunner
+
+        tid = "11111111-1111-4111-8111-111111111111"
+        pid = "22222222-2222-4222-8222-222222222222"
+
+        class _FailingAssignRegistry(AgentInstanceRegistry):
+            def assign_task(self, **kwargs):
+                raise RuntimeError("PERSIST_AGENT_FAILED")
+
+        import hashlib
+        from types import SimpleNamespace
+
+        class _StubOllama:
+            def generate(self, *args, **kwargs):
+                text = "Somut doğrulama adımı ve kabul ölçütü eksiksiz tamamlandı."
+                payload = {
+                    "response": text,
+                    "response_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
+                    "model": "stub",
+                    "eval_count": 12,
+                    "prompt_eval_count": 10,
+                    "total_duration_ms": 10,
+                    "done": True,
+                }
+                return SimpleNamespace(**payload, to_dict=lambda: dict(payload))
+
+        reg = _FailingAssignRegistry()
+        reg.register_agent(
+            agent_instance_id="11111111-0001-4000-8000-000000000001",
+            tenant_id=tid,
+            project_id=pid,
+            role_id="EXP-01",
+            display_name="Engineer #1",
+            worker_principal="worker-eng-01",
+        )
+        runner = LiveOfficeTaskRunner(
+            ollama_client=_StubOllama(),
+            agent_registry=reg,
+            registry_tenant_id=tid,
+            project_id=pid,
+        )
+        submitted = runner.submit_task(
+            {
+                "title": "Regresyon testi",
+                "goal": "Assign hatasında worker donmadan görevi tamamlamalı.",
+                "work_type": "SOFTWARE",
+                "role_id": "EXP-01",
+            }
+        )
+        summary = runner.run_once()
+        self.assertIsNotNone(summary)
+        self.assertEqual(summary.outcome, "ACCEPTED")
+        run_state = next(r for r in runner.list_runs() if r["task_id"] == submitted["task_id"])
+        self.assertEqual(run_state["state"], "ACCEPTED")
+
 
 if __name__ == "__main__":
     unittest.main()

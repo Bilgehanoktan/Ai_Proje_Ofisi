@@ -370,7 +370,10 @@ class LifecycleWsgiRoutesTests(unittest.TestCase):
         runner.run_once()
         runs = {r["task_id"]: r for r in runner.list_runs()}
         self.assertEqual(runs[submitted["task_id"]]["state"], "ERROR")
-        self.assertEqual(runs[submitted["task_id"]].get("error"), "OfficeTaskValidationError")
+        self.assertEqual(
+            runs[submitted["task_id"]].get("error"),
+            "OfficeTaskValidationError: ENGINEER_PILOT_CATALOG_PIN_MISSING_OR_INVALID",
+        )
 
 
 if __name__ == "__main__":

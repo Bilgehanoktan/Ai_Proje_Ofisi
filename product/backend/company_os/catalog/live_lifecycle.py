@@ -49,6 +49,13 @@ def _effect_to_dict(entry: ExternalEffectEntry) -> dict[str, Any]:
     return asdict(entry)
 
 
+class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """Block HTTP 3xx redirects so an allowlisted host cannot redirect to an untrusted host."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # type: ignore[override]
+        raise urllib.error.HTTPError(req.full_url, code, f"REDIRECT_BLOCKED:{msg}", headers, fp)
+
+
 def _default_loopback_webhook_dispatch(
     target_url: str, payload: dict[str, Any], *, timeout: float = 5.0
 ) -> dict[str, Any]:
@@ -60,7 +67,7 @@ def _default_loopback_webhook_dispatch(
         headers={"Content-Type": "application/json", "Accept": "application/json"},
         method="POST",
     )
-    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), _NoRedirectHandler())
     try:
         with opener.open(req, timeout=timeout) as resp:
             status_code = int(getattr(resp, "status", 200))
@@ -81,6 +88,7 @@ class LiveMemoryAndBudgetCoordinator:
         *,
         tenant_id: str,
         budget_limit_minor: int = 1000,
+        max_single_effect_minor: int | None = None,
         allowed_hosts: frozenset[str] = DEFAULT_ALLOWED_WEBHOOK_HOSTS,
         persist_promotion: Callable[[MemoryRecord], None] | None = None,
         persist_effect: Callable[[ExternalEffectEntry], None] | None = None,
@@ -91,6 +99,10 @@ class LiveMemoryAndBudgetCoordinator:
             raise ValueError("TENANT_ID_REQUIRED")
         if type(budget_limit_minor) is not int or budget_limit_minor <= 0:
             raise ValueError("BUDGET_LIMIT_POSITIVE_REQUIRED")
+        if max_single_effect_minor is not None and (
+            type(max_single_effect_minor) is not int or max_single_effect_minor <= 0
+        ):
+            raise ValueError("MAX_SINGLE_EFFECT_POSITIVE_REQUIRED")
         self.tenant_id = tenant_id.strip()
         self.allowed_hosts = frozenset(allowed_hosts)
         self._persist_promotion = persist_promotion
@@ -99,7 +111,9 @@ class LiveMemoryAndBudgetCoordinator:
         self._lock = threading.Lock()
         self._pipeline = ProductMemoryPromotionPipeline()
         self._ledger = BudgetAndEffectLedger(
-            tenant_id=self.tenant_id, budget_limit_minor=budget_limit_minor
+            tenant_id=self.tenant_id,
+            budget_limit_minor=budget_limit_minor,
+            max_single_effect_minor=max_single_effect_minor,
         )
         self._effect_reservations: dict[str, str] = {}
         self._events: deque[ProjectionEvent] = deque(maxlen=max_events)
@@ -212,6 +226,25 @@ class LiveMemoryAndBudgetCoordinator:
                 if tid == self.tenant_id
             ]
 
+    def search_promoted_memory(self, query: str) -> list[dict[str, Any]]:
+        with self._lock:
+            return [
+                _memory_to_dict(rec)
+                for rec in self._pipeline.search_promoted(self.tenant_id, query)
+            ]
+
+    def repropose_memory(
+        self, *, record_id: str, summary: str, evidence_digest: str
+    ) -> dict[str, Any]:
+        with self._lock:
+            rec = self._pipeline.repropose_rejected(
+                self.tenant_id, record_id.strip(), summary, evidence_digest
+            )
+            self._emit("MemoryReproposed", {"record_id": rec.record_id})
+            snapshot = _memory_to_dict(rec)
+        self._save_promotion(rec)
+        return snapshot
+
     # --- MOD-014: External effect & budget reservation / reconciliation ---
 
     def _validate_target_url(self, target_url: str) -> str:
@@ -221,8 +254,13 @@ class LiveMemoryAndBudgetCoordinator:
         parsed = urllib.parse.urlparse(cleaned)
         if parsed.scheme not in ("http", "https") or not parsed.hostname:
             raise ValueError("INVALID_TARGET_URL")
-        if parsed.hostname not in self.allowed_hosts:
+        if parsed.username is not None or parsed.password is not None:
+            raise ValueError("CREDENTIALS_IN_URL_FORBIDDEN")
+        host = parsed.hostname.lower()
+        if host not in self.allowed_hosts:
             raise PermissionError("EXTERNAL_HOST_NOT_ALLOWED")
+        if host not in DEFAULT_ALLOWED_WEBHOOK_HOSTS and parsed.scheme != "https":
+            raise PermissionError("HTTPS_REQUIRED_FOR_EXTERNAL_HOST")
         return cleaned
 
     def execute_external_effect(
@@ -345,6 +383,7 @@ class LiveMemoryAndBudgetCoordinator:
         return {
             "tenant_id": self.tenant_id,
             "budget_limit_minor": self._ledger.budget_limit_minor,
+            "max_single_effect_minor": self._ledger.max_single_effect_minor,
             "spent_minor": self._ledger.spent_minor,
             "held_minor": self._ledger.held_minor,
             "available_minor": self._ledger.available_minor,
@@ -354,6 +393,10 @@ class LiveMemoryAndBudgetCoordinator:
     def budget_summary(self) -> dict[str, Any]:
         with self._lock:
             return self._budget_snapshot_unlocked()
+
+    def provider_summary(self) -> dict[str, dict[str, int]]:
+        with self._lock:
+            return self._ledger.provider_summary()
 
     def list_effects(self) -> list[dict[str, Any]]:
         with self._lock:

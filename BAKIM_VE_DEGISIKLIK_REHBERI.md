@@ -137,3 +137,8 @@ Yerel başlatıcının PostgreSQL sorgusu ajan, görev, aktif deneme, worker ve 
 ### Kalıcı RESEARCH makbuzunu doğrulama
 
 Yerel ofiste --research-readback-service seçeneği önceden tanımlı, yalnızca gerekli kayıtları okuyabilen PostgreSQL servisinin adını alır. Yerel dosya özeti kalıcı görev için kabul üretmez. Native worker aynı görev ve denemede workspace.read işlemini tamamlamışsa seçilen makbuz ayrı bir doğrulayıcı sürecinde yeni bir salt okunur işlemle denetlenir. Bu seçenek native worker başlatmaz. İzole PostgreSQL üzerinde yeniden başlatma ve yanlış kapsam regresyonu scripts/verification/check_research_readback_pg.py içindedir. Fikstür, native imza üretiminin kabulü değildir.
+
+## 087 katalog genişletmesi ve eski referans bakım kaydı (2026-11-26)
+
+- [ollama_adapter.py](product/backend/company_os/engine/ollama_adapter.py): Yerel Ollama kurulumunda mevcut `bge-m3:latest` çok dilli gömme (embedding) modeli `LOCAL_OLLAMA_MODEL_PROFILES` içine eklendi; `087` varsayılan katalog tohumlaması 12 pinli kayda (4 rol, 4 beceri, 4 yerel Ollama model profili) çıkarıldı ([test_worker_daemon_and_087_api.py](tests/unit/test_worker_daemon_and_087_api.py)).
+- [BAKIM_GUNCEL_DOGRULA_HASH_20261126.md](handover/BAKIM_GUNCEL_DOGRULA_HASH_20261126.md): Eski A referans doğrulayıcısındaki (`GUNCEL/DOGRULA.py`) `dokumanlar/hedef-mimari-v1/CALISMA_DURUMU.md` SHA-256 uyuşmazlığı (manifest otomatik yenilenmeden) ayrı açık bakım kaydı olarak bağlandı.

@@ -139,3 +139,18 @@ class AutonomousWorkerDaemon:
         if self.stats.state != DaemonState.HALTED_ON_ERRORS:
             self.stats.state = DaemonState.STOPPED
         return self.stats
+
+    def health_snapshot(self) -> dict[str, Any]:
+        """Return a structured observability snapshot for multi-node / production monitoring."""
+        return {
+            "state": self.stats.state.value,
+            "healthy": self.stats.state != DaemonState.HALTED_ON_ERRORS,
+            "cycles": self.stats.cycles,
+            "processed": self.stats.processed,
+            "accepted": self.stats.accepted,
+            "rejected": self.stats.rejected,
+            "errors": self.stats.errors,
+            "consecutive_errors": self.stats.consecutive_errors,
+            "max_consecutive_errors": self._max_consecutive_errors,
+            "stop_requested": self._stop_event.is_set(),
+        }

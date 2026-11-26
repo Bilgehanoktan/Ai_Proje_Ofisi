@@ -232,12 +232,21 @@ class Extensions087StoreAndApiTests(unittest.TestCase):
 
         store = _CaptureStore(connect=lambda: _FakeConn([]))
         seeded = store.seed_default_catalog_profiles(tid)
-        self.assertEqual(len(seeded), 11)
+        self.assertEqual(len(seeded), 12)
         kinds = {item["kind"] for item in seeded}
         self.assertEqual(kinds, {"ROLE", "SKILL", "MODEL"})
         names = {item["name"] for item in seeded}
         self.assertTrue(
-            {"EXP-01", "EXP-02", "MGR-01", "QA-01", "qwen2.5-coder:3b", "qwen2.5-coder:7b", "llama3.2:3b"}.issubset(
+            {
+                "EXP-01",
+                "EXP-02",
+                "MGR-01",
+                "QA-01",
+                "qwen2.5-coder:3b",
+                "qwen2.5-coder:7b",
+                "llama3.2:3b",
+                "bge-m3:latest",
+            }.issubset(
                 names
             )
         )

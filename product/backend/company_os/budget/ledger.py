@@ -37,6 +37,7 @@ class BudgetAndEffectLedger:
 
     tenant_id: str
     budget_limit_minor: int
+    max_single_effect_minor: int | None = None
     _reservations: dict[str, BudgetReservation] = field(default_factory=dict)
     _effects_by_key: dict[str, ExternalEffectEntry] = field(default_factory=dict)
 
@@ -62,6 +63,11 @@ class BudgetAndEffectLedger:
     def reserve(self, reservation_id: str, amount_minor: int) -> BudgetReservation:
         if amount_minor <= 0:
             raise ValueError("NON_ZERO_RESERVATION_REQUIRED")
+        if (
+            self.max_single_effect_minor is not None
+            and amount_minor > self.max_single_effect_minor
+        ):
+            raise ValueError("SINGLE_EFFECT_CAP_EXCEEDED")
         if self.has_unresolved_unknown():
             raise RuntimeError("BLOCKED_BY_UNKNOWN_COST")
         if reservation_id in self._reservations:
@@ -113,3 +119,14 @@ class BudgetAndEffectLedger:
         )
         self._effects_by_key[idempotency_key] = entry
         return entry
+
+    def provider_summary(self) -> dict[str, dict[str, int]]:
+        """Aggregate external effect outcomes per provider for reconciliation reporting."""
+        summary: dict[str, dict[str, int]] = {}
+        for entry in self._effects_by_key.values():
+            bucket = summary.setdefault(
+                entry.provider, {"COMMITTED": 0, "REVERTED": 0, "UNKNOWN": 0}
+            )
+            status = entry.status if entry.status in bucket else "UNKNOWN"
+            bucket[status] += 1
+        return summary

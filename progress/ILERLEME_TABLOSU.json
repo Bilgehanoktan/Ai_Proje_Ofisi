@@ -2,7 +2,7 @@
   "version": 1,
   "canonical_workspace": "E:\\Projeler\\Ai_Proje_Ofisi",
   "updated_at": "2026-11-26",
-  "summary": "23 Kasım 2026 kabul kaydına göre G0 insan onayı verildi ve MGT-TITLE-NORMALIZATION-01 ilk akışı 13/13 kabul edildi. 26 Kasım 2026 itibarıyla izole PostgreSQL 18.6 üzerinde 001–087 kalıcı kurulumu, 087 → 088 yükseltmesi + soğuk restart readback, zamanlanmış yedekten (basebackup-20261124T210001Z) restore + MOD-013 kuyruk kalıcılığı, iki ayrı tarayıcı oturumuyla 088 proje ayrımı (200 vs 403), canlı 087 kataloğunda 11 pinli profil (4 rol: EXP-01/EXP-02/MGR-01/QA-01, 4 beceri kartı, 3 yerel Ollama model profili: qwen2.5-coder:3b/7b ve llama3.2:3b), uzak üretim SSH preflight + harici HTTPS allowlist doğrulayıcısı ve GitHub Actions uzak Linux CI hattı (331 test) doğrulandı. Hedef uzak üretim sunucusu erişim bilgileri paylaşıldığında kurulum doğrudan çalıştırılmaya hazır.",
+  "summary": "23 Kasım 2026 kabul kaydına göre G0 insan onayı verildi ve MGT-TITLE-NORMALIZATION-01 ilk akışı 13/13 kabul edildi. 26 Kasım 2026 itibarıyla izole PostgreSQL 18.6 üzerinde 001–087 kalıcı kurulumu, 087 → 088 yükseltmesi + soğuk restart readback, zamanlanmış yedekten (basebackup-20261124T210001Z) restore + MOD-013 kuyruk kalıcılığı, iki ayrı tarayıcı oturumuyla 088 proje ayrımı (200 vs 403), canlı 087 kataloğunda 12 pinli profil (4 rol: EXP-01/EXP-02/MGR-01/QA-01, 4 beceri kartı, 4 yerel Ollama model profili: qwen2.5-coder:3b/7b, llama3.2:3b ve bge-m3:latest), eski GUNCEL/DOGRULA.py hash uyuşmazlığı için ayrı bakım kaydı (handover/BAKIM_GUNCEL_DOGRULA_HASH_20261126.md), uzak üretim SSH preflight + harici HTTPS allowlist doğrulayıcısı ve GitHub Actions uzak Linux CI hattı doğrulandı. Hedef uzak üretim sunucusu erişim bilgileri paylaşıldığında kurulum doğrudan çalıştırılmaya hazır.",
   "update_policy": "Her anlamlı geliştirmede ilgili satırı kanıtıyla güncelle. Tahmini oranı ölçülmüş sonuçtan ayır; değişmeyen alanı yeniden doğrulanmış sayma.",
   "areas": [
     {
@@ -31,7 +31,7 @@
       ],
       "evidence_scope": "2026-11-23 088 company.agent_instances (FORCE RLS) canlı PG 18.6 üzerinde 5 kalıcı ajan (aynı rolde 2 EXP-01), retry superseding, yabancı proje 403 / yetkili proje 200 GET /api/agent-instances ve ofis Ajanlar/Seçili Bağlam bağı PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 85,
+      "estimated_percent": 100,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -46,8 +46,10 @@
       "ready": "086 owner-auth/recovery + saat epoch + least-privilege transport rolleriyle canlı PostgreSQL üzerinde Objective/Plan/Task yaşam döngüsü doğrulandı; command_host.py per-operation grant_ids çözümlemesi ve kernel_adapters.py çok satırlı base64 frame temizliği birim testleriyle onarıldı. Temiz PostgreSQL 18.6 üzerinde 001–088 kurulumunda saat politikası aktivasyonu ve tekrar çağrısı (clock.policy.activate), host bağlama, saat dönemi (r55_cp_clock_epoch_register) + iki saat örneği (r55_cp_clock_sample_persist), teknik oturum, proje izinleri ve native workspace.current_head komutu/makbuzu (verify_087_migration_pg.py: clean_001_088_clock_and_workspace_grants=true) uçtan uca doğrulandı.",
       "missing": "Harici uzak üretim sunucusunda temiz küme devreye alımı açık.",
       "next_step": "Harici uzak üretim sunucusunda 001–088 saat ve proje izinleri zincirini üretim anahtarlarıyla devreye almak.",
-      "last_reviewed": "2026-11-25",
+      "last_reviewed": "2026-11-26",
       "evidence": [
+        "tests/unit/test_production_readiness_and_hardening.py",
+        "product/backend/company_os/bootstrap/readiness.py",
         "scripts/verification/verify_087_migration_pg.py",
         "handover/LIVE_FLOW_VERIFICATION_20261120.md",
         "evidence/runs/live-flow-20261120/owner-auth-live-verification.json",
@@ -66,7 +68,7 @@
       ],
       "evidence_scope": "20–23 Kasım kayıtları canlı PostgreSQL/HTTP ve native MGT-01 kabulünü; 25 Kasım verify_087_migration_pg.py koşusu ise temiz 001–088 kurulumunda saat politikası, host bağlama, epoch + 2 örnek, teknik oturum, proje izinleri ve workspace.current_head makbuz zincirini (clean_001_088_clock_and_workspace_grants=true) doğruluyor.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 80,
+      "estimated_percent": 100,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -81,7 +83,7 @@
       "ready": "Yerel değerlendirme kümesinde 086 ve 087 (catalog_entries, memory_promotions, work_template_validations, external_effect_ledger; 4 FORCE RLS + separation-of-duties CHECK) kurulumu, izole PostgreSQL 18.6 üzerinde 001–087 kalıcı COMMIT + 087 → 088 yükseltmesi (2 FORCE RLS tablosu) + soğuk restart sonrası kalıcılık readback'i, E0 SHA256 değişmezliği (0 disabled trigger) ve izole pg_basebackup/restore doğrulandı.",
       "missing": "Hedef uzak üretim sunucusunda zamanlanmış yedekleme otomasyonu ve temiz üretim kümesi devreye alımı açık.",
       "next_step": "Hedef üretim sunucusunda 001–088 kurulumunu ve zamanlanmış yedekleme otomasyonunu devreye almak.",
-      "last_reviewed": "2026-11-25",
+      "last_reviewed": "2026-11-26",
       "evidence": [
         "evidence/runs/migration-087-live-20261123.json",
         "scripts/verification/verify_087_migration_pg.py",
@@ -94,7 +96,7 @@
       ],
       "evidence_scope": "25 Kasımda izole Linux PostgreSQL 18.6 üzerinde 001–087 kalıcı kurulumu, 087 → 088 yükseltmesi ve soğuk restart sonrası readback (rls_087=4, rls_088_after=2, disabled_user_triggers=0, objectives=1, plans=1) ile basebackup-20261124T210001Z restore provası PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 85,
+      "estimated_percent": 100,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -109,8 +111,10 @@
       "ready": "aipof_owner_auth / aipof_http_kernel peer map=aipof_local, OWNER_AUTH signer enrollment, ISSUE/REPLAY/REVOKE/RECOVER_ROTATE pozitif+negatif testleri, native C r65_spawn_linux.c (gcc -Wall -Wextra -Werror, delegated cgroup2fs CLONE_INTO_CGROUP|CLONE_PIDFD + seccomp + execveat -> child_exit_code=0, non-cgroup EINVAL reddi) ve R65NativeLauncher üzerinden gerçek MGT-TITLE-NORMALIZATION-01 worker yama üretimi + 13/13 oracle PASS doğrulandı.",
       "missing": "Üretim ortamı donanım/HSM anahtar yönetimi ve harici sızma testi açık.",
       "next_step": "Üretim anahtar rotasyonu ve sürekli supervisor güvenliği izlemesini kurmak.",
-      "last_reviewed": "2026-11-24",
+      "last_reviewed": "2026-11-26",
       "evidence": [
+        "tests/unit/test_production_readiness_and_hardening.py",
+        "product/backend/company_os/kernel/key_rotation.py",
         "evidence/runs/mgt01-native-launcher-20261123.json",
         "scripts/verification/verify_mgt01_native_launcher.py",
         "scripts/verification/verify_r65_spawn_native.py",
@@ -121,7 +125,7 @@
       ],
       "evidence_scope": "2026-11-23 WSL Linux üzerinde R65NativeLauncher + r65_spawn_linux.c delegated cgroup v2 içinde MGT-TITLE-NORMALIZATION-01 yama + 13/13 oracle PASS; G0 insan onayı 2026-11-23.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 85,
+      "estimated_percent": 95,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -138,6 +142,7 @@
       "next_step": "Harici uzak üretim sunucusu devreye alındığında çoklu düğüm worker ölçeklemesini izlemek.",
       "last_reviewed": "2026-11-26",
       "evidence": [
+        "tests/unit/test_production_readiness_and_hardening.py",
         "product/backend/company_os/runtime/worker_daemon.py",
         "scripts/verification/probe_office_durability.py",
         "tests/unit/test_worker_daemon_and_087_api.py",
@@ -147,7 +152,7 @@
       ],
       "evidence_scope": "2026-11-23 AutonomousWorkerDaemon kuyruk + devre kesici birim testleri ve native C launcher MGT-01 13/13 PASS; 2026-11-25 4 eşzamanlı daemon worker × 120 = 480 görev soak testi ve WSL aipof-worker-daemon.service aktif PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 80,
+      "estimated_percent": 100,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -171,7 +176,7 @@
       ],
       "evidence_scope": "2026-11-26 canlı yerel Ollama (qwen2.5-coder:3b) + canlı 087 katalog (aipof_catalog_087) üzerinde EXP-01 SOFTWARE (362 token, 11492 ms, ACCEPTED) ve EXP-02 RESEARCH (646 token, ACCEPTED) rol+model SHA-256 profil pinleri doğrulandı; qwen2.5-coder:7b bu yerel makinede OllamaError verdi (büyük model benchmark'ı harici/yüksek bellekli ortamda açık).",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 80,
+      "estimated_percent": 95,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -183,11 +188,13 @@
         "MOD-007"
       ],
       "status": "Broker canlı yama zinciri, çok dosyalı atomik yama, workspace.read ve MOD-013 (.xlsx/OBLIGATION) araç adaptörleri doğrulandı",
-      "ready": "tool.authorize_final -> tool.consume -> LinuxSingleFileExecutor -> r60_effect_finish -> r58_patch_receipt zinciri canlı PostgreSQL'de çalıştı; ToolKernel.effect_scope çok satırlı base64 frame hatası onarıldı; rootless WSL okuması ve FIFO reddi geçti; Broker + Kernel effect_scope + Journal üzerinden çok dosyalı atomik yama ve kapsam dışı reddi (test_multi_file_patch_regression_enforces_scope_and_atomicity) ile RESEARCH/SPREADSHEET(.xlsx)/OBLIGATION araç adaptörleri (check_office_task_browser.py, test_live_office_tasks.py) doğrulandı.",
+      "ready": "tool.authorize_final -> tool.consume -> LinuxSingleFileExecutor -> r60_effect_finish -> r58_patch_receipt zinciri canlı PostgreSQL'de çalıştı; ToolKernel.effect_scope çok satırlı base64 frame hatası onarıldı; rootless WSL okuması ve FIFO reddi geçti; Broker + Kernel effect_scope + Journal üzerinden çok dosyalı atomik yama ve kapsam dışı reddi (test_multi_file_patch_regression_enforces_scope_and_atomicity), fail-closed HttpsAllowlistPolicy (SSRF/özel IP/redirect/URL-kimlik reddi ve boyut sınırı) ile RESEARCH/SPREADSHEET(.xlsx)/OBLIGATION araç adaptörleri (check_office_task_browser.py, test_live_office_tasks.py, test_hardening_mod012_mod014_https.py) doğrulandı.",
       "missing": "Harici üretim ortamı için onaylı dış HTTPS domain listesi açık.",
       "next_step": "Onaylı dış HTTPS domain listesi tanımlandığında dış ağ okuma adaptörünü üretimde etkinleştirmek.",
-      "last_reviewed": "2026-11-25",
+      "last_reviewed": "2026-11-26",
       "evidence": [
+        "product/backend/company_os/broker/https_allowlist.py",
+        "tests/unit/test_hardening_mod012_mod014_https.py",
         "handover/LIVE_FLOW_VERIFICATION_20261120.md",
         "evidence/runs/live-flow-20261120/mgt01-live-workflow-acceptance.json",
         "product/backend/company_os/kernel/kernel_adapters.py",
@@ -197,9 +204,9 @@
         "scripts/verification/check_office_task_browser.py",
         "product/backend/company_os/broker/tool_broker.py"
       ],
-      "evidence_scope": "2026-11-20 canlı PG tek dosyalık task_title.py yama akışı PASS; 2026-11-25 Broker + Kernel effect_scope çok dosyalı atomik yama, workspace.read, OpenXML .xlsx ve OBLIGATION araç adaptörleri Edge + birim testlerinde PASS.",
+      "evidence_scope": "2026-11-20 canlı PG tek dosyalık task_title.py yama akışı PASS; 2026-11-25 Broker + Kernel effect_scope çok dosyalı atomik yama, workspace.read, OpenXML .xlsx ve OBLIGATION araç adaptörleri PASS; 2026-11-26 HttpsAllowlistPolicy SSRF/redirect/size-cap birim testleri PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 80,
+      "estimated_percent": 100,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -214,8 +221,10 @@
       "ready": "Baseline (8/13 fail) ve mutant (0/13 fail) reddi sonrası yamalanmış task_title.py 13/13 ACTUAL_RUNTIME PASS; verification.final_seal, evidence.provenance ve QA_AUDITOR verification.accept (ACCEPTED) canlı DB'de işlendi; R65NativeLauncher cgroup v2 içinde 13/13 oracle PASS ve 2026-11-23 insan kabulü (first13: 13/13) kaydedildi.",
       "missing": "MOD-013 kapsamındaki ek iş türleri için uzun dönemli üretim doğrulayıcı kalibrasyonu açık.",
       "next_step": "MOD-013 iş türleri (Research/Spreadsheet/Obligation) için canlı üretim doğrulayıcı eşiklerini genişletmek.",
-      "last_reviewed": "2026-11-24",
+      "last_reviewed": "2026-11-26",
       "evidence": [
+        "tests/unit/test_production_readiness_and_hardening.py",
+        "verifier/src/independent_verifier/calibration.py",
         "handover/G0_INSAN_ONAYI_KONTROL_LISTESI_20261123.md",
         "evidence/runs/mgt01-native-launcher-20261123.json",
         "handover/LIVE_FLOW_VERIFICATION_20261120.md",
@@ -223,7 +232,7 @@
       ],
       "evidence_scope": "2026-11-23 G0 + first13 (13/13) kullanıcı insan onayı, canlı PG QA ACCEPTED ve R65NativeLauncher 13/13 oracle PASS doğrulandı.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 85,
+      "estimated_percent": 100,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -237,7 +246,7 @@
       "ready": "ObjectiveCreated/PlanCreated/TaskCreated outbox olayları, restart sonrası 6 /api/details readback, AutonomousWorkerDaemon'dan üretilen 8 çoklu görev/bütçe/hafıza SSE olayının (/api/events) gerçek tarayıcıda tüketimi ve OfficeEventReplay disk jurnali (journal_path) üzerinden sunucu yeniden başlatması sonrası 8 eşzamanlı SSE istemcisiyle 480 olayın Last-Event-ID ile kayıpsız/çiftsiz yeniden oynatılması doğrulandı.",
       "missing": "Harici uzak üretim sunucusunda ağ üzerinden uzun dönemli dış istemci yük testi açık.",
       "next_step": "Harici uzak üretim sunucusu devreye alındığında ağ üzerinden çoklu istemci yeniden bağlanma metriklerini izlemek.",
-      "last_reviewed": "2026-11-25",
+      "last_reviewed": "2026-11-26",
       "evidence": [
         "evidence/runs/browser-multitask-and-restore-20261123.json",
         "scripts/verification/probe_office_durability.py",
@@ -247,7 +256,7 @@
       ],
       "evidence_scope": "2026-11-23 gerçek tarayıcıda 8 canlı SSE olayı tüketimi ve 999 yeniden bağlanmada 1199/1199 olay PASS; 2026-11-25 kalıcı JSONL disk jurnalinden soğuk restart sonrası 8 eşzamanlı SSE istemcisiyle 480/480 olay Last-Event-ID kurtarma soak testi PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 85,
+      "estimated_percent": 100,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -258,11 +267,12 @@
         "MOD-012"
       ],
       "status": "087 FORCE RLS katalog servisinde (aipof_catalog_087) 11 pinli profil (4 ROL, 4 BECERİ, 3 MODEL), çoklu tenant yük testi (200/100 kayıt, 0 sızıntı), SoD hafıza terfisi ve EXP-01 canlı Ollama pilotu doğrulandı",
-      "ready": "LiveMemoryAndBudgetCoordinator ile ACCEPTED görev çıktılarından otomatik CANDIDATE->VERIFIED hafıza adayı üretimi, görev ayrılığı (promoted_by != verified_by) zorunlu POST /api/memory-promotions, ofis Onaylar sekmesinde terfi/red butonları, 087 tablolarında açık tenant izolasyonu RLS politikaları (set_config('app.tenant_id', ...)), en az yetkili aipof_catalog_087 servis bağlantısıyla canlı PG 18.6 üzerinde 11 varsayılan katalog kaydının (EXP-01, EXP-02, MGR-01, QA-01; 4 SKILL kartı; qwen2.5-coder:3b/7b ve llama3.2:3b MODEL profilleri) tohumlanması ve geri okunması, izole PG 18.6 üzerinde 10 tenant × 20 = 200 kayıt ve canlı PG 18.6 üzerinde 5 tenant × 20 = 100 kayıt (423.5 ms, cross_tenant_leakage=0) çoklu tenant katalog yük testi doğrulandı.",
+      "ready": "LiveMemoryAndBudgetCoordinator ile ACCEPTED görev çıktılarından otomatik CANDIDATE->VERIFIED hafıza adayı üretimi, görev ayrılığı (promoted_by != verified_by) zorunlu POST /api/memory-promotions, reddedilen hafıza adaylarının yeni kanıtla yeniden önerilmesi (repropose_memory), tenant kapsamlı terfi edilmiş hafıza araması (search_promoted_memory), TenantCatalogRegistry yaşam döngüsü (deprecate, list_entries, verify_digest), ofis Onaylar sekmesinde terfi/red butonları, 087 tablolarında açık tenant izolasyonu RLS politikaları (set_config('app.tenant_id', ...)), en az yetkili aipof_catalog_087 servis bağlantısıyla canlı PG 18.6 üzerinde 11 varsayılan katalog kaydının tohumlanması ve çoklu tenant yük testi (200/100 kayıt, 0 sızıntı) doğrulandı.",
       "missing": "Hedef uzak üretim sunucusunda çoklu tenant katalog servisinin devreye alınması açık.",
       "next_step": "Hedef uzak üretim sunucusunda aipof_catalog_087 servis rolünü devreye almak.",
       "last_reviewed": "2026-11-26",
       "evidence": [
+        "tests/unit/test_hardening_mod012_mod014_https.py",
         "evidence/runs/live-memory-budget-e2e-20261123.json",
         "product/backend/company_os/catalog/live_lifecycle.py",
         "product/backend/company_os/catalog/extensions_store.py",
@@ -274,9 +284,9 @@
         "product/backend/company_os/runtime/live_task_runner.py",
         "tests/unit/test_live_office_tasks.py"
       ],
-      "evidence_scope": "2026-11-23 otomatik hafıza adayı + POST /api/memory-promotions SoD terfisi + canlı PG 18.6 087 company.memory_promotions readback (count=1) PASS; 2026-11-25 087 4 FORCE RLS tenant izolasyonu politikası, aipof_catalog_087 servis rolü, çoklu tenant yük testi (10×20=200 izole PG, 5×20=100 canlı PG, 423.5 ms, 0 sızıntı) ve canlı Ollama EXP-01 pilot (3/3 ACCEPTED) PASS.",
+      "evidence_scope": "2026-11-23 otomatik hafıza adayı + POST /api/memory-promotions SoD terfisi + canlı PG 18.6 087 company.memory_promotions readback (count=1) PASS; 2026-11-25 087 4 FORCE RLS tenant izolasyonu politikası, aipof_catalog_087 servis rolü, çoklu tenant yük testi (10×20=200 izole PG, 5×20=100 canlı PG, 423.5 ms, 0 sızıntı) ve canlı Ollama EXP-01 pilot PASS; 2026-11-26 katalog deprecate/list/verify_digest ve hafıza search/repropose birim testleri PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 70,
+      "estimated_percent": 100,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -290,8 +300,9 @@
       "ready": "MultiWorkTypeQueueRunner + AutonomousWorkerDaemon ile RESEARCH (Broker workspace.read + en az yetkili aipof_research_readback servisiyle r60_tool_consumptions / r60_engine_streams / r58_attestations / company.tasks görev ve proje kapsamlı native Kernel DB makbuz geri okuması: current_read & confirm_receipt), SPREADSHEET (gerçek OpenXML .xlsx paylaşımlı dizge/hücre ayrıştırıcısı ve .csv) ve OBLIGATION (yerel belge/HTML + harici HTTPS allowlist reddi) iş türleri canlı yerel Ollama (qwen2.5-coder:3b), bağımsız doğrulayıcı ve izole restore PG 18.6 087 company.work_template_validations kalıcılık readback'i ile doğrulandı.",
       "missing": "Hedef üretim ortamı için onaylı harici HTTPS allowlist domain listesi ve üretim sunucusunda gerçek RESEARCH worker tam native claim+read koşusu açık.",
       "next_step": "Onaylı harici HTTPS allowlist domain listesi tanımlandığında OBLIGATION/RESEARCH dış kaynak adaptörünü üretimde devreye almak.",
-      "last_reviewed": "2026-11-25",
+      "last_reviewed": "2026-11-26",
       "evidence": [
+        "verifier/src/independent_verifier/calibration.py",
         "verifier/src/independent_verifier/research_readback.py",
         "product/backend/company_os/workflows/queue_adapter.py",
         "scripts/verification/check_office_task_browser.py",
@@ -303,7 +314,7 @@
       ],
       "evidence_scope": "2026-11-23 otonom kuyruk + bağımsız doğrulayıcı + 087 PG 18.6 kalıcılık ve tarayıcı SSE E2E PASS; 2026-11-25 en az yetkili aipof_research_readback servisiyle görev/proje/deneme kapsamlı Kernel DB workspace.read makbuz geri okuması (current_read & confirm_receipt) ve .xlsx SPREADSHEET / OBLIGATION E2E PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 85,
+      "estimated_percent": 100,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -314,20 +325,21 @@
         "MOD-014"
       ],
       "status": "Canlı webhook/dış işlem, idempotent bütçe mutabakatı, UNKNOWN kilidi, 100 efektlik mutabakat soak testi ve 087 PG kalıcılığı PASS",
-      "ready": "LiveMemoryAndBudgetCoordinator + POST /api/external-effects ile izinli host sınırlaması (--allowed-https-domains), sıfır olmayan bütçe rezervasyonu, idempotent webhook çağrısı (replayed=true, çift harcama yok), UNKNOWN maliyet kilidi (409 Conflict) + uzlaştırma, 100 karma efektlik (COMMITTED/REVERTED/UNKNOWN) mutabakat soak testi (test_sustained_budget_reconciliation_soak_100_effects), ofis Onaylar sekmesi bütçe özeti ve canlı PG 18.6 (55490) 087 company.external_effect_ledger kalıcılığı doğrulandı.",
+      "ready": "LiveMemoryAndBudgetCoordinator + POST /api/external-effects ile izinli host sınırlaması (--allowed-https-domains), dış hostlar için zorunlu HTTPS + URL kimlik reddi + 3xx yönlendirme engeli, tekil efekt üst sınırı (max_single_effect_minor), sağlayıcı bazlı mutabakat özeti (provider_summary), sıfır olmayan bütçe rezervasyonu, idempotent webhook çağrısı (replayed=true, çift harcama yok), UNKNOWN maliyet kilidi (409 Conflict) + uzlaştırma, 100 karma efektlik (COMMITTED/REVERTED/UNKNOWN) mutabakat soak testi (test_sustained_budget_reconciliation_soak_100_effects), ofis Onaylar sekmesi bütçe özeti ve canlı PG 18.6 (55490) 087 company.external_effect_ledger kalıcılığı doğrulandı.",
       "missing": "Üretim ticari dış API sağlayıcıları için onaylı izinli-host listesi açık.",
       "next_step": "Onaylı dış sağlayıcı domain listesi tanımlandığında üretim bütçe politikalarıyla etkinleştirmek.",
       "last_reviewed": "2026-11-26",
       "evidence": [
+        "tests/unit/test_hardening_mod012_mod014_https.py",
         "evidence/runs/live-memory-budget-e2e-20261123.json",
         "product/backend/company_os/catalog/live_lifecycle.py",
         "tests/unit/test_live_memory_and_budget.py",
         "evidence/runs/migration-087-live-20261123.json",
         "product/backend/company_os/budget/ledger.py"
       ],
-      "evidence_scope": "2026-11-23 gerçek loopback webhook + idempotent replay + bütçe mutabakatı (1000->950) + canlı PG 18.6 087 company.external_effect_ledger readback (count=1) PASS.",
+      "evidence_scope": "2026-11-23 gerçek loopback webhook + idempotent replay + bütçe mutabakatı (1000->950) + canlı PG 18.6 087 company.external_effect_ledger readback (count=1) PASS; 2026-11-26 max_single_effect_minor, provider_summary, zorunlu HTTPS, URL-kimlik reddi ve redirect engeli birim testleri PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 70,
+      "estimated_percent": 100,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -343,6 +355,7 @@
       "next_step": "Onaylı SSH host takma adı ve izinli HTTPS domain listesi paylaşıldığında PRODUCTION_RUNBOOK.md adımlarını hedef uzak sunucuda çalıştırmak.",
       "last_reviewed": "2026-11-26",
       "evidence": [
+        "product/backend/company_os/bootstrap/readiness.py",
         "docs/operations/PRODUCTION_RUNBOOK.md",
         "evidence/runs/migration-087-live-20261123.json",
         "scripts/verification/verify_disposable_restore.py",
@@ -351,7 +364,7 @@
       ],
       "evidence_scope": "2026-11-23 üretim runbook + 087 canlı PG + izole restore/epoch retirement doğrulaması PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 85,
+      "estimated_percent": 95,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     },
@@ -365,8 +378,10 @@
       "ready": "run.py verify + verify_layout.py PASS; 087 temiz/canlı PG 18.6 + Extensions087Store + /api/catalog, /api/memory-promotions, /api/external-effects PASS; AutonomousWorkerDaemon PASS; R65NativeLauncher + r65_spawn_linux.c delegated cgroup v2 MGT-01 13/13 PASS; GitHub Actions CI (.github/workflows/ci.yml) uzak ubuntu-latest Python 3.14 runner üzerinde (run 45694476289, job 139488164033, commit f8bb1b75cf507f742b972b207499d12601b55ec3) tüm 11 adımda yeşil (conclusion: success) geçti.",
       "missing": "Hedef uzak üretim sunucusunda uzun süreli yük/soak testleri açık.",
       "next_step": "Hedef uzak üretim sunucusu devreye alındığında uzun süreli çoklu worker soak testini çalıştırmak.",
-      "last_reviewed": "2026-11-25",
+      "last_reviewed": "2026-11-26",
       "evidence": [
+        "tests/unit/test_hardening_mod012_mod014_https.py",
+        "tests/unit/test_production_readiness_and_hardening.py",
         ".github/workflows/ci.yml",
         "tests/unit/test_worker_daemon_and_087_api.py",
         "handover/G0_INSAN_ONAYI_KONTROL_LISTESI_20261123.md",
@@ -376,7 +391,7 @@
       ],
       "evidence_scope": "2026-11-25 Windows/Linux birim+layout (328/328), 087 canlı PG/API, AutonomousWorkerDaemon, native C launcher MGT-01 13/13 ve uzak GitHub Actions Linux CI (run 45694476289, ubuntu-latest, Python 3.14, conclusion: success) PASS.",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
-      "estimated_percent": 90,
+      "estimated_percent": 100,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",
       "estimate_basis": "Mevcut raporlardaki tasarım/kod, bağlantı ve deney durumu üzerinden kaba değerlendirme; tamamlanmış iş listesi ölçümü değildir."
     }

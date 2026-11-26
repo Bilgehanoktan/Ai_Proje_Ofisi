@@ -188,6 +188,49 @@ class TenantCatalogRegistry:
             raise PermissionError("TENANT_SCOPE_OR_INACTIVE")
         return entry
 
+    def deprecate(self, tenant_id: str, kind: CatalogKind, name: str, version: str) -> CatalogEntry:
+        """Mark an existing tenant-scoped catalog entry inactive while preserving its digest."""
+        key = (tenant_id, kind, name, version)
+        if key not in self._entries:
+            raise KeyError("CATALOG_ENTRY_NOT_FOUND")
+        existing = self._entries[key]
+        if existing.tenant_id != tenant_id:
+            raise PermissionError("TENANT_SCOPE_VIOLATION")
+        deprecated = CatalogEntry(
+            tenant_id=existing.tenant_id,
+            kind=existing.kind,
+            name=existing.name,
+            version=existing.version,
+            digest=existing.digest,
+            active=False,
+        )
+        self._entries[key] = deprecated
+        return deprecated
+
+    def list_entries(
+        self,
+        tenant_id: str,
+        *,
+        kind: CatalogKind | None = None,
+        active_only: bool = True,
+    ) -> list[CatalogEntry]:
+        """List catalog entries strictly scoped to a single tenant."""
+        return [
+            entry
+            for entry in self._entries.values()
+            if entry.tenant_id == tenant_id
+            and (kind is None or entry.kind == kind)
+            and (not active_only or entry.active)
+        ]
+
+    def verify_digest(
+        self, tenant_id: str, kind: CatalogKind, name: str, version: str, content: str
+    ) -> bool:
+        """Verify that raw content matches the SHA-256 digest of an active catalog entry."""
+        entry = self.resolve(tenant_id, kind, name, version)
+        actual = hashlib.sha256(content.encode("utf-8")).hexdigest()
+        return actual == entry.digest
+
 
 @dataclass
 class ProductMemoryPromotionPipeline:
@@ -237,6 +280,33 @@ class ProductMemoryPromotionPipeline:
             r for (t, _), r in self._records.items()
             if t == tenant_id and r.state == PromotionState.PROMOTED
         ]
+
+    def search_promoted(self, tenant_id: str, query: str) -> list[MemoryRecord]:
+        """Search promoted product memory records by substring, strictly tenant-scoped."""
+        needle = (query or "").strip().lower()
+        if not needle:
+            return self.list_promoted(tenant_id)
+        return [
+            r
+            for r in self.list_promoted(tenant_id)
+            if needle in r.summary.lower() or needle in r.record_id.lower()
+        ]
+
+    def repropose_rejected(
+        self, tenant_id: str, record_id: str, summary: str, evidence_digest: str
+    ) -> MemoryRecord:
+        """Re-submit a REJECTED memory record with updated evidence as a fresh CANDIDATE."""
+        rec = self._get_scoped(tenant_id, record_id)
+        if rec.state != PromotionState.REJECTED:
+            raise ValueError("ONLY_REJECTED_CAN_BE_REPROPOSED")
+        if not summary.strip() or not evidence_digest.strip():
+            raise ValueError("SUMMARY_AND_DIGEST_REQUIRED")
+        rec.summary = summary.strip()
+        rec.evidence_digest = evidence_digest.strip()
+        rec.state = PromotionState.CANDIDATE
+        rec.verified_by = None
+        rec.promoted_by = None
+        return rec
 
     def _get_scoped(self, tenant_id: str, record_id: str) -> MemoryRecord:
         key = (tenant_id, record_id)

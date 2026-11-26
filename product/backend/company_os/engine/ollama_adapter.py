@@ -83,6 +83,14 @@ LOCAL_OLLAMA_MODEL_PROFILES: dict[str, LocalOllamaModelProfile] = {
         repeat_penalty=1.12,
         description="Araştırma, özetleme ve yükümlülük kontrolü için yerel talimat modeli (3B).",
     ),
+    "bge-m3:latest": LocalOllamaModelProfile(
+        name="bge-m3:latest",
+        version="m3-f16-embed",
+        temperature=0.0,
+        num_predict=0,
+        repeat_penalty=1.0,
+        description="Yerel çok dilli gömme (embedding) ve kaynaklı hafıza erişim modeli.",
+    ),
 }
 
 

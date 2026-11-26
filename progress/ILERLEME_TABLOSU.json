@@ -11,11 +11,11 @@
       "modules": [
         "MOD-011"
       ],
-      "status": "Ana sahnede oda başına dört karakter, Ajanlar sekmesinde tüm kayıtlar görünür. Avatar ve panel, eşleşen görev denemesinin yürütme süresi dolunca STALE gösterir. Edge otomasyonunda RESEARCH, SPREADSHEET (.xlsx) ve OBLIGATION gerçek Broker/araç adaptörü makbuzlarıyla doğrulandı.",
-      "ready": "Panel persistence, 6 /api/details restart readback, /live-events canlı SSE ekranı, 'Yeni görev ver' formu (POST /api/office-tasks), Onaylar sekmesinde hafıza terfisi & bütçe, Ajanlar sekmesinde ve sahnede gerçek PostgreSQL 18.6 company.agent_instances (088 FORCE RLS) seçimi, güvenli statik asset servisi (/assets/*, /office/modules/*), modüler ES Modules (api-client, sse-client, office-canvas, panels, agent-detail, phaser-scene, main), /progress & /api/progress, harici CDN'siz yerel Phaser 3.90.0 ve Edge otomasyonunda (check_office_task_browser.py) gerçek Broker workspace.read / OpenXML .xlsx / OBLIGATION araç adaptörü makbuz doğrulaması tamamlandı.",
+      "status": "Ana sahnede oda başına dört karakter, Ajanlar sekmesinde tüm kayıtlar görünür. Edge otomasyonunda RESEARCH/SPREADSHEET(.xlsx)/OBLIGATION Broker makbuzları ile CEO (MGR-01) otomatik delegasyon + nihai özet raporu (.run-ceo-report) doğrulandı.",
+      "ready": "Panel persistence, 6 /api/details restart readback, /live-events canlı SSE ekranı, 'Yeni görev ver' formu (POST /api/office-tasks, varsayılan MGR-01 CEO otomatik delegasyon + .run-ceo-report görünümü), Onaylar sekmesinde hafıza terfisi & bütçe, Ajanlar sekmesinde ve sahnede gerçek PostgreSQL 18.6 company.agent_instances (088 FORCE RLS) seçimi, güvenli statik asset servisi (/assets/*, /office/modules/*), modüler ES Modules, /progress & /api/progress, harici CDN'siz yerel Phaser 3.90.0 ve Edge otomasyonunda (check_office_task_browser.py) 9 görevlik uçtan uca doğrulama tamamlandı.",
       "missing": "Harici uzak üretim sunucusunda çok kullanıcılı dış ağ oturum doğrulaması açık.",
       "next_step": "Harici uzak üretim sunucusu devreye alındığında çok kullanıcılı dış ağ oturumlarını izlemek.",
-      "last_reviewed": "2026-11-25",
+      "last_reviewed": "2026-11-26",
       "evidence": [
         "scripts/verification/check_office_task_browser.py",
         "product/frontend/office/scenes/phaser-preview.html",
@@ -132,11 +132,11 @@
         "MOD-002",
         "MOD-003"
       ],
-      "status": "MGT-01 uçtan uca akışı, fail-closed AutonomousWorkerDaemon döngüsü ve 4 eşzamanlı worker (480 görev) soak testi doğrulandı",
-      "ready": "MGT-TITLE-NORMALIZATION-01 için tasks.ready, worker.claim, process.launch_reserve/consume, DeliveryGuard, LaunchActivation, PilotSession.run, ProcessReconciler, process.stop_release, devre kesicili AutonomousWorkerDaemon (product/backend/company_os/runtime/worker_daemon.py) ve 4 eşzamanlı daemon worker ile 480 görevlik (120×4, 0 çift sahiplenme, 0 hata) çoklu worker soak testi (scripts/verification/probe_office_durability.py) doğrulandı.",
+      "status": "MGT-01 uçtan uca akışı, CEO (MGR-01) otomatik delegasyon + nihai sentez raporu, AutonomousWorkerDaemon ve 480 görev soak testi doğrulandı",
+      "ready": "MGT-TITLE-NORMALIZATION-01 için tasks.ready, worker.claim, process.launch_reserve/consume, DeliveryGuard, LaunchActivation, PilotSession.run, ProcessReconciler, process.stop_release, CEO (MGR-01) otomatik uzman (EXP-01/EXP-02) + QA-01 delegasyonu ve nihai özet raporu sentezi (CeoDelegatedSubtasks, CeoFinalReportReady), devre kesicili AutonomousWorkerDaemon ve 4 eşzamanlı daemon worker ile 480 görevlik (120×4, 0 çift sahiplenme, 0 hata) çoklu worker soak testi doğrulandı.",
       "missing": "Harici uzak üretim sunucusunda çoklu düğüm (multi-node) worker ölçekleme açık.",
       "next_step": "Harici uzak üretim sunucusu devreye alındığında çoklu düğüm worker ölçeklemesini izlemek.",
-      "last_reviewed": "2026-11-25",
+      "last_reviewed": "2026-11-26",
       "evidence": [
         "product/backend/company_os/runtime/worker_daemon.py",
         "scripts/verification/probe_office_durability.py",
@@ -313,11 +313,11 @@
       "modules": [
         "MOD-014"
       ],
-      "status": "Canlı webhook/dış işlem, idempotent bütçe mutabakatı, UNKNOWN kilidi ve 087 PG kalıcılığı PASS",
-      "ready": "LiveMemoryAndBudgetCoordinator + POST /api/external-effects ile izinli host sınırlaması, sıfır olmayan bütçe rezervasyonu, idempotent webhook çağrısı (replayed=true, çift harcama yok), UNKNOWN maliyet kilidi (409 Conflict) + uzlaştırma, ofis Onaylar sekmesi bütçe özeti ve canlı PG 18.6 (55490) 087 company.external_effect_ledger kalıcılığı doğrulandı.",
-      "missing": "Üretim ticari dış API sağlayıcıları için onaylı izinli-host listesi ve uzun dönemli mutabakat yük testi açık.",
-      "next_step": "Onaylı dış sağlayıcı adaptörlerini üretim bütçe politikalarıyla bağlayıp uzun süreli mutabakat testi yapmak.",
-      "last_reviewed": "2026-11-24",
+      "status": "Canlı webhook/dış işlem, idempotent bütçe mutabakatı, UNKNOWN kilidi, 100 efektlik mutabakat soak testi ve 087 PG kalıcılığı PASS",
+      "ready": "LiveMemoryAndBudgetCoordinator + POST /api/external-effects ile izinli host sınırlaması (--allowed-https-domains), sıfır olmayan bütçe rezervasyonu, idempotent webhook çağrısı (replayed=true, çift harcama yok), UNKNOWN maliyet kilidi (409 Conflict) + uzlaştırma, 100 karma efektlik (COMMITTED/REVERTED/UNKNOWN) mutabakat soak testi (test_sustained_budget_reconciliation_soak_100_effects), ofis Onaylar sekmesi bütçe özeti ve canlı PG 18.6 (55490) 087 company.external_effect_ledger kalıcılığı doğrulandı.",
+      "missing": "Üretim ticari dış API sağlayıcıları için onaylı izinli-host listesi açık.",
+      "next_step": "Onaylı dış sağlayıcı domain listesi tanımlandığında üretim bütçe politikalarıyla etkinleştirmek.",
+      "last_reviewed": "2026-11-26",
       "evidence": [
         "evidence/runs/live-memory-budget-e2e-20261123.json",
         "product/backend/company_os/catalog/live_lifecycle.py",

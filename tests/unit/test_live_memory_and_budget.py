@@ -180,6 +180,58 @@ class ExternalEffectAndBudgetLifecycleTests(unittest.TestCase):
         self.assertEqual(rec["budget"]["available_minor"], 360)
         self.assertEqual(saved_effects[-1], ("k-2", "COMMITTED"))
 
+    def test_sustained_budget_reconciliation_soak_100_effects(self):
+        """MOD-014 sustained reconciliation soak: 100 effects with mixed COMMITTED/REVERTED/UNKNOWN."""
+        calls = 0
+
+        def dispatcher(_url, payload):
+            nonlocal calls
+            calls += 1
+            idx = int(payload["idx"])
+            if idx % 10 == 0:
+                return {"outcome": "UNKNOWN", "http_status": 504}
+            if idx % 5 == 0:
+                return {"outcome": "REVERTED", "http_status": 422}
+            return {"outcome": "COMMITTED", "http_status": 200}
+
+        coord = LiveMemoryAndBudgetCoordinator(
+            tenant_id="11111111-1111-4111-8111-111111111111",
+            budget_limit_minor=10_000,
+            allowed_hosts=frozenset({"127.0.0.1", "api.approved.example"}),
+            dispatcher=dispatcher,
+        )
+        expected_spent = 0
+        for idx in range(1, 101):
+            key = f"soak-key-{idx:03d}"
+            res = coord.execute_external_effect(
+                idempotency_key=key,
+                provider="approved-api",
+                target_url="https://api.approved.example/v1/run",
+                payload={"idx": idx},
+                reserved_minor=50,
+                actual_minor=40,
+            )
+            if idx % 10 == 0:
+                self.assertEqual(res["effect"]["status"], "UNKNOWN")
+                self.assertTrue(res["budget"]["blocked_by_unknown"])
+                coord.reconcile_unknown_effect(
+                    idempotency_key=key, actual_minor=30, final_status="COMMITTED"
+                )
+                expected_spent += 30
+            elif idx % 5 == 0:
+                self.assertEqual(res["effect"]["status"], "REVERTED")
+            else:
+                self.assertEqual(res["effect"]["status"], "COMMITTED")
+                expected_spent += 40
+
+        summary = coord.budget_summary()
+        self.assertEqual(calls, 100)
+        self.assertFalse(summary["blocked_by_unknown"])
+        self.assertEqual(summary["held_minor"], 0)
+        self.assertEqual(summary["spent_minor"], expected_spent)
+        self.assertEqual(summary["available_minor"], 10_000 - expected_spent)
+        self.assertEqual(len(coord.list_effects()), 100)
+
 
 class LifecycleWsgiRoutesTests(unittest.TestCase):
     def _post(self, app, path: str, payload: dict, *, origin: str = "http://127.0.0.1:8765"):

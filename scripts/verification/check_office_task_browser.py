@@ -163,6 +163,7 @@ def main():
                         expect(page.locator("#office-task-submit")).to_be_enabled()
                         page.locator("#office-task-title").fill(title)
                         page.locator("#office-task-work-type").select_option(work_type)
+                        page.locator("#office-task-role").select_option("EXP-01")
                         page.locator("#office-task-goal").fill("Sentetik görev çıktısını doğrula.")
                         with page.expect_response(
                             lambda response: response.url.endswith("/api/office-tasks")
@@ -338,6 +339,24 @@ def main():
                             if work_type == "SPREADSHEET":
                                 assert latest["exec_result"]["broker_read_receipt"]["cell_count"] == 6
                     assert len(runner.list_runs()) == 6
+                    # Verify CEO (MGR-01) auto-delegation & consolidated CEO final report in browser
+                    page.locator("#office-task-title").fill("CEO yönetim testi")
+                    page.locator("#office-task-work-type").select_option("SOFTWARE")
+                    page.locator("#office-task-role").select_option("MGR-01")
+                    page.locator("#office-task-read-path").fill("")
+                    page.locator("#office-task-goal").fill("CEO hedefi parcalayip uzman ve QA'ya delege etsin.")
+                    with page.expect_response(
+                        lambda response: response.url.endswith("/api/office-tasks")
+                        and response.request.method == "POST"
+                    ) as ceo_sub:
+                        page.locator("#office-task-submit").click()
+                    assert ceo_sub.value.ok
+                    ceo_card = page.locator(".run-card").filter(has_text="MGR-01")
+                    expect(ceo_card.locator(".run-status")).to_have_text("Kabul edildi", timeout=12000)
+                    ceo_card.locator("summary").click()
+                    expect(ceo_card.locator(".run-ceo-report")).to_be_visible(timeout=12000)
+                    expect(ceo_card.locator(".run-ceo-report")).to_contain_text("CEO (MGR-01) Nihai Özet Raporu")
+                    assert len(runner.list_runs()) == 9
                     expect(page.locator(".scene-agent")).to_have_count(2)
                     phaser_floor = page.locator('.phaser-floor[data-ready="true"] canvas')
                     expect(phaser_floor).to_be_visible()

@@ -144,9 +144,24 @@ def verify_office_task_output(task: dict[str, Any], exec_result: dict[str, Any])
 
     if task.get("read_path"):
         receipt = exec_result.get("broker_read_receipt")
-        source_key = "source" if task.get("work_type") == "OBLIGATION" else "relative_path"
+        work_type = str(task.get("work_type") or "SOFTWARE").upper()
+        source_key = "source" if work_type == "OBLIGATION" else "relative_path"
         source_matches = isinstance(receipt, dict) and receipt.get(source_key) == task["read_path"]
         checks.append({"check": "broker_read_receipt_source_match", "passed": source_matches})
+        if isinstance(receipt, dict):
+            has_digest_or_id = any(
+                isinstance(receipt.get(k), str) and bool(str(receipt.get(k)).strip())
+                for k in ("sha256", "content_digest", "sheet_digest", "receipt_id")
+            )
+            if work_type == "SPREADSHEET" and "cell_count" in receipt:
+                cell_ok = isinstance(receipt.get("cell_count"), int) and int(receipt["cell_count"]) > 0
+                checks.append({"check": "spreadsheet_cells_positive", "passed": cell_ok})
+            elif work_type == "OBLIGATION" and "uncertainty" in receipt:
+                unc = receipt.get("uncertainty")
+                unc_ok = isinstance(unc, (int, float)) and not isinstance(unc, bool) and 0.0 <= float(unc) <= 0.5
+                checks.append({"check": "obligation_uncertainty_bounded", "passed": unc_ok})
+            if has_digest_or_id:
+                checks.append({"check": "broker_read_receipt_evidence_present", "passed": True})
 
     accepted = all(item["passed"] for item in checks)
     reason = "LOCAL_VERIFIER_CHECKS_PASSED" if accepted else next(

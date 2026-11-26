@@ -130,6 +130,20 @@ class LiveOfficeTaskRunnerTests(unittest.TestCase):
         )
         self.assertTrue(verdict["accepted"])
 
+        bad_sheet = verify_office_task_output(
+            {"work_type": "SPREADSHEET", "read_path": "budget.xlsx"},
+            dict(result, broker_read_receipt={"relative_path": "budget.xlsx", "cell_count": 0}),
+        )
+        self.assertFalse(bad_sheet["accepted"])
+        self.assertEqual(bad_sheet["reason"], "FAILED_SPREADSHEET_CELLS_POSITIVE")
+
+        bad_obl = verify_office_task_output(
+            {"work_type": "OBLIGATION", "read_path": "reg.html"},
+            dict(result, broker_read_receipt={"source": "reg.html", "uncertainty": 0.9}),
+        )
+        self.assertFalse(bad_obl["accepted"])
+        self.assertEqual(bad_obl["reason"], "FAILED_OBLIGATION_UNCERTAINTY_BOUNDED")
+
     def test_engineer_pilot_requires_active_matching_catalog_digest(self):
         from unittest.mock import Mock
 

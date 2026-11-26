@@ -315,7 +315,7 @@
     "product/frontend/office/modules/api-client.js": "345ba99b376371565945f436e033103eacab42b1215f253b080321b3244c3eb2",
     "product/frontend/office/modules/main.js": "8ccee336a4a26cd85c3804475321bf81b112847455b9e4bbac3fb3738ec1eb70",
     "product/frontend/office/modules/office-canvas.js": "3f3f77720dad51bb61fe766e370ca230b8fe924b908dcab153dabbb59cba85af",
-    "product/frontend/office/modules/panels.js": "5abc70f0b57a6611aff6f7021829b446034ede626562518033ca84d4ce21ae87",
+    "product/frontend/office/modules/panels.js": "d46f00d64515b684dd7a17c4af22d56397968101ff0891a8013ebc6eda5a7a33",
     "product/frontend/office/modules/phaser-scene.js": "9e2916bd953c58e9b56c8474ce9ee510c47869aaed929a30b66d846b98b7c56d",
     "product/frontend/office/modules/sse-client.js": "084e6e542f13057172e2e45e63eded5ebd340bcc962bbf2312f378ef2a835316",
     "product/frontend/office/scenes/dashboard.html": "69c5b0ca7991180f98c116468b989df9b46f17e2e8631b65c7d0eb7ad236b65a",

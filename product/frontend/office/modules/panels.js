@@ -233,6 +233,20 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
       } else {
         receiptEl?.remove();
       }
+
+      let ceoReportEl = result.querySelector('.run-ceo-report');
+      if (run.ceo_final_report?.summary) {
+        if (!ceoReportEl) {
+          ceoReportEl = doc.createElement('pre');
+          ceoReportEl.className = 'run-output run-ceo-report';
+          result.append(ceoReportEl);
+        }
+        if (ceoReportEl.textContent !== run.ceo_final_report.summary) {
+          ceoReportEl.textContent = run.ceo_final_report.summary;
+        }
+      } else {
+        ceoReportEl?.remove();
+      }
     });
     for (const removed of cards.values()) removed.remove();
   }

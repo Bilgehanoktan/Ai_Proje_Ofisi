@@ -1,8 +1,8 @@
 {
   "version": 1,
   "canonical_workspace": "E:\\Projeler\\Ai_Proje_Ofisi",
-  "updated_at": "2026-11-25",
-  "summary": "23 Kasım 2026 kabul kaydına göre G0 insan onayı verildi ve MGT-TITLE-NORMALIZATION-01 ilk akışı 13/13 kabul edildi. 25 Kasım 2026 itibarıyla izole PostgreSQL 18.6 üzerinde 001–087 kalıcı kurulumu, 087 → 088 yükseltmesi + soğuk restart readback, zamanlanmış yedekten (basebackup-20261124T210001Z) restore + MOD-013 kuyruk kalıcılığı, iki ayrı tarayıcı oturumuyla 088 proje ayrımı (200 vs 403), canlı Ollama (qwen2.5-coder:3b) üzerinde EXP-01 baz/pilot rol kartı karşılaştırması (3/3 ACCEPTED) ve GitHub Actions uzak Linux CI hattı (run 45694476289, conclusion: success) doğrulandı. Hedef uzak üretim sunucusu kurulumu ve onaylı dış HTTPS domain listesi açık.",
+  "updated_at": "2026-11-26",
+  "summary": "23 Kasım 2026 kabul kaydına göre G0 insan onayı verildi ve MGT-TITLE-NORMALIZATION-01 ilk akışı 13/13 kabul edildi. 26 Kasım 2026 itibarıyla izole PostgreSQL 18.6 üzerinde 001–087 kalıcı kurulumu, 087 → 088 yükseltmesi + soğuk restart readback, zamanlanmış yedekten (basebackup-20261124T210001Z) restore + MOD-013 kuyruk kalıcılığı, iki ayrı tarayıcı oturumuyla 088 proje ayrımı (200 vs 403), canlı 087 kataloğunda 11 pinli profil (4 rol: EXP-01/EXP-02/MGR-01/QA-01, 4 beceri kartı, 3 yerel Ollama model profili: qwen2.5-coder:3b/7b ve llama3.2:3b), uzak üretim SSH preflight + harici HTTPS allowlist doğrulayıcısı ve GitHub Actions uzak Linux CI hattı (331 test) doğrulandı. Hedef uzak üretim sunucusu erişim bilgileri paylaşıldığında kurulum doğrudan çalıştırılmaya hazır.",
   "update_policy": "Her anlamlı geliştirmede ilgili satırı kanıtıyla güncelle. Tahmini oranı ölçülmüş sonuçtan ayır; değişmeyen alanı yeniden doğrulanmış sayma.",
   "areas": [
     {
@@ -157,11 +157,11 @@
       "modules": [
         "MOD-005"
       ],
-      "status": "Ücretsiz yerel Ollama (qwen2.5-coder:3b) otomatik başlatıcı, EXP-01 katalog pini ve MOD-013 araç adaptörleriyle canlı ofise bağlandı",
-      "ready": "OllamaClient (loopback-only, stdlib HTTP, repeat_penalty=1.15, otomatik paid fallback yok) + ensure_local_ollama_running (E:\\ollama_local\\bin\\ollama.exe) + LiveOfficeTaskRunner ile SOFTWARE (EXP-01 087 katalog pinli rol profili), RESEARCH (Broker workspace.read + aipof_research_readback Kernel DB makbuz geri okuması), SPREADSHEET (OpenXML .xlsx / .csv) ve OBLIGATION görevleri qwen2.5-coder:3b üzerinde canlı çalıştırılıp INDEPENDENT_LOCAL_VERIFIER ile doğrulandı.",
+      "status": "Ücretsiz yerel Ollama (qwen2.5-coder:3b) otomatik başlatıcı, 087 kataloğunda 3 pinli model profili (qwen2.5-coder:3b/7b, llama3.2:3b) ve MOD-013 araç adaptörleriyle canlı ofise bağlandı",
+      "ready": "OllamaClient (loopback-only, stdlib HTTP, repeat_penalty=1.15, otomatik paid fallback yok) + LOCAL_OLLAMA_MODEL_PROFILES (qwen2.5-coder:3b, qwen2.5-coder:7b, llama3.2:3b SHA-256 özet pinli 087 MODEL kayıtları) + ensure_local_ollama_running (E:\\ollama_local\\bin\\ollama.exe) + LiveOfficeTaskRunner ile SOFTWARE, RESEARCH, SPREADSHEET (.xlsx / .csv) ve OBLIGATION görevleri qwen2.5-coder:3b üzerinde canlı çalıştırılıp INDEPENDENT_LOCAL_VERIFIER ile doğrulandı.",
       "missing": "Harici üretim ortamında büyük yerel model alternatifleriyle uzun süreli karşılaştırmalı benchmark açık.",
       "next_step": "İhtiyaç duyulduğunda ek yerel Ollama model profillerini 087 kataloğuna eklemek.",
-      "last_reviewed": "2026-11-25",
+      "last_reviewed": "2026-11-26",
       "evidence": [
         "evidence/runs/live-office-task-e2e-20261123.json",
         "product/backend/company_os/engine/ollama_adapter.py",
@@ -257,11 +257,11 @@
       "modules": [
         "MOD-012"
       ],
-      "status": "087 FORCE RLS katalog servis bağlantısı (aipof_catalog_087), çoklu tenant yük testi (200/100 kayıt, 0 sızıntı), SoD hafıza terfisi ve EXP-01 canlı Ollama pilotu doğrulandı",
-      "ready": "LiveMemoryAndBudgetCoordinator ile ACCEPTED görev çıktılarından otomatik CANDIDATE->VERIFIED hafıza adayı üretimi, görev ayrılığı (promoted_by != verified_by) zorunlu POST /api/memory-promotions, ofis Onaylar sekmesinde terfi/red butonları, 087 tablolarında açık tenant izolasyonu RLS politikaları (set_config('app.tenant_id', ...)), en az yetkili aipof_catalog_087 servis bağlantısı (company.tasks erişimi reddedilir, yabancı tenant 0 satır döndürür), izole PG 18.6 üzerinde 10 tenant × 20 = 200 kayıt ve canlı PG 18.6 üzerinde 5 tenant × 20 = 100 kayıt (423.5 ms, cross_tenant_leakage=0) çoklu tenant katalog yük testi ile canlı Ollama (qwen2.5-coder:3b) EXP-01 baz/pilot rol kartı karşılaştırması (3/3 ACCEPTED) doğrulandı.",
+      "status": "087 FORCE RLS katalog servisinde (aipof_catalog_087) 11 pinli profil (4 ROL, 4 BECERİ, 3 MODEL), çoklu tenant yük testi (200/100 kayıt, 0 sızıntı), SoD hafıza terfisi ve EXP-01 canlı Ollama pilotu doğrulandı",
+      "ready": "LiveMemoryAndBudgetCoordinator ile ACCEPTED görev çıktılarından otomatik CANDIDATE->VERIFIED hafıza adayı üretimi, görev ayrılığı (promoted_by != verified_by) zorunlu POST /api/memory-promotions, ofis Onaylar sekmesinde terfi/red butonları, 087 tablolarında açık tenant izolasyonu RLS politikaları (set_config('app.tenant_id', ...)), en az yetkili aipof_catalog_087 servis bağlantısıyla canlı PG 18.6 üzerinde 11 varsayılan katalog kaydının (EXP-01, EXP-02, MGR-01, QA-01; 4 SKILL kartı; qwen2.5-coder:3b/7b ve llama3.2:3b MODEL profilleri) tohumlanması ve geri okunması, izole PG 18.6 üzerinde 10 tenant × 20 = 200 kayıt ve canlı PG 18.6 üzerinde 5 tenant × 20 = 100 kayıt (423.5 ms, cross_tenant_leakage=0) çoklu tenant katalog yük testi doğrulandı.",
       "missing": "Hedef uzak üretim sunucusunda çoklu tenant katalog servisinin devreye alınması açık.",
       "next_step": "Hedef uzak üretim sunucusunda aipof_catalog_087 servis rolünü devreye almak.",
-      "last_reviewed": "2026-11-25",
+      "last_reviewed": "2026-11-26",
       "evidence": [
         "evidence/runs/live-memory-budget-e2e-20261123.json",
         "product/backend/company_os/catalog/live_lifecycle.py",
@@ -337,11 +337,11 @@
       "modules": [
         "MOD-015"
       ],
-      "status": "086+087 kurulumu, izole yedek/restore/epoch kurtarma ve üretim runbook tamamlandı",
-      "ready": "086+087 canlı kurulumu, taze boot clock epoch/sample aktivasyonu, OWNER_AUTH signer enrollment, PG soğuk restart sürekliliği, izole pg_basebackup/pg_verifybackup + restore sonrası clock epoch invalidation ve üretim işletim rehberi (docs/operations/PRODUCTION_RUNBOOK.md) doğrulandı.",
-      "missing": "Üretim sunucusunda otomatik zamanlanmış yedekleme cron/systemd kurulumu açık.",
-      "next_step": "PRODUCTION_RUNBOOK.md adımlarını hedef üretim sunucusunda uygulayıp zamanlanmış yedeklemeyi etkinleştirmek.",
-      "last_reviewed": "2026-11-24",
+      "status": "086+087+088 kurulumu, izole yedek/restore/epoch kurtarma, uzak SSH preflight + HTTPS allowlist ve üretim runbook tamamlandı",
+      "ready": "086+087+088 canlı kurulumu, taze boot clock epoch/sample aktivasyonu, OWNER_AUTH signer enrollment, PG soğuk restart sürekliliği, izole pg_basebackup/pg_verifybackup + restore sonrası clock epoch invalidation, uzak üretim SSH host takma adı (--remote-ssh-host) + harici HTTPS domain allowlist (--allowed-https-domains) preflight doğrulayıcısı ve üretim işletim rehberi (docs/operations/PRODUCTION_RUNBOOK.md) doğrulandı.",
+      "missing": "Hedef harici uzak üretim sunucusu SSH erişimi paylaşıldığında üretim sunucusunda kurulumun çalıştırılması açık.",
+      "next_step": "Onaylı SSH host takma adı ve izinli HTTPS domain listesi paylaşıldığında PRODUCTION_RUNBOOK.md adımlarını hedef uzak sunucuda çalıştırmak.",
+      "last_reviewed": "2026-11-26",
       "evidence": [
         "docs/operations/PRODUCTION_RUNBOOK.md",
         "evidence/runs/migration-087-live-20261123.json",

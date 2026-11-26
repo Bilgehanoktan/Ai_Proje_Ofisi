@@ -208,6 +208,54 @@ class Extensions087StoreAndApiTests(unittest.TestCase):
         self.assertTrue(st3.startswith("200"))
         self.assertEqual(json.loads(b3)["external_effects"][0]["effect_id"], "e-1")
 
+    def test_seed_default_catalog_profiles_and_remote_preflight_allowlist(self):
+        from scripts.operations.start_office_local import (
+            build_remote_production_preflight,
+            parse_allowed_https_domains,
+        )
+
+        tid = "11111111-1111-4111-8111-111111111111"
+        saved = []
+
+        class _CaptureStore(Extensions087Store):
+            def upsert_catalog_entry(self, entry: CatalogEntry):
+                item = {
+                    "tenant_id": entry.tenant_id,
+                    "kind": entry.kind.value,
+                    "name": entry.name,
+                    "version": entry.version,
+                    "digest": entry.digest,
+                    "active": entry.active,
+                }
+                saved.append(item)
+                return item
+
+        store = _CaptureStore(connect=lambda: _FakeConn([]))
+        seeded = store.seed_default_catalog_profiles(tid)
+        self.assertEqual(len(seeded), 11)
+        kinds = {item["kind"] for item in seeded}
+        self.assertEqual(kinds, {"ROLE", "SKILL", "MODEL"})
+        names = {item["name"] for item in seeded}
+        self.assertTrue(
+            {"EXP-01", "EXP-02", "MGR-01", "QA-01", "qwen2.5-coder:3b", "qwen2.5-coder:7b", "llama3.2:3b"}.issubset(
+                names
+            )
+        )
+
+        domains = parse_allowed_https_domains("docs.example.org, mevzuat.gov.tr ")
+        self.assertEqual(domains, frozenset({"docs.example.org", "mevzuat.gov.tr"}))
+        with self.assertRaises(ValueError):
+            parse_allowed_https_domains("https://bad.example.org")
+        with self.assertRaises(ValueError):
+            parse_allowed_https_domains("*.wildcard.example.org")
+
+        preflight = build_remote_production_preflight("aipof-prod-01", domains)
+        self.assertEqual(preflight["ssh_host_alias"], "aipof-prod-01")
+        self.assertEqual(preflight["allowed_https_domains"], ["docs.example.org", "mevzuat.gov.tr"])
+        self.assertEqual(len(preflight["steps"]), 4)
+        with self.assertRaises(ValueError):
+            build_remote_production_preflight("-bad-host", domains)
+
 
 class MultiWorkTypeQueueRunnerTests(unittest.TestCase):
     def test_research_spreadsheet_obligation_queue_accept_and_reject(self):

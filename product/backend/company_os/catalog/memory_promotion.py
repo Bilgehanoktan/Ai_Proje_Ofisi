@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Mapping
+import hashlib
+from typing import Any, Mapping
 
 
 class PromotionState(str, Enum):
@@ -19,6 +20,125 @@ class CatalogKind(str, Enum):
     ROLE = "ROLE"
     TOOL = "TOOL"
     MODEL = "MODEL"
+
+
+@dataclass(frozen=True)
+class CatalogProfileSpec:
+    """Immutable definition for a role, skill, or local model card in the 087 catalog."""
+
+    kind: CatalogKind
+    name: str
+    version: str
+    content: str
+
+    @property
+    def digest(self) -> str:
+        return hashlib.sha256(self.content.encode("utf-8")).hexdigest()
+
+    def to_entry(self, tenant_id: str, *, active: bool = True) -> "CatalogEntry":
+        return CatalogEntry(
+            tenant_id=tenant_id,
+            kind=self.kind,
+            name=self.name,
+            version=self.version,
+            digest=self.digest,
+            active=active,
+        )
+
+
+DEFAULT_ROLE_CARDS: dict[str, CatalogProfileSpec] = {
+    "EXP-01": CatalogProfileSpec(
+        kind=CatalogKind.ROLE,
+        name="EXP-01",
+        version="1.0.0",
+        content=(
+            "Sen AI Proje Ofisi EXP-01 yazılım mühendisisin. Verilen kabul ölçütlerini çıkar. "
+            "Mevcut davranışı koruyan en küçük değişikliği ve ilgili regresyon kontrolünü belirt. "
+            "Gözlenen kanıtı varsayımdan ayır. Çalıştırmadığın testleri ve kullanmadığın araçları açıkça bildir."
+        ),
+    ),
+    "EXP-02": CatalogProfileSpec(
+        kind=CatalogKind.ROLE,
+        name="EXP-02",
+        version="1.0.0",
+        content=(
+            "Sen AI Proje Ofisi EXP-02 araştırma ve yükümlülük uzmanısın. Bulguları doğrulanmış kaynak "
+            "makbuzu, madde/bölüm referansı, risk/belirsizlik sınırı ve somut doğrulama adımlarıyla raporla. "
+            "Okunmamış kaynağı okunmuş gibi sunma."
+        ),
+    ),
+    "MGR-01": CatalogProfileSpec(
+        kind=CatalogKind.ROLE,
+        name="MGR-01",
+        version="1.0.0",
+        content=(
+            "Sen AI Proje Ofisi MGR-01 orkestratör yöneticisisin. Hedefi bağımsız doğrulanabilir görevlere "
+            "ayır, görev ayrılığı (producer != verifier != acceptor) sınırını koru ve kapsam dışı genişlemeyi reddet."
+        ),
+    ),
+    "QA-01": CatalogProfileSpec(
+        kind=CatalogKind.ROLE,
+        name="QA-01",
+        version="1.0.0",
+        content=(
+            "Sen AI Proje Ofisi QA-01 bağımsız kalite ve kabul denetçisisin. Çıktıyı kabul ölçütlerine, "
+            "SHA-256 kanıt özetine ve negatif regresyon kontrollerine göre bağımsız değerlendir; kanıtsız kabul verme."
+        ),
+    ),
+}
+
+DEFAULT_SKILL_CARDS: dict[str, CatalogProfileSpec] = {
+    "SKILL-PATCH-ATOMIC-01": CatalogProfileSpec(
+        kind=CatalogKind.SKILL,
+        name="SKILL-PATCH-ATOMIC-01",
+        version="1.0.0",
+        content="Broker patch.apply ve Kernel effect_scope üzerinden kapsam içi atomik yama ve SHA-256 taban kontrolü.",
+    ),
+    "SKILL-RESEARCH-READBACK-01": CatalogProfileSpec(
+        kind=CatalogKind.SKILL,
+        name="SKILL-RESEARCH-READBACK-01",
+        version="1.0.0",
+        content="Broker workspace.read makbuzunun bağımsız aipof_research_readback servisiyle Kernel DB üzerinden doğrulanması.",
+    ),
+    "SKILL-XLSX-AUDIT-01": CatalogProfileSpec(
+        kind=CatalogKind.SKILL,
+        name="SKILL-XLSX-AUDIT-01",
+        version="1.0.0",
+        content="OpenXML .xlsx ve .csv çalışma kitaplarında paylaşımlı dizge, hücre sayısı ve toplam/formül mutabakatı.",
+    ),
+    "SKILL-OBLIGATION-EXTRACT-01": CatalogProfileSpec(
+        kind=CatalogKind.SKILL,
+        name="SKILL-OBLIGATION-EXTRACT-01",
+        version="1.0.0",
+        content="Yükümlülük belgelerinden ve izinli HTTPS kaynaklarından madde, süre sınırı ve kanıt kontrol listesi çıkarımı.",
+    ),
+}
+
+
+def build_default_087_catalog_entries(
+    tenant_id: str,
+    *,
+    model_profiles: Mapping[str, Any] | None = None,
+) -> list["CatalogEntry"]:
+    """Build the canonical set of 087 ROLE, SKILL, and local Ollama MODEL catalog entries for a tenant."""
+    entries: list[CatalogEntry] = []
+    for spec in DEFAULT_ROLE_CARDS.values():
+        entries.append(spec.to_entry(tenant_id))
+    for spec in DEFAULT_SKILL_CARDS.values():
+        entries.append(spec.to_entry(tenant_id))
+    if model_profiles:
+        for prof in model_profiles.values():
+            entries.append(
+                CatalogEntry(
+                    tenant_id=tenant_id,
+                    kind=CatalogKind.MODEL,
+                    name=str(prof.name),
+                    version=str(prof.version),
+                    digest=str(prof.digest),
+                    active=True,
+                )
+            )
+    return entries
 
 
 @dataclass(frozen=True)

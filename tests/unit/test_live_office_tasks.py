@@ -164,6 +164,35 @@ class LiveOfficeTaskRunnerTests(unittest.TestCase):
         result = runner._execute_task(task)
         self.assertEqual(stub.calls[0]["system"], ENGINEER_PILOT_PROMPT)
         self.assertEqual(result["role_profile"]["sha256"], entry["digest"])
+        self.assertEqual(result["model_profile"]["name"], "qwen2.5-coder:3b")
+
+        from company_os.catalog.memory_promotion import DEFAULT_ROLE_CARDS
+
+        exp02_spec = DEFAULT_ROLE_CARDS["EXP-02"]
+        catalog.list_catalog_entries.return_value = [
+            entry,
+            {
+                "tenant_id": "pilot-tenant",
+                "kind": "ROLE",
+                "name": exp02_spec.name,
+                "version": exp02_spec.version,
+                "digest": exp02_spec.digest,
+                "active": True,
+            },
+        ]
+        res_task = {
+            "task_id": "res-pilot-task",
+            "title": "Araştırma rol profili",
+            "goal": "Kaynak makbuzunu ve belirsizlik sınırını özetle.",
+            "work_type": "RESEARCH",
+            "role_id": "EXP-02",
+            "model": "qwen2.5-coder:7b",
+        }
+        res_out = runner._execute_task(res_task)
+        self.assertEqual(stub.calls[-1]["system"], exp02_spec.content)
+        self.assertEqual(res_out["role_profile"]["name"], "EXP-02")
+        self.assertEqual(res_out["role_profile"]["sha256"], exp02_spec.digest)
+        self.assertEqual(res_out["model_profile"]["name"], "qwen2.5-coder:7b")
 
     def test_validation_rejects_invalid_fields(self):
         with self.assertRaises(OfficeTaskValidationError):

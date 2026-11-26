@@ -26,10 +26,16 @@ from company_os.api.http.app import make_wsgi_app  # noqa: E402
 from company_os.budget.ledger import ExternalEffectEntry  # noqa: E402
 from company_os.catalog.extensions_store import Extensions087Store  # noqa: E402
 from company_os.catalog.live_lifecycle import LiveMemoryAndBudgetCoordinator  # noqa: E402
-from company_os.catalog.memory_promotion import CatalogEntry, CatalogKind, MemoryRecord  # noqa: E402
+from company_os.catalog.memory_promotion import (  # noqa: E402
+    CatalogEntry,
+    CatalogKind,
+    MemoryRecord,
+    build_default_087_catalog_entries,
+)
 from company_os.engine.ollama_adapter import (  # noqa: E402
     DEFAULT_OLLAMA_BASE_URL,
     DEFAULT_OLLAMA_MODEL,
+    LOCAL_OLLAMA_MODEL_PROFILES,
     OllamaClient,
     ensure_local_ollama_running,
 )
@@ -553,6 +559,84 @@ class WslCatalog087Adapter:
     def list_catalog_entries(self, tenant_id: str) -> list[dict]:
         return list(self._call({"op": "list", "tenant_id": tenant_id}).get("items") or [])
 
+    def seed_default_catalog_profiles(self, tenant_id: str) -> list[dict]:
+        entries = build_default_087_catalog_entries(
+            tenant_id, model_profiles=LOCAL_OLLAMA_MODEL_PROFILES
+        )
+        return [self.upsert_catalog_entry(entry) for entry in entries]
+
+
+def parse_allowed_https_domains(raw: str | None) -> frozenset[str]:
+    """Parse and validate comma-separated external HTTPS domain allowlist."""
+    if not raw or not str(raw).strip():
+        return frozenset()
+    domains: set[str] = set()
+    for part in str(raw).split(","):
+        item = part.strip().lower()
+        if not item:
+            continue
+        if (
+            "://" in item
+            or "/" in item
+            or ":" in item
+            or "*" in item
+            or item.startswith(".")
+            or item.endswith(".")
+            or ".." in item
+            or "." not in item
+        ):
+            raise ValueError(f"INVALID_ALLOWED_HTTPS_DOMAIN:{part.strip()}")
+        domains.add(item)
+    return frozenset(domains)
+
+
+def build_remote_production_preflight(
+    ssh_host_alias: str,
+    allowed_https_domains: frozenset[str],
+) -> dict[str, object]:
+    """Validate approved remote SSH host alias and HTTPS allowlist and emit PRODUCTION_RUNBOOK.md step plan."""
+    alias = str(ssh_host_alias or "").strip()
+    if not alias or any(ch.isspace() for ch in alias) or alias.startswith("-"):
+        raise ValueError("INVALID_SSH_HOST_ALIAS")
+    domain_csv = ",".join(sorted(allowed_https_domains))
+    return {
+        "ssh_host_alias": alias,
+        "allowed_https_domains": sorted(allowed_https_domains),
+        "runbook": "docs/operations/PRODUCTION_RUNBOOK.md",
+        "steps": [
+            {
+                "step": 1,
+                "title": "001..088 PostgreSQL 18.6 kurulum ve yükseltme doğrulaması",
+                "remote_command": f"ssh {alias} 'cd /opt/aipof && PYTHONPATH=. python3 -B scripts/verification/verify_087_migration_pg.py'",
+            },
+            {
+                "step": 2,
+                "title": "r65_spawn_linux.c derlemesi ve delegated cgroup v2 MGT-01 (13/13) doğrulaması",
+                "remote_command": (
+                    f"ssh {alias} 'cd /opt/aipof && gcc -Wall -Wextra -Werror -O2 -shared -fPIC "
+                    "-o /opt/aipof/lib/r65_spawn_linux.so product/backend/native/linux/r65_spawn_linux.c "
+                    "&& AIPOF_CGROUP_PATH=/sys/fs/cgroup/aipof_eval/worker python3 -B scripts/verification/verify_mgt01_native_launcher.py'"
+                ),
+            },
+            {
+                "step": 3,
+                "title": "087 rol/beceri kartları ve yerel Ollama model profillerinin tohumlanması",
+                "remote_command": (
+                    f"ssh {alias} 'cd /opt/aipof && python3 -B scripts/operations/start_office_local.py "
+                    f"--skip-wsl --check-only --allowed-https-domains=\"{domain_csv}\"'"
+                ),
+            },
+            {
+                "step": 4,
+                "title": "Systemd worker daemon ve zamanlanmış pg_basebackup/pg_verifybackup timer etkinleştirme",
+                "remote_command": (
+                    f"ssh {alias} 'sudo systemctl enable --now aipof-worker-daemon.service aipof-pg-backup.timer "
+                    "&& systemctl is-active aipof-worker-daemon.service aipof-pg-backup.timer'"
+                ),
+            },
+        ],
+    }
+
 
 
 def ensure_wsl_services(distro: str = "Ubuntu-E") -> dict[str, str]:
@@ -815,7 +899,24 @@ def main() -> int:
         default="aipof_catalog_087",
         help="EXP-01 pilotu icin 087 katalog yetkisi olan PostgreSQL service adi",
     )
+    parser.add_argument(
+        "--allowed-https-domains",
+        default="",
+        help="Virgulle ayrilmis onayli harici HTTPS domain listesi (orn: docs.example.org,reg.example.gov.tr)",
+    )
+    parser.add_argument(
+        "--remote-ssh-host",
+        default="",
+        help="Uzak uretim Linux sunucusu SSH host takma adi (preflight runbook dogrulamasi icin)",
+    )
     args = parser.parse_args()
+    allowed_https_domains = parse_allowed_https_domains(args.allowed_https_domains)
+
+    if args.remote_ssh_host:
+        preflight = build_remote_production_preflight(args.remote_ssh_host, allowed_https_domains)
+        print(json.dumps(preflight, ensure_ascii=False, indent=2), flush=True)
+        if args.check_only:
+            return 0
 
     print("=== AI Proje Ofisi Baslatiliyor ===", flush=True)
     if not args.skip_wsl:
@@ -859,14 +960,14 @@ def main() -> int:
             try:
                 svc = None if args.engineer_pilot_service == "wsl-local" else args.engineer_pilot_service
                 engineer_pilot_catalog = WslCatalog087Adapter(distro=args.wsl_distro, service=svc)
-                entry = engineer_pilot_catalog.upsert_catalog_entry(
-                    CatalogEntry(
-                        tenant_id=DEFAULT_TENANT_ID,
-                        kind=CatalogKind.ROLE,
-                        name="EXP-01",
-                        version=ENGINEER_PILOT_VERSION,
-                        digest=hashlib.sha256(ENGINEER_PILOT_PROMPT.encode("utf-8")).hexdigest(),
-                    )
+                seeded = engineer_pilot_catalog.seed_default_catalog_profiles(DEFAULT_TENANT_ID)
+                entry = next(
+                    (
+                        item
+                        for item in seeded
+                        if item.get("kind") == "ROLE" and item.get("name") == "EXP-01"
+                    ),
+                    {},
                 )
                 if not entry.get("active"):
                     raise ValueError("ENGINEER_PILOT_CATALOG_ENTRY_INACTIVE")
@@ -894,16 +995,16 @@ def main() -> int:
                 engineer_pilot_catalog = Extensions087Store(
                     lambda: psycopg.connect(service=args.engineer_pilot_service, connect_timeout=5)
                 )
-                entry = engineer_pilot_catalog.upsert_catalog_entry(
-                    CatalogEntry(
-                        tenant_id=DEFAULT_TENANT_ID,
-                        kind=CatalogKind.ROLE,
-                        name="EXP-01",
-                        version=ENGINEER_PILOT_VERSION,
-                        digest=hashlib.sha256(ENGINEER_PILOT_PROMPT.encode("utf-8")).hexdigest(),
-                    )
+                seeded = engineer_pilot_catalog.seed_default_catalog_profiles(DEFAULT_TENANT_ID)
+                entry = next(
+                    (
+                        item
+                        for item in seeded
+                        if item.get("kind") == "ROLE" and item.get("name") == "EXP-01"
+                    ),
+                    {},
                 )
-                if not entry["active"]:
+                if not entry.get("active"):
                     raise ValueError("ENGINEER_PILOT_CATALOG_ENTRY_INACTIVE")
             except psycopg.errors.InsufficientPrivilege as exc:
                 print(
@@ -916,9 +1017,11 @@ def main() -> int:
                 print("[HATA] EXP-01 pilot katalog kaydi hazirlanamadi.", file=sys.stderr)
                 return 1
 
+    allowed_webhook_hosts = frozenset({"127.0.0.1", "localhost"} | set(allowed_https_domains))
     coordinator = LiveMemoryAndBudgetCoordinator(
         tenant_id=DEFAULT_TENANT_ID,
         budget_limit_minor=1000,
+        allowed_hosts=allowed_webhook_hosts,
         persist_promotion=(
             None
             if args.skip_wsl
@@ -1015,7 +1118,25 @@ def main() -> int:
 
     def _obligation_web_reader(read_path: str) -> dict[str, object]:
         if read_path.startswith("https://"):
-            raise PermissionError("OBLIGATION_EXTERNAL_HOST_ALLOWLIST_REQUIRED")
+            import urllib.parse
+            import urllib.request
+
+            if not allowed_https_domains:
+                raise PermissionError("OBLIGATION_EXTERNAL_HOST_ALLOWLIST_REQUIRED")
+            parsed = urllib.parse.urlparse(read_path)
+            host = (parsed.hostname or "").lower()
+            if parsed.scheme != "https" or not host or host not in allowed_https_domains:
+                raise PermissionError(f"OBLIGATION_EXTERNAL_HOST_NOT_ALLOWED:{host or read_path}")
+            req = urllib.request.Request(read_path, headers={"User-Agent": "AI-Proje-Ofisi-Verifier/1.0"})
+            opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+            with opener.open(req, timeout=10.0) as resp:
+                raw_bytes = resp.read(131072)
+            return {
+                "source": read_path,
+                "host": host,
+                "sha256": hashlib.sha256(raw_bytes).hexdigest(),
+                "receipt_id": str(uuid4()),
+            }
         normalized_rel = read_path.replace("\\", "/").lstrip("/")
         target = (ROOT / normalized_rel).resolve()
         if ROOT.resolve() not in target.parents or not target.is_file():

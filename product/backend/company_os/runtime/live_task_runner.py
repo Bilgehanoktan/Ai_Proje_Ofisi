@@ -20,7 +20,12 @@ from typing import Any, Callable
 from uuid import uuid4
 
 from company_os.catalog.extensions_store import Extensions087Store
-from company_os.engine.ollama_adapter import DEFAULT_OLLAMA_MODEL, OllamaClient
+from company_os.catalog.memory_promotion import DEFAULT_ROLE_CARDS
+from company_os.engine.ollama_adapter import (
+    DEFAULT_OLLAMA_MODEL,
+    LOCAL_OLLAMA_MODEL_PROFILES,
+    OllamaClient,
+)
 from company_os.projections.sse_stream import ProjectionEvent
 from company_os.runtime.agent_instances import AgentInstanceRegistry, AgentState
 from company_os.runtime.worker_daemon import AutonomousWorkerDaemon, DaemonState
@@ -101,7 +106,12 @@ def validate_office_task_payload(payload: dict[str, Any]) -> dict[str, Any]:
 
     read_path = str(payload.get("read_path") or "").strip() or None
     if read_path is not None:
-        if "/" in read_path or "\\" in read_path or read_path in {".", ".."} or len(read_path) > 120:
+        if len(read_path) > 300:
+            raise OfficeTaskValidationError("INVALID_READ_PATH")
+        if work_type == "OBLIGATION" and read_path.startswith("https://"):
+            if ".." in read_path or "\\" in read_path or len(read_path) < 12:
+                raise OfficeTaskValidationError("INVALID_READ_PATH")
+        elif "/" in read_path or "\\" in read_path or read_path in {".", ".."} or len(read_path) > 120:
             raise OfficeTaskValidationError("INVALID_READ_PATH")
 
     return {
@@ -387,25 +397,33 @@ class LiveOfficeTaskRunner:
         )
         system = ROLE_SYSTEM_PROMPTS.get(str(task["work_type"]), ROLE_SYSTEM_PROMPTS["SOFTWARE"])
         pilot_digest = None
-        if (
-            self._engineer_pilot_catalog is not None
-            and self._registry_tenant_id
-            and task["role_id"] == "EXP-01"
-            and task["work_type"] == "SOFTWARE"
-        ):
-            pilot_digest = hashlib.sha256(ENGINEER_PILOT_PROMPT.encode("utf-8")).hexdigest()
+        role_card = DEFAULT_ROLE_CARDS.get(str(task["role_id"]))
+        if self._engineer_pilot_catalog is not None and self._registry_tenant_id:
             entries = self._engineer_pilot_catalog.list_catalog_entries(self._registry_tenant_id)
-            if not any(
+            if task["role_id"] == "EXP-01" and task["work_type"] == "SOFTWARE":
+                pilot_digest = hashlib.sha256(ENGINEER_PILOT_PROMPT.encode("utf-8")).hexdigest()
+                if not any(
+                    entry["tenant_id"] == self._registry_tenant_id
+                    and entry["kind"] == "ROLE"
+                    and entry["name"] == "EXP-01"
+                    and entry["version"] == ENGINEER_PILOT_VERSION
+                    and entry["digest"] == pilot_digest
+                    and entry["active"] is True
+                    for entry in entries
+                ):
+                    raise OfficeTaskValidationError("ENGINEER_PILOT_CATALOG_PIN_MISSING_OR_INVALID")
+                system = ENGINEER_PILOT_PROMPT
+            elif role_card is not None and any(
                 entry["tenant_id"] == self._registry_tenant_id
                 and entry["kind"] == "ROLE"
-                and entry["name"] == "EXP-01"
-                and entry["version"] == ENGINEER_PILOT_VERSION
-                and entry["digest"] == pilot_digest
+                and entry["name"] == role_card.name
+                and entry["version"] == role_card.version
+                and entry["digest"] == role_card.digest
                 and entry["active"] is True
                 for entry in entries
             ):
-                raise OfficeTaskValidationError("ENGINEER_PILOT_CATALOG_PIN_MISSING_OR_INVALID")
-            system = ENGINEER_PILOT_PROMPT
+                pilot_digest = role_card.digest
+                system = role_card.content
         broker_read_receipt = None
         if task.get("read_path") and task["work_type"] == "RESEARCH" and self._kernel_research_read:
             if task.get("db_persisted") is not True:
@@ -421,15 +439,36 @@ class LiveOfficeTaskRunner:
             if self._queue_runner is not None:
                 self._queue_runner.execute_task(task)
             broker_read_receipt = reader(str(task["read_path"]))
-        gen = self.ollama.generate(prompt, model=str(task.get("model") or DEFAULT_OLLAMA_MODEL), system=system)
+        chosen_model = str(task.get("model") or DEFAULT_OLLAMA_MODEL)
+        model_prof = LOCAL_OLLAMA_MODEL_PROFILES.get(chosen_model)
+        if model_prof is not None:
+            try:
+                gen = self.ollama.generate(
+                    prompt,
+                    model=chosen_model,
+                    system=system,
+                    temperature=model_prof.temperature,
+                    num_predict=model_prof.num_predict,
+                    repeat_penalty=model_prof.repeat_penalty,
+                )
+            except TypeError:
+                gen = self.ollama.generate(prompt, model=chosen_model, system=system)
+        else:
+            gen = self.ollama.generate(prompt, model=chosen_model, system=system)
         result = gen.to_dict()
         if broker_read_receipt is not None:
             result["broker_read_receipt"] = broker_read_receipt
         if pilot_digest is not None:
             result["role_profile"] = {
-                "name": "EXP-01",
-                "version": ENGINEER_PILOT_VERSION,
+                "name": str(task["role_id"]),
+                "version": role_card.version if role_card is not None else ENGINEER_PILOT_VERSION,
                 "sha256": pilot_digest,
+            }
+        if model_prof is not None:
+            result["model_profile"] = {
+                "name": model_prof.name,
+                "version": model_prof.version,
+                "sha256": model_prof.digest,
             }
         with self._lock:
             rec = self._tasks.get(str(task["task_id"]))

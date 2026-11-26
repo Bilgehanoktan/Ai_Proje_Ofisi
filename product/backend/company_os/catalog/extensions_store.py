@@ -11,7 +11,12 @@ from dataclasses import dataclass
 from typing import Any, Callable
 
 from company_os.budget.ledger import ExternalEffectEntry
-from company_os.catalog.memory_promotion import CatalogEntry, MemoryRecord
+from company_os.catalog.memory_promotion import (
+    CatalogEntry,
+    MemoryRecord,
+    build_default_087_catalog_entries,
+)
+from company_os.engine.ollama_adapter import LOCAL_OLLAMA_MODEL_PROFILES
 
 
 def _require_non_empty(value: str, field_name: str) -> str:
@@ -101,6 +106,14 @@ class Extensions087Store:
             }
             for r in rows
         ]
+
+    def seed_default_catalog_profiles(self, tenant_id: str) -> list[dict[str, Any]]:
+        """Seed all default 087 ROLE, SKILL, and local Ollama MODEL profiles idempotently for a tenant."""
+        tid = _require_non_empty(tenant_id, "TENANT_ID")
+        entries = build_default_087_catalog_entries(
+            tid, model_profiles=LOCAL_OLLAMA_MODEL_PROFILES
+        )
+        return [self.upsert_catalog_entry(entry) for entry in entries]
 
     def save_memory_promotion(self, record: MemoryRecord) -> dict[str, Any]:
         tid = _require_non_empty(record.tenant_id, "TENANT_ID")

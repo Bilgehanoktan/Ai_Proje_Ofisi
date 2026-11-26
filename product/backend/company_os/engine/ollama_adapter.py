@@ -27,6 +27,65 @@ DEFAULT_OLLAMA_MODELS_DIR = Path(r"E:\ollama_local\models")
 ALLOWED_LOCAL_HOSTS = frozenset({"127.0.0.1", "localhost"})
 
 
+@dataclass(frozen=True)
+class LocalOllamaModelProfile:
+    """Versioned, digest-pinned local Ollama model profile for 087 catalog entries."""
+
+    name: str
+    version: str
+    temperature: float
+    num_predict: int
+    repeat_penalty: float
+    description: str
+
+    def canonical_json(self) -> str:
+        return json.dumps(
+            {
+                "name": self.name,
+                "version": self.version,
+                "temperature": self.temperature,
+                "num_predict": self.num_predict,
+                "repeat_penalty": self.repeat_penalty,
+                "description": self.description,
+            },
+            sort_keys=True,
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
+
+    @property
+    def digest(self) -> str:
+        return hashlib.sha256(self.canonical_json().encode("utf-8")).hexdigest()
+
+
+LOCAL_OLLAMA_MODEL_PROFILES: dict[str, LocalOllamaModelProfile] = {
+    "qwen2.5-coder:3b": LocalOllamaModelProfile(
+        name="qwen2.5-coder:3b",
+        version="3b-q4_k_m",
+        temperature=0.2,
+        num_predict=768,
+        repeat_penalty=1.15,
+        description="Varsayılan ücretsiz yerel kod ve görev modeli (3B).",
+    ),
+    "qwen2.5-coder:7b": LocalOllamaModelProfile(
+        name="qwen2.5-coder:7b",
+        version="7b-q4_k_m",
+        temperature=0.15,
+        num_predict=1024,
+        repeat_penalty=1.15,
+        description="Geniş bağlamlı yerel yazılım ve mimari analiz modeli (7B).",
+    ),
+    "llama3.2:3b": LocalOllamaModelProfile(
+        name="llama3.2:3b",
+        version="3b-instruct-q4_k_m",
+        temperature=0.2,
+        num_predict=768,
+        repeat_penalty=1.12,
+        description="Araştırma, özetleme ve yükümlülük kontrolü için yerel talimat modeli (3B).",
+    ),
+}
+
+
 class OllamaError(RuntimeError):
     """Fail-closed error raised when local Ollama invocation fails."""
 

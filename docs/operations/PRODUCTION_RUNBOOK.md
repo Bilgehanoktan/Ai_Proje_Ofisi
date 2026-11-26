@@ -56,3 +56,14 @@
 - Worker servisi: `ops/systemd/aipof-worker.service` (`/etc/systemd/system/` altına kopyalayıp `systemctl enable --now aipof-worker.service`).
 - Zamanlanmış yedekleme: `ops/systemd/aipof-backup.service` ve `ops/systemd/aipof-backup.timer` (`systemctl enable --now aipof-backup.timer`).
 - Kalıcı SSE Replay: `OfficeEventReplay(..., journal_path=Path("/var/lib/aipof/sse_replay.jsonl"))` ile sunucu yeniden başlatmalarında `Last-Event-ID` sürekliliği korunur.
+
+## 7. Uzak Üretim Sunucusu Preflight, Harici HTTPS Allowlist ve 087 Katalog Profilleri
+- Harici uzak üretim Linux sunucusuna kurulum yapılacağı zaman onaylı SSH host takma adı (`--remote-ssh-host`) ve izinli harici HTTPS domain listesi (`--allowed-https-domains`) ile preflight doğrulaması çalıştırılır:
+  ```bash
+  python3 -B scripts/operations/start_office_local.py \
+    --remote-ssh-host aipof-prod-01 \
+    --allowed-https-domains "docs.example.org,mevzuat.gov.tr" \
+    --check-only
+  ```
+- İzinli domain listesi tanımlandığında `OBLIGATION` HTTPS okuyucusu ve `MOD-014` dış webhook/bütçe koordinatörü yalnızca bu listedeki tam alan adlarına (`https://`) izin verir; liste dışındaki tüm harici hostlar `OBLIGATION_EXTERNAL_HOST_NOT_ALLOWED` / `EXTERNAL_HOST_NOT_ALLOWED` ile fail-closed reddedilir.
+- `087` kataloğu (`company.catalog_entries`, `FORCE RLS`) `Extensions087Store.seed_default_catalog_profiles(tenant_id)` ile 4 rol kartı (`EXP-01`, `EXP-02`, `MGR-01`, `QA-01`), 4 beceri kartı (`SKILL-PATCH-ATOMIC-01`, `SKILL-RESEARCH-READBACK-01`, `SKILL-XLSX-AUDIT-01`, `SKILL-OBLIGATION-EXTRACT-01`) ve 3 yerel Ollama model profilini (`qwen2.5-coder:3b`, `qwen2.5-coder:7b`, `llama3.2:3b`) SHA-256 özet pinleriyle idempotent olarak tohumlar.

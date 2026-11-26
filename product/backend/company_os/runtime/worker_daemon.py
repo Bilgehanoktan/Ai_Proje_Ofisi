@@ -76,7 +76,25 @@ class AutonomousWorkerDaemon:
     def run_once(self) -> TaskRunSummary | None:
         """Run a single claim -> execute -> verify cycle."""
         self.stats.cycles += 1
-        task = self._claim_next()
+        try:
+            task = self._claim_next()
+        except Exception as exc:  # noqa: BLE001 — fail-closed circuit breaker on claim errors
+            self.stats.errors += 1
+            self.stats.consecutive_errors += 1
+            summary = TaskRunSummary(
+                task_id="",
+                outcome="ERROR",
+                detail={"error_type": type(exc).__name__, "message": str(exc)},
+            )
+            self.stats.history.append(summary)
+            self._emit(
+                "WorkerTaskError",
+                {"task_id": "", "error_type": type(exc).__name__, "error": str(exc).strip()[:300]},
+            )
+            if self.stats.consecutive_errors >= self._max_consecutive_errors:
+                self.stats.state = DaemonState.HALTED_ON_ERRORS
+                self._stop_event.set()
+            return summary
         if task is None:
             return None
         task_id = str(task.get("task_id") or task.get("id") or "")

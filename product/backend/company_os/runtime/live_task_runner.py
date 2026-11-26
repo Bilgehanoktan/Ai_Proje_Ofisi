@@ -388,19 +388,31 @@ class LiveOfficeTaskRunner:
             )
             if chosen is not None:
                 attempt_id = str(uuid4())
-                self._agent_registry.assign_task(
-                    agent_instance_id=chosen,
-                    task_id=task_id,
-                    attempt_id=attempt_id,
-                    task_title=title,
-                )
-                with self._lock:
-                    record.agent_instance_id = chosen
-                    record.attempt_id = attempt_id
-                self._record_event(
-                    "AgentInstanceAssigned",
-                    {"agent_instance_id": chosen, "task_id": task_id, "attempt_id": attempt_id, "role_id": role_id},
-                )
+                try:
+                    self._agent_registry.assign_task(
+                        agent_instance_id=chosen,
+                        task_id=task_id,
+                        attempt_id=attempt_id,
+                        task_title=title,
+                    )
+                    with self._lock:
+                        record.agent_instance_id = chosen
+                        record.attempt_id = attempt_id
+                    self._record_event(
+                        "AgentInstanceAssigned",
+                        {"agent_instance_id": chosen, "task_id": task_id, "attempt_id": attempt_id, "role_id": role_id},
+                    )
+                except Exception as exc:  # noqa: BLE001 — do not stall worker daemon on registry persistence error
+                    self._record_event(
+                        "AgentInstanceAssignFailed",
+                        {
+                            "agent_instance_id": chosen,
+                            "task_id": task_id,
+                            "role_id": role_id,
+                            "error_type": type(exc).__name__,
+                            "error": str(exc).strip()[:200],
+                        },
+                    )
         with self._lock:
             record_dict = record.to_dict()
             record_dict["read_path"] = record.read_path

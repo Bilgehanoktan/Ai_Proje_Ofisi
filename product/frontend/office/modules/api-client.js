@@ -93,3 +93,25 @@ export async function fetchDetailRecord(payload, bearerToken = '') {
   const data = await response.json();
   return { ok: response.ok, status: response.status, data };
 }
+
+export async function fetchReadinessSnapshot(timeoutMs = 4000) {
+  const response = await fetch('/api/readiness', {
+    cache: 'no-store',
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP_${response.status}`);
+  }
+  return response.json();
+}
+
+export async function fetchVerifierCalibration(timeoutMs = 4000) {
+  const response = await fetch('/api/verifier-calibration', {
+    cache: 'no-store',
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP_${response.status}`);
+  }
+  return response.json();
+}

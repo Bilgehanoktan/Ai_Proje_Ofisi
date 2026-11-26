@@ -1,4 +1,11 @@
-import { fetchOfficeSnapshot, observeOfficeAgents, sendMemoryAction, submitOfficeTask } from './api-client.js';
+import {
+  fetchOfficeSnapshot,
+  fetchReadinessSnapshot,
+  fetchVerifierCalibration,
+  observeOfficeAgents,
+  sendMemoryAction,
+  submitOfficeTask,
+} from './api-client.js';
 import { ROLES, SCENE_KEY_TO_ROLE_ID, createOfficeCanvas } from './office-canvas.js';
 import { createPanelsController } from './panels.js';
 import { createOfficeEventStream } from './sse-client.js';
@@ -314,5 +321,17 @@ if (taskForm) {
   });
 }
 
+async function refreshReadinessAndCalibration() {
+  const [readinessRes, calibrationRes] = await Promise.allSettled([
+    fetchReadinessSnapshot(),
+    fetchVerifierCalibration(),
+  ]);
+  panels.renderReadinessAndCalibration(
+    readinessRes.status === 'fulfilled' ? readinessRes.value : null,
+    calibrationRes.status === 'fulfilled' ? calibrationRes.value : null,
+  );
+}
+
 refreshLiveOffice();
+refreshReadinessAndCalibration();
 setInterval(refreshLiveOffice, 2500);

@@ -350,6 +350,28 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
     if (fieldset) fieldset.disabled = true;
   }
 
+  function renderReadinessAndCalibration(readiness, calibrationPayload) {
+    const body = doc.getElementById('readiness-calibration-body');
+    if (!body) return;
+    body.textContent = '';
+    const items = [];
+    if (readiness) {
+      const blockers = Array.isArray(readiness.blockers) ? readiness.blockers : [];
+      items.push({
+        title: `Uzak dağıtım hazırlığı: ${readiness.ready_for_remote_deploy ? 'HAZIR' : 'ENGELLİ'} (Anahtar: ${readiness.key_status || 'bilinmiyor'})`,
+        sub: blockers.length ? `Açık maddeler: ${blockers.join(', ')}` : 'Tüm üretim hazırlık kontrolleri geçti.',
+      });
+    }
+    const cal = calibrationPayload?.calibration;
+    if (cal) {
+      items.push({
+        title: `Doğrulayıcı eşikleri (SOFTWARE ≥ ${(Number(cal.min_software_oracle_pass_ratio) * 100).toFixed(0)}%)`,
+        sub: `RESEARCH makbuz ≥ ${cal.min_research_receipt_count} · SPREADSHEET hücre ≥ ${cal.min_spreadsheet_cell_count} · OBLIGATION belirsizlik ≤ ${(Number(cal.max_obligation_uncertainty_ratio) * 100).toFixed(0)}%`,
+      });
+    }
+    renderLiveList(body, items, 'Hazırlık ve kalibrasyon verisi alınamadı.');
+  }
+
   return {
     showTab,
     renderLiveList,
@@ -359,6 +381,7 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
     renderOfficeRuns,
     renderMemoryPromotions,
     renderBudgetAndEffects,
+    renderReadinessAndCalibration,
     renderConnectionLoss,
   };
 }

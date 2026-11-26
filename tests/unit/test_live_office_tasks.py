@@ -280,6 +280,41 @@ class LiveOfficeTaskRunnerTests(unittest.TestCase):
             )
         self.assertEqual(runner.list_runs(), [])
 
+    def test_ceo_mgr01_auto_delegates_to_specialist_and_qa(self):
+        stub = _StubOllama("1. Gorev parcalandi.\n2. Uygulama ve QA dogrulama adimlari tanimlandi.")
+        runner = LiveOfficeTaskRunner(
+            tenant_id="t1",
+            ollama_client=stub,  # type: ignore[arg-type]
+            poll_interval_seconds=0.0,
+        )
+        parent = runner.submit_task(
+            {
+                "title": "Yeni API ucunu tasarla",
+                "goal": "CEO olarak hedefi parcala, muhendise ve QA'ya delege et.",
+                "work_type": "SOFTWARE",
+                "role_id": "MGR-01",
+            }
+        )
+        runner.run_once()
+        # CEO run should be ACCEPTED and should have delegated 2 subtasks (EXP-01 + QA-01)
+        runs_after_ceo = {r["task_id"]: r for r in runner.list_runs(limit=10)}
+        parent_rec = runs_after_ceo[parent["task_id"]]
+        self.assertEqual(parent_rec["state"], "ACCEPTED")
+        self.assertEqual(len(parent_rec["delegated_task_ids"]), 2)
+
+        # Execute both delegated subtasks
+        runner.run_once()
+        runner.run_once()
+        all_runs = {r["task_id"]: r for r in runner.list_runs(limit=10)}
+        child_roles = {all_runs[cid]["role_id"] for cid in parent_rec["delegated_task_ids"]}
+        child_states = {all_runs[cid]["state"] for cid in parent_rec["delegated_task_ids"]}
+        self.assertEqual(child_roles, {"EXP-01", "QA-01"})
+        self.assertEqual(child_states, {"ACCEPTED"})
+        self.assertTrue(
+            all(all_runs[cid]["parent_task_id"] == parent["task_id"] for cid in parent_rec["delegated_task_ids"])
+        )
+        self.assertIn("CeoDelegatedSubtasks", [ev.event_type for ev in runner.recent_events()])
+
 
 class OfficeTasksWsgiTests(unittest.TestCase):
     def _call(self, app, method: str, path: str, *, body: bytes = b"", headers: dict[str, str] | None = None):

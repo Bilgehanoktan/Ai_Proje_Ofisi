@@ -200,6 +200,8 @@ class OfficeTaskRecord:
     error: str | None = None
     agent_instance_id: str | None = None
     attempt_id: str | None = None
+    parent_task_id: str | None = None
+    delegated_task_ids: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -221,6 +223,8 @@ class OfficeTaskRecord:
             "error": self.error,
             "agent_instance_id": self.agent_instance_id,
             "attempt_id": self.attempt_id,
+            "parent_task_id": self.parent_task_id,
+            "delegated_task_ids": list(self.delegated_task_ids),
         }
 
 
@@ -551,7 +555,69 @@ class LiveOfficeTaskRunner:
             except Exception:
                 # Memory promotion candidate creation never alters task verification verdict.
                 pass
+        if (
+            snapshot is not None
+            and verdict.get("accepted")
+            and snapshot.role_id == "MGR-01"
+            and snapshot.parent_task_id is None
+            and not snapshot.delegated_task_ids
+        ):
+            self._delegate_ceo_subtasks(snapshot)
         return verdict
+
+    def _delegate_ceo_subtasks(self, parent: OfficeTaskRecord) -> list[str]:
+        """When CEO/Orchestrator (MGR-01) completes an approved plan, auto-delegate to specialist roles."""
+        ceo_plan = str((parent.exec_result or {}).get("response") or "").strip()[:1200]
+        target_role = "EXP-01" if parent.work_type in {"SOFTWARE", "SPREADSHEET"} else "EXP-02"
+        specs = [
+            {
+                "title": f"[CEO→{target_role}] {parent.title}"[:180],
+                "goal": (
+                    f"CEO (MGR-01) talimatı ve planı doğrultusunda uygulamayı/analizi üret.\n"
+                    f"Üst Hedef: {parent.goal}\n"
+                    f"CEO Plan Özeti:\n{ceo_plan}"
+                )[:3800],
+                "work_type": parent.work_type,
+                "role_id": target_role,
+                "acceptance_criteria": list(parent.acceptance_criteria),
+                "model": parent.model,
+                "read_path": parent.read_path,
+            },
+            {
+                "title": f"[CEO→QA-01] {parent.title} · Kalite Kontrol"[:180],
+                "goal": (
+                    f"CEO (MGR-01) talimatı kapsamında '{parent.title}' görevinin kabul ölçütlerini, "
+                    f"risklerini ve bağımsız doğrulama kontrol listesini çıkar.\nÜst Hedef: {parent.goal}"
+                )[:3800],
+                "work_type": "RESEARCH",
+                "role_id": "QA-01",
+                "acceptance_criteria": [
+                    "Her kabul ölçütü için somut doğrulama kontrolü belirtilmeli.",
+                    "Görev ayrılığı (producer != verifier) korunmalı.",
+                ],
+                "model": parent.model,
+            },
+        ]
+        child_ids: list[str] = []
+        for spec in specs:
+            try:
+                child = self.submit_task(spec)
+                cid = str(child["task_id"])
+                with self._lock:
+                    if cid in self._tasks:
+                        self._tasks[cid].parent_task_id = parent.task_id
+                child_ids.append(cid)
+            except Exception:
+                continue
+        if child_ids:
+            with self._lock:
+                parent.delegated_task_ids = list(child_ids)
+                parent.updated_at = _now_iso()
+            self._record_event(
+                "CeoDelegatedSubtasks",
+                {"parent_task_id": parent.task_id, "delegated_task_ids": child_ids},
+            )
+        return child_ids
 
     def _on_daemon_event(self, kind: str, payload: dict[str, Any]) -> None:
         if kind == "WorkerTaskError":

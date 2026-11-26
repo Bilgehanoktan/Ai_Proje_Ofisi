@@ -514,6 +514,37 @@ def make_wsgi_app(
             payload = load_progress()
             return _json_response(start_response, payload)
 
+        if path == "/api/readiness":
+            import os
+            from company_os.bootstrap.readiness import build_production_readiness_snapshot
+
+            raw_domains = os.environ.get("AIPOF_ALLOWED_HTTPS_DOMAINS", "")
+            domains = [d.strip() for d in raw_domains.split(",") if d.strip()]
+            try:
+                schema_version = int(os.environ.get("AIPOF_SCHEMA_VERSION", "88"))
+            except ValueError:
+                schema_version = 0
+            try:
+                signer_key_age_days = int(os.environ.get("AIPOF_SIGNER_KEY_AGE_DAYS", "0"))
+            except ValueError:
+                signer_key_age_days = 9999
+            payload = build_production_readiness_snapshot(
+                schema_version=schema_version,
+                owner_auth_enrolled=os.environ.get("AIPOF_OWNER_AUTH_ENROLLED", "").lower() in ("1", "true", "yes"),
+                clock_epoch_active=os.environ.get("AIPOF_CLOCK_EPOCH_ACTIVE", "").lower() in ("1", "true", "yes"),
+                allowed_https_domains=domains,
+                signer_key_age_days=signer_key_age_days,
+                remote_ssh_host=os.environ.get("AIPOF_REMOTE_SSH_HOST") or None,
+            )
+            return _json_response(start_response, payload)
+
+        if path == "/api/verifier-calibration":
+            from dataclasses import asdict
+            from independent_verifier.calibration import VerifierCalibrationProfile
+
+            profile = VerifierCalibrationProfile()
+            return _json_response(start_response, {"calibration": asdict(profile)})
+
         if path == "/progress":
             from company_os.projections.progress import load_progress, render_progress_html
 

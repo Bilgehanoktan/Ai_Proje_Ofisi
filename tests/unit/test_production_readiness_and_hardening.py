@@ -81,6 +81,45 @@ class ProductionReadinessAndHardeningTests(unittest.TestCase):
         self.assertIn("https_allowlist_configured", blocked["blockers"])
         self.assertIn("remote_ssh_host_configured", blocked["blockers"])
 
+    def test_http_readiness_and_verifier_calibration_endpoints(self) -> None:
+        import json
+        import os
+        from unittest.mock import patch
+        from company_os.api.http.app import make_wsgi_app
+
+        app = make_wsgi_app()
+
+        def call_get(path: str) -> tuple[str, dict]:
+            captured: dict[str, str] = {}
+
+            def start_response(status: str, headers: list[tuple[str, str]]) -> None:
+                captured["status"] = status
+
+            body = b"".join(app({"REQUEST_METHOD": "GET", "PATH_INFO": path}, start_response))
+            return captured["status"], json.loads(body.decode("utf-8"))
+
+        with patch.dict(
+            os.environ,
+            {
+                "AIPOF_SCHEMA_VERSION": "88",
+                "AIPOF_OWNER_AUTH_ENROLLED": "true",
+                "AIPOF_CLOCK_EPOCH_ACTIVE": "1",
+                "AIPOF_ALLOWED_HTTPS_DOMAINS": "api.example.com",
+                "AIPOF_SIGNER_KEY_AGE_DAYS": "10",
+                "AIPOF_REMOTE_SSH_HOST": "prod-eu-1",
+            },
+            clear=False,
+        ):
+            status, payload = call_get("/api/readiness")
+            self.assertEqual(status, "200 OK")
+            self.assertTrue(payload["ready_for_remote_deploy"])
+            self.assertEqual(payload["key_status"], "ACTIVE")
+
+        cal_status, cal_payload = call_get("/api/verifier-calibration")
+        self.assertEqual(cal_status, "200 OK")
+        self.assertEqual(cal_payload["calibration"]["min_software_oracle_pass_ratio"], 1.0)
+        self.assertEqual(cal_payload["calibration"]["min_research_receipt_count"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -313,7 +313,13 @@ class LiveOfficeTaskRunnerTests(unittest.TestCase):
         self.assertTrue(
             all(all_runs[cid]["parent_task_id"] == parent["task_id"] for cid in parent_rec["delegated_task_ids"])
         )
-        self.assertIn("CeoDelegatedSubtasks", [ev.event_type for ev in runner.recent_events()])
+        final_parent = all_runs[parent["task_id"]]
+        self.assertIsNotNone(final_parent["ceo_final_report"])
+        self.assertTrue(final_parent["ceo_final_report"]["all_accepted"])
+        self.assertEqual(final_parent["ceo_final_report"]["completed_subtasks"], 2)
+        event_types = [ev.event_type for ev in runner.recent_events()]
+        self.assertIn("CeoDelegatedSubtasks", event_types)
+        self.assertIn("CeoFinalReportReady", event_types)
 
 
 class OfficeTasksWsgiTests(unittest.TestCase):

@@ -202,6 +202,7 @@ class OfficeTaskRecord:
     attempt_id: str | None = None
     parent_task_id: str | None = None
     delegated_task_ids: list[str] = field(default_factory=list)
+    ceo_final_report: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -225,6 +226,7 @@ class OfficeTaskRecord:
             "attempt_id": self.attempt_id,
             "parent_task_id": self.parent_task_id,
             "delegated_task_ids": list(self.delegated_task_ids),
+            "ceo_final_report": self.ceo_final_report,
         }
 
 
@@ -563,7 +565,59 @@ class LiveOfficeTaskRunner:
             and not snapshot.delegated_task_ids
         ):
             self._delegate_ceo_subtasks(snapshot)
+        if snapshot is not None and snapshot.parent_task_id:
+            self._maybe_synthesize_ceo_report(snapshot.parent_task_id)
         return verdict
+
+    def _maybe_synthesize_ceo_report(self, parent_task_id: str) -> dict[str, Any] | None:
+        """When all delegated subtasks reach a terminal state, attach a consolidated CEO report."""
+        terminal = {"ACCEPTED", "REJECTED", "ERROR"}
+        with self._lock:
+            parent = self._tasks.get(parent_task_id)
+            if parent is None or not parent.delegated_task_ids or parent.ceo_final_report is not None:
+                return None
+            children = [self._tasks.get(cid) for cid in parent.delegated_task_ids]
+            if any(ch is None or ch.state not in terminal for ch in children):
+                return None
+            subtask_summaries = []
+            for ch in children:
+                assert ch is not None
+                resp = str((ch.exec_result or {}).get("response") or ch.error or "").strip()
+                subtask_summaries.append(
+                    {
+                        "task_id": ch.task_id,
+                        "role_id": ch.role_id,
+                        "work_type": ch.work_type,
+                        "state": ch.state,
+                        "excerpt": resp[:240],
+                    }
+                )
+            all_accepted = all(item["state"] == "ACCEPTED" for item in subtask_summaries)
+            lines = [
+                f"CEO (MGR-01) Nihai Özet Raporu — {parent.title}",
+                f"Genel Durum: {'TÜM ALT GÖREVLER KABUL EDİLDİ' if all_accepted else 'İNCELEME GEREKTİREN ALT GÖREV VAR'}",
+            ]
+            for item in subtask_summaries:
+                lines.append(f"- [{item['role_id']} · {item['state']}] {item['excerpt']}")
+            report = {
+                "synthesized_by": "MGR-01",
+                "all_accepted": all_accepted,
+                "completed_subtasks": len(subtask_summaries),
+                "subtasks": subtask_summaries,
+                "summary": "\n".join(lines),
+                "synthesized_at": _now_iso(),
+            }
+            parent.ceo_final_report = report
+            parent.updated_at = _now_iso()
+        self._record_event(
+            "CeoFinalReportReady",
+            {
+                "parent_task_id": parent_task_id,
+                "all_accepted": report["all_accepted"],
+                "completed_subtasks": report["completed_subtasks"],
+            },
+        )
+        return report
 
     def _delegate_ceo_subtasks(self, parent: OfficeTaskRecord) -> list[str]:
         """When CEO/Orchestrator (MGR-01) completes an approved plan, auto-delegate to specialist roles."""

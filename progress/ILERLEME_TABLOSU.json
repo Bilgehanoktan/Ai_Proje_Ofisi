@@ -169,7 +169,7 @@
         "tests/unit/test_live_office_tasks.py",
         "evidence/runs/live-flow-20261120/local-model-invocation.json"
       ],
-      "evidence_scope": "2026-11-25 yerel Ollama otomatik başlatma + repeat_penalty=1.15 + EXP-01 baz/pilot (3/3 ACCEPTED) + RESEARCH/SPREADSHEET(.xlsx)/OBLIGATION canlı üretim ve bağımsız doğrulama PASS.",
+      "evidence_scope": "2026-11-26 canlı yerel Ollama (qwen2.5-coder:3b) + canlı 087 katalog (aipof_catalog_087) üzerinde EXP-01 SOFTWARE (362 token, 11492 ms, ACCEPTED) ve EXP-02 RESEARCH (646 token, ACCEPTED) rol+model SHA-256 profil pinleri doğrulandı; qwen2.5-coder:7b bu yerel makinede OllamaError verdi (büyük model benchmark'ı harici/yüksek bellekli ortamda açık).",
       "real_acceptance": "ACCEPTED_BY_HUMAN_20261123",
       "estimated_percent": 80,
       "estimate_kind": "EXPERT_GUESS_NOT_MEASURED",

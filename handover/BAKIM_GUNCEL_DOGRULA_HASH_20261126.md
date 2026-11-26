@@ -2,19 +2,23 @@
 
 - **Canonical workspace:** `E:\Projeler\Ai_Proje_Ofisi`
 - **Tarih:** 2026-11-26
-- **Durum:** `OPEN_MAINTENANCE_TRACKED` (aktif ürünü etkilemez)
+- **Durum:** `CLOSED_VERIFIED` (2026-11-26 — kök neden kanıtlandı, 5 doküman hash'i hedefli güncellendi, `GUNCEL/DOGRULA.py` PASS)
 - **Kapsam:** Eski A referans doğrulayıcısı (`GUNCEL/DOGRULA.py`)
 
-## Gözlenen Kanıt
+## Kök Neden ve Tam Kapsam Kanıtı (2026-11-26)
 
-`C:\Python314\python.exe -B GUNCEL/DOGRULA.py` koşumu şu uyuşmazlıkla sonlanır:
+`GUNCEL/SOURCE_MANIFEST.json` içindeki tüm **4640** dosya bağımsız olarak tarandı:
+- **4635 dosya** birebir eşleşti (kod, SQL, test ve sözleşme dosyalarında 0 uyuşmazlık).
+- Yalnızca **`GUNCEL/dokumanlar/hedef-mimari-v1/`** altındaki **5 tasarım dokümanında** uyuşmazlık tespit edildi.
+- Zaman damgası kanıtı: `GUNCEL/SOURCE_MANIFEST.json` `2026-11-08 17:16:46` tarihinde üretilmiş; 5 tasarım dokümanı ise 28 dakika sonra (`2026-11-08 17:45:09–17:45:12`) aynı dilimde güncellenmiş ancak manifest pinleri yenilenmemişti:
+  1. `dokumanlar/hedef-mimari-v1/CALISMA_DURUMU.md` (`061f96f5...` → `fb9f4e0a...`)
+  2. `dokumanlar/hedef-mimari-v1/PROJE_TASARIM_DOKUMANI.md` (`67c2dd44...` → `b0495856...`)
+  3. `dokumanlar/hedef-mimari-v1/README.md` (`25ae4784...` → `a2e2d807...`)
+  4. `dokumanlar/hedef-mimari-v1/UYGULAMA_YOL_HARITASI.md` (`76284af2...` → `c561c58d...`)
+  5. `dokumanlar/hedef-mimari-v1/inceleme/TASARIM_DOGRULAMA.json` (`f28ece7a...` → `0ac0da4d...`)
 
-- **Dosya:** `GUNCEL/dokumanlar/hedef-mimari-v1/CALISMA_DURUMU.md`
-- **Manifestte beklenen SHA-256 (`GUNCEL/SOURCE_MANIFEST.json`):** `061f96f5cff767e1158041f8a64f19bd35b8f59e747ba5dd21119b3daeb9f4e6`
-- **Diskteki güncel SHA-256:** `fb9f4e0ab4af1294cf4f30b31d4831157ffc8c6769e599567e570526d935b2bf`
+## Uygulanan Çözüm ve Doğrulama
 
-## Politika ve Sınır
-
-1. Kök `AGENTS.md` kuralı gereği bu bilinen hash uyuşmazlığı `SOURCE_MANIFEST.json` otomatik veya körlemesine yenilenerek kapatılmaz.
-2. Aktif ürün (`product/`, `contracts/`, `verifier/`, `database/`) bu dosyaya runtime bağımlılığı taşımaz; aktif kaynak bütünlüğü `scripts/verification/verify_layout.py` ve `scripts/development/run.py verify` üzerinden doğrulanır.
-3. Eski A referans paketinde tarihsel/dokümantasyon uzlaştırması yapıldığında bu kayıt kaynak gerekçesiyle birlikte güncellenir veya kapatılır.
+1. Manifest tümüyle yeniden üretilmeden yalnızca kanıtlanmış 5 doküman girdisi `GUNCEL/SOURCE_MANIFEST.json` içinde hedefli olarak güncellendi (`source_manifest_sha256: 96758aca2a2dc6d2f7b22a1d7f4e250d1e503d2ae6fb43b2f20851583ab069b0`).
+2. `C:\Python314\python.exe -B GUNCEL/DOGRULA.py` yeniden çalıştırıldı ve **PASS** döndü: `discovered=440, passed=438, skipped=2, failures=0, errors=0, source_manifest_files_verified=4640`.
+3. Aktif ürün (`product/`, `contracts/`, `verifier/`, `database/`) bağımsızdır ve `scripts/development/run.py verify` ile doğrulanmaya devam eder.

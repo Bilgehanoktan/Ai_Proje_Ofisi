@@ -6,4 +6,4 @@
 2. İhtiyaç duyulduğunda `087` kataloğuna (`company.catalog_entries`, an itibarıyla 4 rol, 4 beceri ve 4 yerel Ollama model profili — `qwen2.5-coder:3b/7b`, `llama3.2:3b`, `bge-m3:latest` — olmak üzere 12 pinli kayıt aktif) ek rol/beceri kartları veya yeni yerel Ollama model profilleri ekle.
 3. MOD-001–MOD-016 ve PH-00–PH-06 durumunu `progress/ILERLEME_TABLOSU.json` üzerinden kanıtıyla izle.
 
-GUNCEL/DOGRULA.py içindeki eski CALISMA_DURUMU.md hash uyuşmazlığı ayrı açık bakım kaydı olarak [BAKIM_GUNCEL_DOGRULA_HASH_20261126.md](BAKIM_GUNCEL_DOGRULA_HASH_20261126.md) içinde izlenir; manifesti körlemesine yenileyerek kapatma.
+GUNCEL/DOGRULA.py içindeki eski hedef-mimari-v1 5-doküman hash uyuşmazlığı 2026-11-26 tarihinde kök neden kanıtıyla hedefli güncellenerek kapatıldı (`GUNCEL/DOGRULA.py` PASS: 4640/4640 dosya, 438 passed / 2 skipped / 0 fail): [BAKIM_GUNCEL_DOGRULA_HASH_20261126.md](BAKIM_GUNCEL_DOGRULA_HASH_20261126.md).

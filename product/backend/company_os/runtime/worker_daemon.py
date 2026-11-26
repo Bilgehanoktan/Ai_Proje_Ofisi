@@ -112,7 +112,14 @@ class AutonomousWorkerDaemon:
                 detail={"error_type": type(exc).__name__, "message": str(exc)},
             )
             self.stats.history.append(summary)
-            self._emit("WorkerTaskError", {"task_id": task_id, "error_type": type(exc).__name__})
+            self._emit(
+                "WorkerTaskError",
+                {
+                    "task_id": task_id,
+                    "error_type": type(exc).__name__,
+                    "error": str(exc).strip()[:300],
+                },
+            )
             if self.stats.consecutive_errors >= self._max_consecutive_errors:
                 self.stats.state = DaemonState.HALTED_ON_ERRORS
                 self._stop_event.set()

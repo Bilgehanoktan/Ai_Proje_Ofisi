@@ -48,6 +48,8 @@ export const ROLE_ID_TO_SCENE_KEY = {
   'MGR-01': 'orchestrator',
   'EXP-01': 'engineer',
   'QA-01': 'qa',
+  'EXP-03': 'qa',
+  'EXP-04': 'research',
 };
 
 export const SCENE_KEY_TO_ROLE_ID = {

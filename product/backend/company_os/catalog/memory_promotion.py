@@ -85,6 +85,26 @@ DEFAULT_ROLE_CARDS: dict[str, CatalogProfileSpec] = {
             "SHA-256 kanıt özetine ve negatif regresyon kontrollerine göre bağımsız değerlendir; kanıtsız kabul verme."
         ),
     ),
+    "EXP-03": CatalogProfileSpec(
+        kind=CatalogKind.ROLE,
+        name="EXP-03",
+        version="1.0.0",
+        content=(
+            "Sen AI Proje Ofisi EXP-03 güvenlik ve gizlilik denetçisisin. Kod, yapılandırma ve dış kaynak "
+            "akışlarını OWASP, SSRF/allowlist, en az yetki ve gizli veri sızıntısı açısından denetle. "
+            "Her bulguyu etki, kanıt satırı ve somut giderim adımıyla raporla; doğrulanmamış varsayımı bulgu sayma."
+        ),
+    ),
+    "EXP-04": CatalogProfileSpec(
+        kind=CatalogKind.ROLE,
+        name="EXP-04",
+        version="1.0.0",
+        content=(
+            "Sen AI Proje Ofisi EXP-04 veri ve tablo analiz uzmanısın. .xlsx ve .csv çalışma kitaplarındaki "
+            "sayısal tutarlılık, eksik/anomali kayıtlar ve özet metrikleri hücre/sütun referansı ile çıkar. "
+            "Hesaplanmamış veya okunmamış değeri tahmin ederek doldurma."
+        ),
+    ),
 }
 
 DEFAULT_SKILL_CARDS: dict[str, CatalogProfileSpec] = {
@@ -111,6 +131,18 @@ DEFAULT_SKILL_CARDS: dict[str, CatalogProfileSpec] = {
         name="SKILL-OBLIGATION-EXTRACT-01",
         version="1.0.0",
         content="Yükümlülük belgelerinden ve izinli HTTPS kaynaklarından madde, süre sınırı ve kanıt kontrol listesi çıkarımı.",
+    ),
+    "SKILL-SECURITY-AUDIT-01": CatalogProfileSpec(
+        kind=CatalogKind.SKILL,
+        name="SKILL-SECURITY-AUDIT-01",
+        version="1.0.0",
+        content="SSRF/allowlist sınırları, gizli veri sızıntısı, yetki ayrılığı ve en az yetki kontrol listesi denetimi.",
+    ),
+    "SKILL-CEO-SYNTHESIS-01": CatalogProfileSpec(
+        kind=CatalogKind.SKILL,
+        name="SKILL-CEO-SYNTHESIS-01",
+        version="1.0.0",
+        content="Çoklu uzman ve QA çıktılarından çelişki denetimli, makbuz/kanıt referanslı nihai yönetici özeti sentezi.",
     ),
 }
 

@@ -161,15 +161,37 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
     }
   }
 
+  let lastRuns = [];
+  const runsFilterEl = doc.getElementById('office-runs-filter');
+  if (runsFilterEl) {
+    runsFilterEl.addEventListener('change', () => renderOfficeRuns(lastRuns));
+  }
+
   function renderOfficeRuns(runs) {
     const box = doc.getElementById('office-runs-list');
     if (!box) return;
+    lastRuns = Array.isArray(runs) ? runs : [];
+    const summaryEl = doc.getElementById('office-runs-summary');
+    if (summaryEl) {
+      if (!lastRuns.length) {
+        summaryEl.textContent = '';
+      } else {
+        const accepted = lastRuns.filter((r) => r.state === 'ACCEPTED').length;
+        const running = lastRuns.filter((r) => r.state === 'RUNNING' || r.state === 'QUEUED').length;
+        const failed = lastRuns.filter((r) => r.state === 'REJECTED' || r.state === 'ERROR').length;
+        summaryEl.textContent = `Toplam ${lastRuns.length} · Kabul: ${accepted} · Aktif: ${running} · Red/Hata: ${failed}`;
+      }
+    }
+    const activeFilter = runsFilterEl ? runsFilterEl.value : 'ALL';
+    const visibleRuns = activeFilter === 'ALL'
+      ? lastRuns
+      : lastRuns.filter((r) => r.state === activeFilter);
     const cards = new Map(Array.from(box.querySelectorAll('.run-card'),
       (card) => [card.dataset.taskId, card]));
-    if (!Array.isArray(runs) || !runs.length) {
+    if (!visibleRuns.length) {
       if (box.firstElementChild?.matches('p') && !cards.size) return;
       const empty = doc.createElement('p');
-      empty.textContent = 'Henüz görev yok.';
+      empty.textContent = lastRuns.length ? 'Seçili filtreye uygun görev yok.' : 'Henüz görev yok.';
       box.replaceChildren(empty);
       return;
     }
@@ -181,7 +203,7 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
       ['REJECTED', 'Reddedildi'],
       ['ERROR', 'Hata'],
     ]);
-    runs.forEach((run, index) => {
+    visibleRuns.forEach((run, index) => {
       let card = cards.get(run.task_id);
       if (!card) {
         card = doc.createElement('article');
@@ -234,18 +256,40 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
         receiptEl?.remove();
       }
 
-      let ceoReportEl = result.querySelector('.run-ceo-report');
+      let ceoBox = result.querySelector('.run-ceo-report-box');
       if (run.ceo_final_report?.summary) {
-        if (!ceoReportEl) {
-          ceoReportEl = doc.createElement('pre');
+        if (!ceoBox) {
+          ceoBox = doc.createElement('div');
+          ceoBox.className = 'run-ceo-report-box';
+          const head = doc.createElement('div');
+          head.className = 'run-ceo-report-head';
+          const title = doc.createElement('strong');
+          title.textContent = 'CEO Nihai Raporu';
+          const copyBtn = doc.createElement('button');
+          copyBtn.type = 'button';
+          copyBtn.className = 'mini-btn';
+          copyBtn.textContent = 'Kopyala';
+          copyBtn.addEventListener('click', () => {
+            const text = ceoBox.querySelector('.run-ceo-report')?.textContent || '';
+            if (navigator?.clipboard?.writeText) {
+              navigator.clipboard.writeText(text).then(() => {
+                copyBtn.textContent = 'Kopyalandı';
+                setTimeout(() => { copyBtn.textContent = 'Kopyala'; }, 1500);
+              }).catch(() => {});
+            }
+          });
+          head.append(title, copyBtn);
+          const ceoReportEl = doc.createElement('pre');
           ceoReportEl.className = 'run-output run-ceo-report';
-          result.append(ceoReportEl);
+          ceoBox.append(head, ceoReportEl);
+          result.append(ceoBox);
         }
-        if (ceoReportEl.textContent !== run.ceo_final_report.summary) {
+        const ceoReportEl = ceoBox.querySelector('.run-ceo-report');
+        if (ceoReportEl && ceoReportEl.textContent !== run.ceo_final_report.summary) {
           ceoReportEl.textContent = run.ceo_final_report.summary;
         }
       } else {
-        ceoReportEl?.remove();
+        ceoBox?.remove();
       }
     });
     for (const removed of cards.values()) removed.remove();

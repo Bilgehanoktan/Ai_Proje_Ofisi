@@ -79,6 +79,8 @@
                   <option value="EXP-01">EXP-01 · Engineer</option>
                   <option value="EXP-02">EXP-02 · Research</option>
                   <option value="QA-01">QA-01 · QA</option>
+                  <option value="EXP-03">EXP-03 · Güvenlik ve Gizlilik Denetçisi</option>
+                  <option value="EXP-04">EXP-04 · Veri ve Tablo Analiz Uzmanı</option>
                 </select>
               </label>
               <label>Kernel oturum anahtarı (opsiyonel · saklanmaz)
@@ -101,7 +103,18 @@
           </fieldset>
         </form>
         <section class="task-results" aria-labelledby="task-results-heading">
-          <h2 id="task-results-heading">Görev sonuçları</h2>
+          <div class="task-results-bar">
+            <h2 id="task-results-heading">Görev sonuçları</h2>
+            <span id="office-runs-summary" class="run-meta"></span>
+            <label for="office-runs-filter" class="sr-only">Durum filtresi</label>
+            <select id="office-runs-filter" aria-label="Görev durumu filtresi">
+              <option value="ALL">Tümü</option>
+              <option value="RUNNING">Çalışıyor</option>
+              <option value="ACCEPTED">Kabul edildi</option>
+              <option value="REJECTED">Reddedildi</option>
+              <option value="ERROR">Hata</option>
+            </select>
+          </div>
           <div id="office-runs-list"><p>Henüz görev yok.</p></div>
         </section>
       </section>

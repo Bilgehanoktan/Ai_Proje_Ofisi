@@ -459,6 +459,7 @@
     "verifier/src/independent_verifier/candidate_runner.py": "a005c8560f7cb1855eefe8ebe01c069ec0e7fbe726a30087dd2eb10e12d8e3f9",
     "verifier/src/independent_verifier/research_readback.py": "996f8ef82560fbbb96b63fdc977f9f70c487cfd9301e69d80825fdd90ed3e0d4",
     "verifier/src/independent_verifier/verifier_runner.py": "32c3178eac4753e40b5ebe4a7dd0afcc57b37839ccc33439f19f8637817c8898",
-    "workers/README.md": "f967f30149d5addb27922b68597c4c303eaccaf90a9db389d63fe4a389bc850c"
+    "workers/README.md": "f967f30149d5addb27922b68597c4c303eaccaf90a9db389d63fe4a389bc850c",
+    "docs/architecture/OPEN_KONULAR_KANIT_MATRISI.md": "925b175e443afab5c05ad000818c4b08f17581ff3fea78039e498298a3c13fcd"
   }
 }

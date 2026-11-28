@@ -38,3 +38,7 @@ G0 OPEN; First13 0/13; insan kabulü üretilmedi.
 ## 2026-11-14 konum güncellemesi
 
 Ofis kabuğu product/frontend/office/scenes/dashboard.html; script product/frontend/office/engine/office-preview.js; üretici product/backend/company_os/projections/preview_generator.py. Eski dosya adları yukarıda tarihsel tasarım kanıtıdır. Geçiş yeni görsel tasarım veya canlı ajan kabulü değildir.
+
+## 2026-11-28 DEC-28C / DEC-017 / MOD-011 mimari hizalama güncellemesi
+
+- Canlı modüler giriş (`product/frontend/office/modules/main.js`, `office-canvas.js`, `phaser-scene.js`, `panels.js`) ve salt-okunur `GET /api/office-architecture` (`product/backend/company_os/projections/office_layout.py`) ile `F1-DEC28C` taslak kat planı (`F1-RSCH`, `F1-ORCH`, `F1-ENG`, `F1-COR`, kapalı `F1-EXP`, `F1-BRIEF`, `F1-QA`, kapı eşikleri ve kapalı üst kat portali), yerel Phaser 3.90.0 karakter seçim konturu, renk+simge durum rozetleri (`●/◆/△/○`), `Hareket Azalt` (`reduced-motion`), sahne durum filtresi, `Seçiliye Odaklan`, sol menü kanonik KPI özeti, `087` Rol/Beceri/Model kataloğu ve `DEC-017` 7 sekmeli salt-okunur `Agent Detail` görünümü eklendi. Görsel şema veya beceri pini yetki (`grant`) üretmez; geometri dondurulmuş (frozen) sayılmaz.

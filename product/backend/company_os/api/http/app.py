@@ -17,6 +17,10 @@ from company_os.kernel import command_host as host
 from company_os.kernel.command_host import Blocked
 from company_os.projections.preview_generator import generate_preview_html
 from company_os.projections.sse_stream import ProjectionEvent, stream_tenant_events
+from company_os.runtime.ceo_improvement import (
+    CeoContinuousImprovementEngine,
+    CeoImprovementValidationError,
+)
 from company_os.runtime.live_task_runner import OfficeTaskValidationError
 from company_os.workflows.templates import TEMPLATES
 
@@ -258,6 +262,8 @@ def make_wsgi_app(
     external_effect_handler=None,
     agent_instances_provider=None,
     detail_readback_provider=None,
+    ceo_improvement_provider=None,
+    ceo_improvement_handler=None,
 ):
     """Returns a WSGI application serving read-only views, SSE stream, MOD-012..014 APIs,
     and optional loopback-checked office task, memory promotion, and external effect handlers."""
@@ -436,6 +442,38 @@ def make_wsgi_app(
                 start_response, {"status": "OK", "result": outcome}, status="201 Created"
             )
 
+        if method == "POST" and path == "/api/ceo-improvement" and ceo_improvement_handler is not None:
+            payload, err_resp = _read_loopback_json_post(environ, start_response)
+            if err_resp is not None:
+                return err_resp
+            auth_header = (environ.get("HTTP_AUTHORIZATION") or "").strip()
+            bearer = auth_header[7:].strip() if auth_header.startswith("Bearer ") else None
+            try:
+                outcome = ceo_improvement_handler(payload, bearer)
+            except (CeoImprovementValidationError, OfficeTaskValidationError, ValueError) as exc:
+                return _json_response(
+                    start_response, {"error": str(exc)}, status="400 Bad Request"
+                )
+            except KeyError as exc:
+                return _json_response(
+                    start_response, {"error": str(exc).strip("'")}, status="404 Not Found"
+                )
+            except (PermissionError, Blocked) as exc:
+                return _json_response(
+                    start_response, {"error": str(exc)}, status="403 Forbidden"
+                )
+            except RuntimeError as exc:
+                return _json_response(
+                    start_response, {"error": str(exc)}, status="409 Conflict"
+                )
+            except Exception as exc:  # noqa: BLE001
+                return _json_response(
+                    start_response,
+                    {"error": f"CEO_IMPROVEMENT_FAILED:{type(exc).__name__}"},
+                    status="503 Service Unavailable",
+                )
+            return _json_response(start_response, {"status": "OK", "result": outcome})
+
         if method == "POST" and path == "/api/details":
             payload, err_resp = _read_loopback_json_post(environ, start_response)
             if err_resp is not None:
@@ -507,6 +545,20 @@ def make_wsgi_app(
                 ],
             )
             return [content]
+
+        if path == "/api/office-architecture":
+            from company_os.projections.office_layout import build_office_architecture_payload
+
+            qs = parse_qs(environ.get("QUERY_STRING", ""))
+            tid = (qs.get("tenant_id") or ["default"])[0].strip() or "default"
+            return _json_response(start_response, build_office_architecture_payload(tenant_id=tid))
+
+        if path == "/api/ceo-improvement":
+            if ceo_improvement_provider is not None:
+                payload = ceo_improvement_provider()
+            else:
+                payload = CeoContinuousImprovementEngine().evaluate_company_state()
+            return _json_response(start_response, payload)
 
         if path == "/api/progress":
             from company_os.projections.progress import load_progress

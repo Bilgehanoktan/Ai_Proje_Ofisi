@@ -115,3 +115,42 @@ export async function fetchVerifierCalibration(timeoutMs = 4000) {
   }
   return response.json();
 }
+
+export async function fetchCeoImprovement(timeoutMs = 4000) {
+  const response = await fetch('/api/ceo-improvement', {
+    cache: 'no-store',
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP_${response.status}`);
+  }
+  return response.json();
+}
+
+export async function sendCeoImprovementAction(payload, bearerToken = '') {
+  const headers = { 'Content-Type': 'application/json' };
+  if (bearerToken) {
+    headers.Authorization = `Bearer ${bearerToken}`;
+  }
+  const response = await fetch('/api/ceo-improvement', {
+    method: 'POST',
+    credentials: 'omit',
+    cache: 'no-store',
+    headers,
+    body: JSON.stringify(payload),
+  });
+  const data = await response.json();
+  return { ok: response.ok, status: response.status, data };
+}
+
+export async function fetchOfficeArchitecture(tenantId = '', timeoutMs = 4000) {
+  const qs = tenantId ? `?${new URLSearchParams({ tenant_id: tenantId }).toString()}` : '';
+  const response = await fetch(`/api/office-architecture${qs}`, {
+    cache: 'no-store',
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP_${response.status}`);
+  }
+  return response.json();
+}

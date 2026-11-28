@@ -241,6 +241,7 @@ class LiveOfficeTaskRunner:
         persist_submission: Callable[[dict[str, Any], str | None], dict[str, Any]] | None = None,
         persist_result: Callable[[OfficeTaskRecord], None] | None = None,
         on_task_accepted: Callable[[OfficeTaskRecord], Any] | None = None,
+        on_task_settled: Callable[[OfficeTaskRecord], Any] | None = None,
         agent_registry: AgentInstanceRegistry | None = None,
         registry_tenant_id: str | None = None,
         engineer_pilot_catalog: Extensions087Store | None = None,
@@ -261,6 +262,7 @@ class LiveOfficeTaskRunner:
         self._persist_submission = persist_submission
         self._persist_result = persist_result
         self._on_task_accepted = on_task_accepted
+        self._on_task_settled = on_task_settled
         self._agent_registry = agent_registry
         self._registry_tenant_id = registry_tenant_id
         if engineer_pilot_catalog is not None and not registry_tenant_id:
@@ -563,7 +565,12 @@ class LiveOfficeTaskRunner:
             except Exception:
                 # Verification result stays intact; persistence failure is surfaced separately.
                 pass
-        if snapshot is not None and verdict.get("accepted") and self._on_task_accepted is not None:
+        if (
+            snapshot is not None
+            and verdict.get("accepted")
+            and self._on_task_accepted is not None
+            and "[CEO-KAIZEN]" not in (snapshot.title or "")
+        ):
             try:
                 self._on_task_accepted(snapshot)
             except Exception:
@@ -579,6 +586,11 @@ class LiveOfficeTaskRunner:
             self._delegate_ceo_subtasks(snapshot)
         if snapshot is not None and snapshot.parent_task_id:
             self._maybe_synthesize_ceo_report(snapshot.parent_task_id)
+        if snapshot is not None and self._on_task_settled is not None:
+            try:
+                self._on_task_settled(snapshot)
+            except Exception:
+                pass
         return verdict
 
     def _maybe_synthesize_ceo_report(self, parent_task_id: str) -> dict[str, Any] | None:
@@ -790,12 +802,14 @@ class LiveOfficeTaskRunner:
             release_pair: tuple[str, str] | None = None
             with self._lock:
                 rec = self._tasks.get(task_id)
+                settled_snapshot: OfficeTaskRecord | None = None
                 if rec is not None:
                     rec.state = "ERROR"
                     err_type = str(payload.get("error_type") or "WORKER_ERROR")
                     err_detail = str(payload.get("error") or "").strip()
                     rec.error = f"{err_type}: {err_detail}" if err_detail and err_detail != err_type else err_type
                     rec.updated_at = _now_iso()
+                    settled_snapshot = rec
                     if rec.agent_instance_id and rec.attempt_id:
                         release_pair = (rec.agent_instance_id, rec.attempt_id)
             if release_pair is not None and self._agent_registry is not None:
@@ -806,6 +820,11 @@ class LiveOfficeTaskRunner:
                         outcome="FAILED",
                         next_state=AgentState.IDLE,
                     )
+                except Exception:
+                    pass
+            if settled_snapshot is not None and self._on_task_settled is not None:
+                try:
+                    self._on_task_settled(settled_snapshot)
                 except Exception:
                     pass
         self._record_event(kind, payload)
@@ -833,9 +852,18 @@ class LiveOfficeTaskRunner:
         if thread is not None and thread.is_alive():
             thread.join(timeout=join_timeout)
 
-    def list_runs(self, *, limit: int = 12) -> list[dict[str, Any]]:
+    def list_runs(self, *, limit: int = 24) -> list[dict[str, Any]]:
         with self._lock:
             ids = list(self._task_order)[:limit]
+            seen = set(ids)
+            parent_ids: list[str] = []
+            for tid in ids:
+                rec = self._tasks.get(tid)
+                if rec is not None and rec.parent_task_id and rec.parent_task_id in self._tasks:
+                    if rec.parent_task_id not in seen:
+                        seen.add(rec.parent_task_id)
+                        parent_ids.append(rec.parent_task_id)
+            ids.extend(parent_ids)
             return [self._tasks[tid].to_dict() for tid in ids if tid in self._tasks]
 
     def recent_events(self) -> list[ProjectionEvent]:

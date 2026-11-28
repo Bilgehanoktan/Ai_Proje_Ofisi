@@ -20,7 +20,11 @@ from uuid import uuid4
 from wsgiref.simple_server import make_server
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT / "product/backend"), str(ROOT / "contracts/source/python")]
+sys.path[:0] = [
+    str(ROOT / "product/backend"),
+    str(ROOT / "contracts/source/python"),
+    str(ROOT / "verifier/src"),
+]
 
 from company_os.api.http.app import make_wsgi_app  # noqa: E402
 from company_os.budget.ledger import ExternalEffectEntry  # noqa: E402
@@ -41,6 +45,7 @@ from company_os.engine.ollama_adapter import (  # noqa: E402
 )
 from company_os.projections.sse_stream import OfficeEventReplay, ProjectionEvent  # noqa: E402
 from company_os.runtime.agent_instances import AgentInstanceRecord, AgentInstanceRegistry  # noqa: E402
+from company_os.runtime.ceo_improvement import CeoContinuousImprovementEngine  # noqa: E402
 from company_os.runtime.live_task_runner import (  # noqa: E402
     ENGINEER_PILOT_PROMPT,
     ENGINEER_PILOT_VERSION,
@@ -1181,12 +1186,35 @@ def main() -> int:
             None if args.skip_wsl else (lambda rec: _persist_validation_to_wsl_pg087(args.wsl_distro, rec))
         ),
         on_task_accepted=coordinator.on_task_verified,
+        on_task_settled=lambda _rec: _evaluate_ceo_improvement(),
         agent_registry=agent_registry,
         registry_tenant_id=DEFAULT_TENANT_ID,
         engineer_pilot_catalog=engineer_pilot_catalog,
         project_id=DEFAULT_PROJECT_ID,
         poll_interval_seconds=0.4,
     )
+    ceo_engine = CeoContinuousImprovementEngine(
+        task_submitter=lambda payload, bearer: runner.submit_task(payload, bearer_token=bearer),
+    )
+
+    def _improvement_state_context() -> dict:
+        return {
+            "runs": runner.list_runs(limit=25),
+            "memory_promotions": coordinator.list_promotions(),
+            "budget": coordinator.budget_summary(),
+            "external_effects": coordinator.list_effects(),
+        }
+
+    def _evaluate_ceo_improvement() -> dict:
+        ctx = _improvement_state_context()
+        return ceo_engine.evaluate_company_state(
+            runs=ctx["runs"],
+            memory_promotions=ctx["memory_promotions"],
+            budget=ctx["budget"],
+            external_effects=ctx["external_effects"],
+        )
+
+    _evaluate_ceo_improvement()
     runner.start_background()
     print("[3/4] AutonomousWorkerDaemon + yerel Ollama + AgentInstance + hafiza/butce hazir.", flush=True)
 
@@ -1203,10 +1231,11 @@ def main() -> int:
         snap["require_session_token"] = bool(args.require_session_token)
         snap["ollama"] = ollama_client.check_health(timeout=1.5)
         snap["worker_runner"] = runner.status_summary()
-        snap["office_runs"] = runner.list_runs(limit=10)
+        snap["office_runs"] = runner.list_runs(limit=30)
         snap["memory_promotions"] = coordinator.list_promotions()
         snap["budget"] = coordinator.budget_summary()
         snap["external_effects"] = coordinator.list_effects()
+        snap["ceo_improvement"] = _evaluate_ceo_improvement()
         if not snap.get("agent_instances"):
             snap["agent_instances"] = agent_registry.list_authorized(
                 tenant_id=DEFAULT_TENANT_ID,
@@ -1259,6 +1288,12 @@ def main() -> int:
             project_id=pid,
             allowed_tenant_id=DEFAULT_TENANT_ID,
             allowed_project_ids=allowed_projects,
+        ),
+        ceo_improvement_provider=_evaluate_ceo_improvement,
+        ceo_improvement_handler=lambda payload, bearer: ceo_engine.handle_action(
+            payload,
+            bearer_token=bearer,
+            state_provider=_improvement_state_context,
         ),
     )
     url_office = f"http://{args.host}:{args.port}/"

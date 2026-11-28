@@ -11,12 +11,18 @@
       "modules": [
         "MOD-011"
       ],
-      "status": "Ana sahnede oda başına dört karakter, Ajanlar sekmesinde tüm kayıtlar görünür. Edge otomasyonunda RESEARCH/SPREADSHEET(.xlsx)/OBLIGATION Broker makbuzları ile CEO (MGR-01) otomatik delegasyon + nihai özet raporu (.run-ceo-report) doğrulandı.",
-      "ready": "Panel persistence, 6 /api/details restart readback, /live-events canlı SSE ekranı, 'Yeni görev ver' formu (POST /api/office-tasks, varsayılan MGR-01 CEO otomatik delegasyon + .run-ceo-report görünümü), Onaylar sekmesinde hafıza terfisi & bütçe, Ajanlar sekmesinde ve sahnede gerçek PostgreSQL 18.6 company.agent_instances (088 FORCE RLS) seçimi, güvenli statik asset servisi (/assets/*, /office/modules/*), modüler ES Modules, /progress & /api/progress, harici CDN'siz yerel Phaser 3.90.0 ve Edge otomasyonunda (check_office_task_browser.py) 9 görevlik uçtan uca doğrulama tamamlandı.",
+      "status": "DEC-28C Kat 01 2.5D katmanlı hibrit ofis (koridor, kapı eşikleri, oda aksesuarları, seçim konturu, hareket azaltma), DEC-017 7 sekmeli Agent Detail ekranı, 087 Beceri Kataloğu görünümü, kanonik sol KPI ve CEO Kaizen paneli bağlandı.",
+      "ready": "Panel persistence, 6 /api/details restart readback, /live-events canlı SSE ekranı, 'Yeni görev ver' formu (POST /api/office-tasks, MGR-01 CEO otomatik delegasyon + .run-tree delegasyon ağacı + .run-ceo-report görünümü), CEO Sürekli Şirket Geliştirme / Kaizen paneli (#ceo-improvement-panel, GET/POST /api/ceo-improvement), DEC-28C Kat 01 2.5D hibrit & Phaser sahnesi (F1-COR koridor, kapı portalları, istasyon aksesuarları, durum filtresi, Seçiliye Odaklan, Hareket Azalt), DEC-017 7 sekmeli Agent Detail görünümü (#agent-detail-view), 087 AI Çalışanlar & Beceri Kataloğu (#skill-library, GET /api/office-architecture), sol menü kanonik KPI özeti (#nav-kpi-box), Onaylar sekmesinde rozet + görsel bütçe çubuğu (.budget-meter), 7 gerçek AgentInstance (088 FORCE RLS) seçimi ve Edge canlı tarayıcı doğrulaması tamamlandı.",
       "missing": "Harici uzak üretim sunucusunda çok kullanıcılı dış ağ oturum doğrulaması açık.",
       "next_step": "Harici uzak üretim sunucusu devreye alındığında çok kullanıcılı dış ağ oturumlarını izlemek.",
-      "last_reviewed": "2026-11-26",
+      "last_reviewed": "2026-11-28",
       "evidence": [
+        "product/backend/company_os/projections/office_layout.py",
+        "tests/unit/test_office_architecture_ui.py",
+        "product/backend/company_os/runtime/ceo_improvement.py",
+        "tests/unit/test_ceo_continuous_improvement.py",
+        "product/frontend/office/modules/panels.js",
+        "product/frontend/office/modules/phaser-scene.js",
         "scripts/verification/check_office_task_browser.py",
         "product/frontend/office/scenes/phaser-preview.html",
         "evidence/runs/live-agent-instances-e2e-20261123.json",
@@ -468,12 +474,12 @@
     },
     {
       "id": "C2",
-      "title": "Faz C — C2: İleri Araç & Referanslar (Inspect AI, Paperclip, DBOS)",
-      "estimated_percent": 0,
-      "status": "PLANLANDI (İhtiyaca Bağlı)",
-      "ready": "Mevcut Python değerlendirme ve JSONL kurtarma düzeni çalışıyor.",
-      "missing": "Mevcut düzeni aşan senaryo kanıtı ve referans incelemesi.",
-      "next_step": "Mevcut düzen yetersiz kalırsa ilgili modül için değerlendirmek."
+      "title": "Faz C — C2: İleri Araç & Referanslar (Inspect AI, Paperclip UX, DBOS)",
+      "estimated_percent": 60,
+      "status": "KISMEN TAMAMLANDI (Paperclip UX + CEO Kaizen Uygulandı)",
+      "ready": "Paperclip UX referansıyla CEO delegasyon ağacı (.run-tree), birleşik onay kuyruğu rozeti (.tab-badge), görsel bütçe çubuğu (.budget-meter) ve MGR-01 CEO Sürekli Şirket Geliştirme (Kaizen) döngüsü (/api/ceo-improvement + #ceo-improvement-panel, 3/3 birim testi OK) uygulandı.",
+      "missing": "Inspect AI ve DBOS yalnızca mevcut Python değerlendirme / JSONL kurtarma düzenini aşan bir darboğaz kanıtlandığında değerlendirilecek.",
+      "next_step": "İhtiyaç kanıtlandığında Inspect AI veya DBOS referans incelemesi yapmak."
     },
     {
       "id": "D1-D5",

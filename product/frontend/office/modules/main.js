@@ -1,12 +1,15 @@
 import {
+  fetchCeoImprovement,
+  fetchOfficeArchitecture,
   fetchOfficeSnapshot,
   fetchReadinessSnapshot,
   fetchVerifierCalibration,
   observeOfficeAgents,
+  sendCeoImprovementAction,
   sendMemoryAction,
   submitOfficeTask,
 } from './api-client.js';
-import { ROLES, SCENE_KEY_TO_ROLE_ID, createOfficeCanvas } from './office-canvas.js';
+import { ROLES, ROLE_ID_TO_SCENE_KEY, SCENE_KEY_TO_ROLE_ID, createOfficeCanvas } from './office-canvas.js';
 import { createPanelsController } from './panels.js';
 import { createOfficeEventStream } from './sse-client.js';
 
@@ -21,6 +24,10 @@ let zoom = 100;
 let sseStream = null;
 let sseTenantId = '';
 let sseRefreshTimer = null;
+let latestKaizenSnapshot = null;
+let latestOfficeSnapshot = null;
+let latestArchitecturePayload = null;
+let lastSourceLabel = '';
 
 const officeCanvas = createOfficeCanvas(
   document.getElementById('office-canvas'),
@@ -52,6 +59,21 @@ const panels = createPanelsController(document, {
       // Bağlantı hatası bir sonraki yenilemede gösterilir.
     }
   },
+  onKaizenAction: async (actionPayload) => {
+    try {
+      const { ok, data } = await sendCeoImprovementAction(actionPayload);
+      if (ok) {
+        const snap = data?.result?.snapshot || data?.result;
+        if (snap && Array.isArray(snap.proposals)) {
+          latestKaizenSnapshot = snap;
+          panels.renderCeoImprovement(snap, taskCommandEnabled);
+        }
+        await refreshLiveOffice();
+      }
+    } catch {
+      // Bağlantı hatası bir sonraki yenilemede gösterilir.
+    }
+  },
 });
 
 function selectAgentInstance(agentId, switchTab = true) {
@@ -65,6 +87,11 @@ function selectAgentInstance(agentId, switchTab = true) {
     document.querySelectorAll('.scene-agent').forEach((btn) => {
       btn.setAttribute('aria-pressed', String(btn.dataset.sceneAgentId === agentId));
     });
+    officeCanvas.draw(liveAgentInstances, lastSourceLabel, selectedAgentInstanceId);
+    const detailEl = document.getElementById('agent-detail-view');
+    if (detailEl && !detailEl.hidden) {
+      panels.renderAgentDetailView(found, latestOfficeSnapshot, latestArchitecturePayload);
+    }
     if (switchTab) panels.showTab('context');
   }
 }
@@ -104,8 +131,73 @@ function setExpanded(on) {
   document.body.style.overflow = on ? 'hidden' : '';
 }
 expandBtn.onclick = () => setExpanded(!officeEl.classList.contains('expanded'));
+
+const sceneFilterEl = document.getElementById('scene-filter');
+if (sceneFilterEl) {
+  sceneFilterEl.addEventListener('change', () => {
+    officeCanvas.setFilter(
+      sceneFilterEl.value,
+      liveAgentInstances.length ? liveAgentInstances : null,
+      lastSourceLabel,
+      selectedAgentInstanceId,
+    );
+  });
+}
+
+const focusSelectedBtn = document.getElementById('focus-selected');
+if (focusSelectedBtn) {
+  focusSelectedBtn.addEventListener('click', () => {
+    const found = liveAgentInstances.find((a) => a.agent_instance_id === selectedAgentInstanceId);
+    const sceneKey = found ? (ROLE_ID_TO_SCENE_KEY[found.role_id] || 'orchestrator') : 'orchestrator';
+    officeCanvas.focusRoleRoom(sceneKey);
+  });
+}
+
+const motionBtn = document.getElementById('toggle-motion');
+if (motionBtn) {
+  const syncMotionUi = () => {
+    const reduced = officeCanvas.getReducedMotion();
+    motionBtn.setAttribute('aria-pressed', String(reduced));
+    motionBtn.textContent = reduced ? 'Hareket: Azaltıldı' : 'Hareket: Normal';
+    document.body.classList.toggle('reduced-motion', reduced);
+  };
+  syncMotionUi();
+  motionBtn.addEventListener('click', () => {
+    officeCanvas.setReducedMotion(!officeCanvas.getReducedMotion());
+    syncMotionUi();
+  });
+}
+
+const openDetailBtn = document.getElementById('open-agent-detail-btn');
+const closeDetailBtn = document.getElementById('close-agent-detail-btn');
+const detailViewEl = document.getElementById('agent-detail-view');
+
+function closeAgentDetail(restoreFocus = false) {
+  if (!detailViewEl || detailViewEl.hidden) return;
+  detailViewEl.hidden = true;
+  if (restoreFocus) openDetailBtn?.focus();
+}
+
+if (openDetailBtn && detailViewEl) {
+  openDetailBtn.addEventListener('click', () => {
+    const cur = liveAgentInstances.find((a) => a.agent_instance_id === selectedAgentInstanceId) || null;
+    panels.renderAgentDetailView(cur, latestOfficeSnapshot, latestArchitecturePayload);
+    detailViewEl.hidden = false;
+    detailViewEl.scrollIntoView({ behavior: officeCanvas.getReducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
+  });
+}
+if (closeDetailBtn) {
+  closeDetailBtn.addEventListener('click', () => closeAgentDetail(true));
+}
+
 document.addEventListener('keydown', (ev) => {
-  if (ev.key === 'Escape') setExpanded(false);
+  if (ev.key === 'Escape') {
+    if (detailViewEl && !detailViewEl.hidden) {
+      closeAgentDetail(true);
+    } else {
+      setExpanded(false);
+    }
+  }
 });
 document.querySelectorAll('a[href^="#"]').forEach((a) => {
   a.addEventListener('click', () => {
@@ -155,6 +247,7 @@ export async function refreshLiveOffice() {
       handleConnectionLoss();
       return;
     }
+    latestOfficeSnapshot = d;
     lastOfficeSnapshotAt = d.updated_at || new Date().toLocaleTimeString('tr-TR');
     const resolvedTenant = d.tenant_id || d.agent_instances?.[0]?.tenant_id || '';
     if (resolvedTenant) ensureSseStream(resolvedTenant);
@@ -221,6 +314,24 @@ export async function refreshLiveOffice() {
       panels.renderMemoryPromotions(d.memory_promotions, Boolean(d.lifecycle_enabled));
     }
     if (d.budget) panels.renderBudgetAndEffects(d.budget, d.external_effects || []);
+    const pendingPromotions = Array.isArray(d.memory_promotions)
+      ? d.memory_promotions.filter((m) => m.state === 'VERIFIED').length
+      : 0;
+    const unknownEffects = Array.isArray(d.external_effects)
+      ? d.external_effects.filter((e) => e.status === 'UNKNOWN').length
+      : 0;
+    panels.renderApprovalsBadge(pendingPromotions + unknownEffects);
+    if (d.ceo_improvement) {
+      latestKaizenSnapshot = d.ceo_improvement;
+      panels.renderCeoImprovement(d.ceo_improvement, taskCommandEnabled);
+    } else if (!latestKaizenSnapshot) {
+      fetchCeoImprovement(3000)
+        .then((snap) => {
+          latestKaizenSnapshot = snap;
+          panels.renderCeoImprovement(snap, taskCommandEnabled);
+        })
+        .catch(() => {});
+    }
 
     const sv = d.services || {};
     const ct = d.counts || {};
@@ -229,6 +340,17 @@ export async function refreshLiveOffice() {
     const sourceLabel = postgresConnected
       ? 'PostgreSQL bağlı'
       : d.mode === 'LOCAL_OFFICE_ONLY' ? 'Yerel ofis · UNVERIFIED' : 'Ofis sunucusu bağlı · UNVERIFIED';
+    lastSourceLabel = sourceLabel;
+    panels.renderNavKpi({
+      acceptedTasks: Number.isInteger(ct.accepted_tasks) ? ct.accepted_tasks : null,
+      totalTasks: Number.isInteger(ct.tasks) ? ct.tasks : null,
+      pendingApprovals: pendingPromotions + unknownEffects,
+      availableBudget: Number(d.budget?.available_minor),
+    });
+    if (detailViewEl && !detailViewEl.hidden) {
+      const cur = liveAgentInstances.find((a) => a.agent_instance_id === selectedAgentInstanceId) || null;
+      panels.renderAgentDetailView(cur, d, latestArchitecturePayload);
+    }
     const workerState = sv.worker_daemon || wr.daemon_state || 'Bilinmiyor';
     stopObservingAgents?.();
     stopObservingAgents = observeOfficeAgents(d, (agents) => {
@@ -401,7 +523,62 @@ async function refreshExpansionStatus() {
   }
 }
 
+const kaizenEvalBtn = document.getElementById('kaizen-evaluate-btn');
+if (kaizenEvalBtn) {
+  kaizenEvalBtn.addEventListener('click', async () => {
+    if (!taskCommandEnabled) return;
+    kaizenEvalBtn.disabled = true;
+    try {
+      const { ok, data } = await sendCeoImprovementAction({ action: 'evaluate' });
+      if (ok && data?.result) {
+        latestKaizenSnapshot = data.result;
+        panels.renderCeoImprovement(data.result, taskCommandEnabled);
+      }
+    } catch {
+      // Sessiz; bir sonraki yenilemede güncellenir.
+    } finally {
+      kaizenEvalBtn.disabled = !taskCommandEnabled;
+    }
+  });
+}
+
+const kaizenAutoBtn = document.getElementById('kaizen-auto-btn');
+if (kaizenAutoBtn) {
+  kaizenAutoBtn.addEventListener('click', async () => {
+    if (!taskCommandEnabled) return;
+    const nextEnabled = !Boolean(latestKaizenSnapshot?.auto_kaizen_enabled);
+    kaizenAutoBtn.disabled = true;
+    try {
+      const { ok, data } = await sendCeoImprovementAction({
+        action: 'set_auto_kaizen',
+        enabled: nextEnabled,
+      });
+      if (ok && data?.result) {
+        latestKaizenSnapshot = data.result;
+        panels.renderCeoImprovement(data.result, taskCommandEnabled);
+        await refreshLiveOffice();
+      }
+    } catch {
+      // Sessiz; bir sonraki yenilemede güncellenir.
+    } finally {
+      kaizenAutoBtn.disabled = !taskCommandEnabled;
+    }
+  });
+}
+
+async function refreshOfficeArchitecture() {
+  try {
+    const data = await fetchOfficeArchitecture(sseTenantId || '');
+    latestArchitecturePayload = data;
+    panels.renderSkillLibrary(data);
+  } catch {
+    const box = document.getElementById('skill-library-body');
+    if (box) box.textContent = 'Katalog ve kat şeması okunamadı.';
+  }
+}
+
 refreshLiveOffice();
 refreshReadinessAndCalibration();
 refreshExpansionStatus();
+refreshOfficeArchitecture();
 setInterval(refreshLiveOffice, 2500);

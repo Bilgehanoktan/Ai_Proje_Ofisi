@@ -406,6 +406,7 @@ class MultiWorkTypeQueueRunnerTests(unittest.TestCase):
 
     def test_default_agent_specs_register_cleanly_against_088_pattern(self):
         from company_os.runtime.agent_instances import AgentInstanceRegistry
+
         from scripts.operations.start_office_local import (
             DEFAULT_AGENT_SPECS,
             DEFAULT_PROJECT_ID,

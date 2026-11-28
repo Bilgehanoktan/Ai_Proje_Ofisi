@@ -421,11 +421,11 @@
     {
       "id": "A2",
       "title": "Faz A — A2: CI Yayın Güvenliği (Trivy, Syft, Grant)",
-      "estimated_percent": 95,
-      "status": "TAMAMLANDI (Yerel)",
-      "ready": ".github/workflows/ci.yml ve .github/grant.yml eklendi; yerel 345/345 verify ve verify_layout.py PASS.",
-      "missing": "Push sonrası uzak GitHub Actions koşusu doğrulaması.",
-      "next_step": "Push sonrası release-security-gates yeşil geçişini ve artifact üretimini doğrulamak."
+      "estimated_percent": 100,
+      "status": "TAMAMLANDI (GitHub Actions Run 46154732628 Yeşil)",
+      "ready": ".github/workflows/ci.yml ve .github/grant.yml eklendi; uzak GitHub Actions Linux CI (Run 46154732628, commit d6c7573b774d69f92631833ee4d24de630eb380c) üzerinde verify-source-and-native (367/367 OK, verify_layout.py PASS, gcc PASS, ruff PASS) ve Release Security (Trivy v0.35.0, Syft v0.24.0, Grant v0.8.0 + release-security-reports artifact) yeşil (conclusion: success) doğrulandı.",
+      "missing": "Yok.",
+      "next_step": "Tamamlandı."
     },
     {
       "id": "A1",

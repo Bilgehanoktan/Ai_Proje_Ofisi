@@ -774,6 +774,7 @@ code {
 .office-dashboard .task-card {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
   align-items: start;
   column-gap: clamp(18px, 3vw, 42px);
   row-gap: 18px;
@@ -975,6 +976,8 @@ code {
   }
 
   .office-dashboard .task-results {
+  grid-column: 2;
+  grid-row: 1 / span 2;
     grid-area: auto;
     padding: 16px 0 0;
     border-inline-start: 0;

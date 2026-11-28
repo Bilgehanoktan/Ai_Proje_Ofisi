@@ -1,0 +1,13 @@
+{
+  "phase": "A3-production-restore-acceptance",
+  "generated_at_utc": "2026-11-28T10:50:50+00:00",
+  "remote_ssh_host": "aipof-staging-wsl",
+  "ssh_connectivity": "PASS",
+  "remote_uname": "Linux DESKTOP-I5A3FC9 6.6.87.2-microsoft-standard-WSL2 x86_64",
+  "postgresql_version": "18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)",
+  "rto_rpo_status": "PASS",
+  "backup_sec": 4.022,
+  "rto_sec": 0.223,
+  "restored_rows": 100,
+  "rpo_lost_rows": 0
+}

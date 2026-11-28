@@ -96,6 +96,11 @@
             <label>Okunacak dosya (RESEARCH · opsiyonel)
               <input id="office-task-read-path" type="text" maxlength="120" placeholder="Örn: task_title.py">
             </label>
+            <label>Ollama modeli
+              <select id="office-task-model">
+                <option value="">Varsayılan yerel model</option>
+              </select>
+            </label>
             <div class="task-actions">
               <button type="submit" class="btn-primary" id="office-task-submit">Görevi gönder ve ajanı çalıştır</button>
               <span class="task-feedback" id="office-task-feedback" role="status" aria-live="polite"></span>
@@ -226,6 +231,11 @@
             <tbody><!-- OFFICE_MODULE_ROWS --></tbody>
           </table>
         </div>
+      </details>
+
+      <details id="expansion-adapters" open>
+        <summary>Genişleme Adaptörleri ve 087 Pilot Roller (Faz B1 / C1 / D1–D5)</summary>
+        <div id="expansion-status-body" class="source">Yükleniyor...</div>
       </details>
 
       <details id="design-source">

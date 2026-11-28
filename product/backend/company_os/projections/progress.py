@@ -74,7 +74,28 @@ def render_progress_html():
         "<table><caption>Tüm mimarinin sade ilerleme tablosu</caption><thead><tr>"
         "<th>Alan</th><th>Tahmini gelişim</th><th>Durum</th><th>Hazır olan</th><th>Eksik olan</th><th>Sıradaki iş</th>"
         "</tr></thead><tbody>" + rows + "</tbody></table></div>"
-        '<details class="trace"><summary>Kontrol tarihleri ve mimari karşılıkları</summary><ul>'
+        + (
+            '<h2>Genişleme ve Entegrasyon Planı (Faz A–D)</h2>'
+            '<div class="progress-scroll" role="region" aria-label="Genişleme ve entegrasyon planı tablosu" tabindex="0">'
+            "<table><caption>Genişleme ve Entegrasyon Planı (Faz A–D)</caption><thead><tr>"
+            "<th>Alan</th><th>Tahmini gelişim</th><th>Durum</th><th>Hazır olan</th><th>Eksik olan</th><th>Sıradaki iş</th>"
+            "</tr></thead><tbody>"
+            + "".join(
+                "<tr>"
+                f"<th>{esc(item.get('title', ''))}</th>"
+                f"<td>~%{esc(str(item.get('estimated_percent', 0)))}</td>"
+                f"<td>{esc(item.get('status', ''))}</td>"
+                f"<td>{esc(item.get('ready', ''))}</td>"
+                f"<td>{esc(item.get('missing', ''))}</td>"
+                f"<td>{esc(item.get('next_step', ''))}</td>"
+                "</tr>"
+                for item in data.get("expansion_phases", [])
+            )
+            + "</tbody></table></div>"
+            if data.get("expansion_phases")
+            else ""
+        )
+        + '<details class="trace"><summary>Kontrol tarihleri ve mimari karşılıkları</summary><ul>'
         + "".join(
             "<li><strong>"
             + esc(a["title"])
@@ -133,6 +154,24 @@ def render_markdown():
         links = ", ".join(f"[{p}](../{p})" for p in a["evidence"])
         lines.append(
             f"- **{a['title']}** — {a['last_reviewed']}; {', '.join(a['modules'])}. {a['evidence_scope']} Kanıt: {links}"
+        )
+    lines += [
+        "",
+        "## Genişleme ve Entegrasyon Planı (Faz A–D)",
+        "",
+        "| Alan | Tahmini gelişim | Durum | Hazır olan | Eksik olan | Sıradaki iş |",
+        "|---|---|---|---|---|---|",
+    ]
+    for item in data.get("expansion_phases", []):
+        lines.append(
+            "| "
+            + " | ".join(
+                (("~%" + str(item[k])) if k == "estimated_percent" else str(item.get(k, ""))).replace(
+                    "|", "\\|"
+                )
+                for k in ("title", "estimated_percent", "status", "ready", "missing", "next_step")
+            )
+            + " |"
         )
     lines += [
         "",

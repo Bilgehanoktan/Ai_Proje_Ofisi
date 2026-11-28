@@ -1,0 +1,45 @@
+{
+  "benchmark": "C1-code-intelligence",
+  "generated_at_utc": "2026-11-28T08:15:11.002626+00:00",
+  "repo_commit": "5056242c05933ca7d783e0b48271057bda11558d",
+  "candidates": {
+    "codebase-memory-mcp": {
+      "license": "MIT",
+      "status": "INSTALLED_READY",
+      "binary": "C:/Users/BİLGEHAN/AppData/Local/Programs/codebase-memory-mcp\\codebase-memory-mcp.EXE"
+    },
+    "codegraph": {
+      "license": "CHECK_REQUIRED",
+      "status": "NOT_INSTALLED",
+      "binary": null
+    },
+    "gitnexus": {
+      "license": "PolyForm-Noncommercial-1.0.0",
+      "status": "EXCLUDED_LICENSE"
+    }
+  },
+  "ripgrep_baseline": {
+    "status": "COMPLETED",
+    "binary": "C:\\Users\\BİLGEHAN\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BurntSushi.ripgrep.MSVC_Microsoft.Winget.Source_8wekyb3d8bbwe\\ripgrep-15.2.0-x86_64-pc-windows-msvc\\rg.EXE",
+    "recall": "3/3",
+    "total_latency_ms": 93.29,
+    "details": [
+      {
+        "id": "Q1-KERNEL-CATALOG-STORE",
+        "matched": true,
+        "latency_ms": 38.82
+      },
+      {
+        "id": "Q2-PILOT-SKILL-PARSER",
+        "matched": true,
+        "latency_ms": 20.85
+      },
+      {
+        "id": "Q3-PROGRESS-MARKDOWN",
+        "matched": true,
+        "latency_ms": 33.62
+      }
+    ]
+  },
+  "decision": "codebase-memory-mcp (MIT) is installed and eligible; codegraph is not installed locally; full MCP index comparison pending if codegraph is added."
+}

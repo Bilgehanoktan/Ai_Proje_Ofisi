@@ -183,9 +183,14 @@ export function createPanelsController(doc, { onSelectAgent, onMemoryAction }) {
       }
     }
     const activeFilter = runsFilterEl ? runsFilterEl.value : 'ALL';
-    const visibleRuns = activeFilter === 'ALL'
+    const filteredRuns = activeFilter === 'ALL'
       ? lastRuns
       : lastRuns.filter((r) => r.state === activeFilter);
+    const visibleRuns = [...filteredRuns].sort((a, b) => {
+      const aCeo = a.ceo_final_report?.summary ? 2 : (a.role_id === 'MGR-01' ? 1 : 0);
+      const bCeo = b.ceo_final_report?.summary ? 2 : (b.role_id === 'MGR-01' ? 1 : 0);
+      return bCeo - aCeo;
+    });
     const cards = new Map(Array.from(box.querySelectorAll('.run-card'),
       (card) => [card.dataset.taskId, card]));
     if (!visibleRuns.length) {

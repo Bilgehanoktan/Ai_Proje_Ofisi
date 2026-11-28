@@ -1,0 +1,168 @@
+{
+  "benchmark": "EXP-01-multi-model-ollama",
+  "generated_at_utc": "2026-11-27T22:08:47.619886+00:00",
+  "ollama_base_url": "http://127.0.0.1:11434",
+  "installed_models": [
+    "bge-m3:latest",
+    "qwen2.5-coder:7b",
+    "qwen2.5-coder:3b"
+  ],
+  "target_models": [
+    "qwen2.5-coder:3b",
+    "qwen2.5-coder:7b",
+    "llama3.2:3b"
+  ],
+  "summary_by_model": {
+    "qwen2.5-coder:3b": {
+      "status": "COMPLETED",
+      "accepted": 6,
+      "total": 6,
+      "avg_latency_sec": 6.552
+    },
+    "qwen2.5-coder:7b": {
+      "status": "COMPLETED",
+      "accepted": 0,
+      "total": 6,
+      "avg_latency_sec": 0.0
+    },
+    "llama3.2:3b": {
+      "status": "SKIPPED_MODEL_NOT_INSTALLED",
+      "accepted": 0,
+      "total": 0
+    }
+  },
+  "runs": [
+    {
+      "model": "qwen2.5-coder:3b",
+      "card": "EXP-01-base",
+      "scenario_id": "MGT-TITLE-NORMALIZATION-01",
+      "accepted": true,
+      "contract_violations": [],
+      "latency_sec": 6.967,
+      "prompt_tokens": 95,
+      "eval_tokens": 41,
+      "error_type": null
+    },
+    {
+      "model": "qwen2.5-coder:3b",
+      "card": "EXP-01-base",
+      "scenario_id": "EFFECT-SCOPE-BOUNDARY-01",
+      "accepted": true,
+      "contract_violations": [],
+      "latency_sec": 8.166,
+      "prompt_tokens": 96,
+      "eval_tokens": 49,
+      "error_type": null
+    },
+    {
+      "model": "qwen2.5-coder:3b",
+      "card": "EXP-01-base",
+      "scenario_id": "STRUCTURED-PATCH-PLAN-01",
+      "accepted": true,
+      "contract_violations": [],
+      "latency_sec": 6.997,
+      "prompt_tokens": 99,
+      "eval_tokens": 44,
+      "error_type": null
+    },
+    {
+      "model": "qwen2.5-coder:3b",
+      "card": "EXP-01-pilot",
+      "scenario_id": "MGT-TITLE-NORMALIZATION-01",
+      "accepted": true,
+      "contract_violations": [],
+      "latency_sec": 6.199,
+      "prompt_tokens": 135,
+      "eval_tokens": 41,
+      "error_type": null
+    },
+    {
+      "model": "qwen2.5-coder:3b",
+      "card": "EXP-01-pilot",
+      "scenario_id": "EFFECT-SCOPE-BOUNDARY-01",
+      "accepted": true,
+      "contract_violations": [],
+      "latency_sec": 5.925,
+      "prompt_tokens": 136,
+      "eval_tokens": 45,
+      "error_type": null
+    },
+    {
+      "model": "qwen2.5-coder:3b",
+      "card": "EXP-01-pilot",
+      "scenario_id": "STRUCTURED-PATCH-PLAN-01",
+      "accepted": true,
+      "contract_violations": [],
+      "latency_sec": 5.058,
+      "prompt_tokens": 139,
+      "eval_tokens": 44,
+      "error_type": null
+    },
+    {
+      "model": "qwen2.5-coder:7b",
+      "card": "EXP-01-base",
+      "scenario_id": "MGT-TITLE-NORMALIZATION-01",
+      "accepted": false,
+      "contract_violations": [],
+      "latency_sec": 0.0,
+      "prompt_tokens": 0,
+      "eval_tokens": 0,
+      "error_type": "URL_ERROR:Internal Server Error"
+    },
+    {
+      "model": "qwen2.5-coder:7b",
+      "card": "EXP-01-base",
+      "scenario_id": "EFFECT-SCOPE-BOUNDARY-01",
+      "accepted": false,
+      "contract_violations": [],
+      "latency_sec": 0.0,
+      "prompt_tokens": 0,
+      "eval_tokens": 0,
+      "error_type": "URL_ERROR:Internal Server Error"
+    },
+    {
+      "model": "qwen2.5-coder:7b",
+      "card": "EXP-01-base",
+      "scenario_id": "STRUCTURED-PATCH-PLAN-01",
+      "accepted": false,
+      "contract_violations": [],
+      "latency_sec": 0.0,
+      "prompt_tokens": 0,
+      "eval_tokens": 0,
+      "error_type": "URL_ERROR:Internal Server Error"
+    },
+    {
+      "model": "qwen2.5-coder:7b",
+      "card": "EXP-01-pilot",
+      "scenario_id": "MGT-TITLE-NORMALIZATION-01",
+      "accepted": false,
+      "contract_violations": [],
+      "latency_sec": 0.0,
+      "prompt_tokens": 0,
+      "eval_tokens": 0,
+      "error_type": "URL_ERROR:Internal Server Error"
+    },
+    {
+      "model": "qwen2.5-coder:7b",
+      "card": "EXP-01-pilot",
+      "scenario_id": "EFFECT-SCOPE-BOUNDARY-01",
+      "accepted": false,
+      "contract_violations": [],
+      "latency_sec": 0.0,
+      "prompt_tokens": 0,
+      "eval_tokens": 0,
+      "error_type": "URL_ERROR:Internal Server Error"
+    },
+    {
+      "model": "qwen2.5-coder:7b",
+      "card": "EXP-01-pilot",
+      "scenario_id": "STRUCTURED-PATCH-PLAN-01",
+      "accepted": false,
+      "contract_violations": [],
+      "latency_sec": 0.0,
+      "prompt_tokens": 0,
+      "eval_tokens": 0,
+      "error_type": "URL_ERROR:Internal Server Error"
+    }
+  ]
+}

@@ -514,6 +514,40 @@ def make_wsgi_app(
             payload = load_progress()
             return _json_response(start_response, payload)
 
+        if path == "/api/expansion-status":
+            from company_os.catalog.code_intel_adapter import detect_code_intel_adapter
+            from company_os.catalog.skill_metadata_pilot import PILOT_087_ROLE_CARDS
+
+            payload = {
+                "pilot_roles": [
+                    {
+                        "name": c.name,
+                        "version": c.version,
+                        "license_spdx": c.license_spdx,
+                        "description": c.description,
+                    }
+                    for c in PILOT_087_ROLE_CARDS
+                ],
+                "code_intel": detect_code_intel_adapter(),
+                "integrations": [
+                    {"id": "D1", "name": "Frappe CRM", "license": "MIT", "mode": "ADAPTER_READY_MOD_001_014"},
+                    {"id": "D2", "name": "ERPNext + TR e-Fatura", "license": "TR-UBL-TR1.2", "mode": "ADAPTER_READY_MOD_001_014"},
+                    {"id": "D3", "name": "Chatwoot", "license": "MIT", "mode": "ADAPTER_READY_MOD_001_014"},
+                    {"id": "D4", "name": "Activepieces", "license": "Community-MIT", "mode": "ADAPTER_READY_MOD_001_014"},
+                    {"id": "D5", "name": "Langfuse / OpenTelemetry", "license": "Privacy-Redacted", "mode": "ADAPTER_READY_MOD_001_014"},
+                ],
+                "phase_a_gates": {
+                    "A1_exp01_ollama": "qwen2.5-coder:3b CPU 6/6 ACCEPTED (6.552s)",
+                    "A2_ci_security": "Trivy 0.28.0 + Syft v0.17.8 + Grant v0.2.2 (.github/grant.yml)",
+                    "A3_restore_rto_rpo": "aipof-staging-wsl PG 18.6 PASS (RTO 0.223s, RPO 0)",
+                },
+                "optional_on_demand": [
+                    "B2: Docling / MarkItDown / Crawl4AI (ihtiyaç kanıtlandığında)",
+                    "C2: Inspect AI / Paperclip / DBOS (ihtiyaç kanıtlandığında)",
+                ],
+            }
+            return _json_response(start_response, payload)
+
         if path == "/api/readiness":
             import os
             from company_os.bootstrap.readiness import build_production_readiness_snapshot

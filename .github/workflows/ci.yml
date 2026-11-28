@@ -38,3 +38,52 @@ jobs:
           ruff check product/backend/company_os/runtime/worker_daemon.py \
             product/backend/company_os/catalog/extensions_store.py \
             tests/unit/test_worker_daemon_and_087_api.py
+
+  release-security-gates:
+    name: Release Security (Trivy, Syft, Grant)
+    runs-on: ubuntu-latest
+    needs: verify-source-and-native
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare security report directory
+        run: mkdir -p security-reports
+
+      - name: Trivy vulnerability and secret scan (blocking on CRITICAL/HIGH or secret)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          scanners: "vuln,secret"
+          severity: "CRITICAL,HIGH"
+          skip-dirs: "ARSIV,GUNCEL/compatibility,tests,evidence"
+          format: "json"
+          output: "security-reports/trivy-report.json"
+          exit-code: "1"
+
+      - name: Generate CycloneDX SBOM with Syft
+        uses: anchore/sbom-action@v0.17.8
+        with:
+          path: "product"
+          format: "cyclonedx-json"
+          output-file: "security-reports/sbom-cyclonedx.json"
+          upload-artifact: false
+
+      - name: Install Anchore Grant (pinned v0.2.2)
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/grant/main/install.sh | sh -s -- -b /usr/local/bin v0.2.2
+          grant version
+
+      - name: Enforce license policy with Grant
+        run: |
+          grant check -c .github/grant.yml -o json security-reports/sbom-cyclonedx.json > security-reports/grant-report.json
+
+      - name: Upload security and SBOM reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-security-reports
+          path: security-reports/
+          retention-days: 30
+

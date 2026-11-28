@@ -582,8 +582,60 @@ class LiveOfficeTaskRunner:
         return verdict
 
     def _maybe_synthesize_ceo_report(self, parent_task_id: str) -> dict[str, Any] | None:
-        """When all delegated subtasks reach a terminal state, attach a consolidated CEO report."""
+        """When all delegated subtasks reach a terminal state, trigger 1 auto-revision on failure or synthesize a structured CEO decision report."""
         terminal = {"ACCEPTED", "REJECTED", "ERROR"}
+        revision_spec: dict[str, Any] | None = None
+        with self._lock:
+            parent = self._tasks.get(parent_task_id)
+            if parent is None or not parent.delegated_task_ids or parent.ceo_final_report is not None:
+                return None
+            children = [self._tasks.get(cid) for cid in parent.delegated_task_ids]
+            if any(ch is None or ch.state not in terminal for ch in children):
+                return None
+
+            # Auto-revision: if any child failed/rejected and no revision has been dispatched yet, open 1 revision task
+            already_revised = any("[CEO→REVİZYON]" in (ch.title or "") for ch in children if ch is not None)
+            failed_child = next((ch for ch in children if ch is not None and ch.state in {"REJECTED", "ERROR"}), None)
+            if failed_child is not None and not already_revised:
+                reason = (
+                    (failed_child.verification or {}).get("reason")
+                    or failed_child.error
+                    or "Kalite/doğrulama ölçütü karşılanmadı"
+                )
+                revision_spec = {
+                    "title": f"[CEO→REVİZYON] {failed_child.title}"[:180],
+                    "goal": (
+                        f"CEO (MGR-01) revizyon talimatı: Önceki alt görev ({failed_child.role_id}) reddedildi/hata verdi.\n"
+                        f"Neden: {reason}\n"
+                        f"Eksikleri gidererek kabul ölçütlerini eksiksiz karşılayan çıktıyı üret.\n"
+                        f"Üst Hedef: {parent.goal}"
+                    )[:3800],
+                    "work_type": failed_child.work_type,
+                    "role_id": failed_child.role_id,
+                    "acceptance_criteria": list(failed_child.acceptance_criteria),
+                    "model": failed_child.model,
+                    "read_path": failed_child.read_path,
+                }
+
+        if revision_spec is not None:
+            try:
+                rev_child = self.submit_task(revision_spec)
+                rev_id = str(rev_child["task_id"])
+                with self._lock:
+                    if rev_id in self._tasks:
+                        self._tasks[rev_id].parent_task_id = parent_task_id
+                    p = self._tasks.get(parent_task_id)
+                    if p is not None:
+                        p.delegated_task_ids.append(rev_id)
+                        p.updated_at = _now_iso()
+                self._record_event(
+                    "CeoRevisionDispatched",
+                    {"parent_task_id": parent_task_id, "revision_task_id": rev_id},
+                )
+                return None
+            except Exception:
+                pass
+
         with self._lock:
             parent = self._tasks.get(parent_task_id)
             if parent is None or not parent.delegated_task_ids or parent.ceo_final_report is not None:
@@ -595,24 +647,41 @@ class LiveOfficeTaskRunner:
             for ch in children:
                 assert ch is not None
                 resp = str((ch.exec_result or {}).get("response") or ch.error or "").strip()
+                if len(resp) > 600:
+                    excerpt = resp[:600].rsplit(" ", 1)[0].rstrip(" ,;:-") + "..."
+                else:
+                    excerpt = resp
                 subtask_summaries.append(
                     {
                         "task_id": ch.task_id,
                         "role_id": ch.role_id,
                         "work_type": ch.work_type,
                         "state": ch.state,
-                        "excerpt": resp[:240],
+                        "excerpt": excerpt,
                     }
                 )
             all_accepted = all(item["state"] == "ACCEPTED" for item in subtask_summaries)
+            accepted_count = sum(1 for item in subtask_summaries if item["state"] == "ACCEPTED")
+            failed_roles = [item["role_id"] for item in subtask_summaries if item["state"] != "ACCEPTED"]
+            decision = "ONAYLANDI" if all_accepted else "İNSAN İNCELEMESİ / REVİZYON GEREKLİ"
+            next_action = (
+                "Çıktılar kabul ölçütlerini karşıladı; bir sonraki iş paketine geçilebilir."
+                if all_accepted
+                else f"Başarısız/reddedilen roller ({', '.join(failed_roles)}) için kabul ölçütlerini gözden geçirin."
+            )
             lines = [
-                f"CEO (MGR-01) Nihai Özet Raporu — {parent.title}",
-                f"Genel Durum: {'TÜM ALT GÖREVLER KABUL EDİLDİ' if all_accepted else 'İNCELEME GEREKTİREN ALT GÖREV VAR'}",
+                f"CEO (MGR-01) Yönetici Karar Raporu — {parent.title}",
+                f"Karar: {decision} ({accepted_count}/{len(subtask_summaries)} alt görev kabul edildi)",
+                f"Sıradaki Adım: {next_action}",
+                "",
+                "Uzman Çıktı Özetleri:",
             ]
             for item in subtask_summaries:
                 lines.append(f"- [{item['role_id']} · {item['state']}] {item['excerpt']}")
             report = {
                 "synthesized_by": "MGR-01",
+                "decision": decision,
+                "next_action": next_action,
                 "all_accepted": all_accepted,
                 "completed_subtasks": len(subtask_summaries),
                 "subtasks": subtask_summaries,
@@ -625,11 +694,24 @@ class LiveOfficeTaskRunner:
             "CeoFinalReportReady",
             {
                 "parent_task_id": parent_task_id,
+                "decision": decision,
                 "all_accepted": report["all_accepted"],
                 "completed_subtasks": report["completed_subtasks"],
             },
         )
         return report
+
+    @staticmethod
+    def _select_ceo_pilot_role(title: str, goal: str) -> str | None:
+        """Select a matching 087 pilot specialist role based on task intent."""
+        text = f"{title} {goal}".lower()
+        if any(k in text for k in ("güvenlik", "security", "denet", "audit", "rls", "yetki")):
+            return "SEC-QA-AUDITOR-01"
+        if any(k in text for k in ("doküman", "rapor", "belge", "readme", "kılavuz", "docs")):
+            return "TECH-WRITER-01"
+        if any(k in text for k in ("kod", "code", "incele", "review", "yama", "patch", "refactor")):
+            return "CODE-REVIEWER-01"
+        return None
 
     def _delegate_ceo_subtasks(self, parent: OfficeTaskRecord) -> list[str]:
         """When CEO/Orchestrator (MGR-01) completes an approved plan, auto-delegate to specialist roles."""
@@ -664,6 +746,23 @@ class LiveOfficeTaskRunner:
                 "model": parent.model,
             },
         ]
+        pilot_role = self._select_ceo_pilot_role(parent.title, parent.goal)
+        if pilot_role:
+            specs.append(
+                {
+                    "title": f"[CEO→{pilot_role}] {parent.title} · Uzman İncelemesi"[:180],
+                    "goal": (
+                        f"CEO (MGR-01) delegasyonu: '{parent.title}' görevi için {pilot_role} "
+                        f"perspektifinden somut inceleme ve öneri üret.\nÜst Hedef: {parent.goal}"
+                    )[:3800],
+                    "work_type": "RESEARCH",
+                    "role_id": pilot_role,
+                    "acceptance_criteria": [
+                        f"{pilot_role} rolüne özgü somut bulgu veya kontrol maddesi içermeli.",
+                    ],
+                    "model": parent.model,
+                }
+            )
         child_ids: list[str] = []
         for spec in specs:
             try:

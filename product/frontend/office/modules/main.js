@@ -167,6 +167,27 @@ export async function refreshLiveOffice() {
         : ollama?.available === false ? 'Ollama erişilemiyor' : 'Ollama durumu bilinmiyor';
       oBadge.classList.toggle('live', ollama?.available === true);
     }
+    const modelSelect = document.getElementById('office-task-model');
+    if (modelSelect && ollama) {
+      const models = Array.isArray(ollama.models) ? ollama.models.filter(Boolean) : [];
+      const prevValue = modelSelect.value;
+      const defaultModel = ollama.default_model || '';
+      const optionList = models.length > 0 ? models : (defaultModel ? [defaultModel] : []);
+      if (optionList.length > 0) {
+        modelSelect.innerHTML = '';
+        for (const name of optionList) {
+          const opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = name === defaultModel ? `${name} (varsayılan)` : name;
+          modelSelect.appendChild(opt);
+        }
+        if (prevValue && optionList.includes(prevValue)) {
+          modelSelect.value = prevValue;
+        } else if (defaultModel && optionList.includes(defaultModel)) {
+          modelSelect.value = defaultModel;
+        }
+      }
+    }
 
     const fieldset = document.getElementById('office-task-fieldset');
     const panelSub = document.getElementById('task-panel-sub');
@@ -284,6 +305,8 @@ if (taskForm) {
     const token = (tokenEl?.value || '').trim();
     const readPathEl = document.getElementById('office-task-read-path');
     const readPath = (readPathEl?.value || '').trim();
+    const modelEl = document.getElementById('office-task-model');
+    const selectedModel = (modelEl?.value || '').trim();
     const payload = {
       title: document.getElementById('office-task-title').value.trim(),
       work_type: document.getElementById('office-task-work-type').value,
@@ -297,6 +320,9 @@ if (taskForm) {
     };
     if (readPath) {
       payload.read_path = readPath;
+    }
+    if (selectedModel) {
+      payload.model = selectedModel;
     }
     btn.disabled = true;
     fb.textContent = 'Görev kuyruğa alınıyor…';
@@ -332,6 +358,50 @@ async function refreshReadinessAndCalibration() {
   );
 }
 
+async function refreshExpansionStatus() {
+  const el = document.getElementById('expansion-status-body');
+  if (!el) return;
+  try {
+    const resp = await fetch('/api/expansion-status', { cache: 'no-store' });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    el.textContent = '';
+    const ul = document.createElement('ul');
+
+    const roles = Array.isArray(data.pilot_roles) ? data.pilot_roles : [];
+    const liRoles = document.createElement('li');
+    liRoles.textContent = `087 Pilot Roller (${roles.length}): ` + roles.map((r) => `${r.name} [${r.license_spdx}]`).join(', ');
+    ul.appendChild(liRoles);
+
+    const ci = data.code_intel || {};
+    const liCi = document.createElement('li');
+    liCi.textContent = `Kod Zekâsı (MOD-012): ${ci.adapter || '-'} [${ci.license || '-'}] — ${ci.installed ? 'KURULU' : 'KURULU DEĞİL'} (${ci.authority_mode || ''})`;
+    ul.appendChild(liCi);
+
+    const ints = Array.isArray(data.integrations) ? data.integrations : [];
+    const liInts = document.createElement('li');
+    liInts.textContent = `Ticari Adaptörler (D1–D5): ` + ints.map((i) => `${i.id} ${i.name} [${i.license}]`).join(' · ');
+    ul.appendChild(liInts);
+
+    const pa = data.phase_a_gates || {};
+    const liPa = document.createElement('li');
+    liPa.textContent = `Faz A Kapıları: A1=${pa.A1_exp01_ollama || '-'} | A2=${pa.A2_ci_security || '-'} | A3=${pa.A3_restore_rto_rpo || '-'}`;
+    ul.appendChild(liPa);
+
+    const opt = Array.isArray(data.optional_on_demand) ? data.optional_on_demand : [];
+    if (opt.length > 0) {
+      const liOpt = document.createElement('li');
+      liOpt.textContent = `İhtiyaca Bağlı (B2/C2): ` + opt.join(' · ');
+      ul.appendChild(liOpt);
+    }
+
+    el.appendChild(ul);
+  } catch (err) {
+    el.textContent = `Genişleme durumu okunamadı: ${err?.message || 'hata'}`;
+  }
+}
+
 refreshLiveOffice();
 refreshReadinessAndCalibration();
+refreshExpansionStatus();
 setInterval(refreshLiveOffice, 2500);

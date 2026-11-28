@@ -1,25 +1,24 @@
-# AI Proje Ofisi — MOD-016 CI Lisans Politikası (Anchore Grant)
+# AI Proje Ofisi — MOD-016 CI Lisans Politikası (Anchore Grant v0.8.0)
 # Ticari olmayan veya copyleft kısıtlı lisansları yayın hattında reddeder.
-policy:
-  # İzinli açık kaynak lisans kalıpları
-  allow:
-    - "MIT*"
-    - "Apache-2.0*"
-    - "BSD-*"
-    - "ISC"
-    - "PSF-2.0"
-    - "0BSD"
-    - "MPL-2.0"
-    - "Unlicense"
-    - "CC0-1.0"
-  # Kesin reddedilen lisanslar (ticari olmayan veya güçlü copyleft)
-  deny:
-    - "*Noncommercial*"
-    - "PolyForm-Noncommercial*"
-    - "AGPL-*"
-    - "GPL-*"
-    - "SSPL-*"
-    - "BSL-*"
-  # Bilinmeyen/tanımsız lisanslar uyarı yerine reddedilmezse SBOM incelemesine düşer;
-  # katı modda false bırakılarak yalnız izinli liste dışı açık ihlaller engellenir.
-  allow-unknown: true
+require-license: false
+require-known-license: false
+
+allow:
+  - "MIT*"
+  - "Apache-2.0*"
+  - "BSD-*"
+  - "ISC"
+  - "PSF-2.0"
+  - "0BSD"
+  - "MPL-2.0"
+  - "Unlicense"
+  - "CC0-1.0"
+  - "Python-2.0"
+
+deny:
+  - "*Noncommercial*"
+  - "PolyForm-Noncommercial*"
+  - "AGPL-*"
+  - "GPL-*"
+  - "SSPL-*"
+  - "BSL-*"

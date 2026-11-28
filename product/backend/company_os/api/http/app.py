@@ -590,7 +590,7 @@ def make_wsgi_app(
                 ],
                 "phase_a_gates": {
                     "A1_exp01_ollama": "qwen2.5-coder:3b CPU 6/6 ACCEPTED (6.552s)",
-                    "A2_ci_security": "Trivy 0.28.0 + Syft v0.17.8 + Grant v0.2.2 (.github/grant.yml)",
+                    "A2_ci_security": "Trivy v0.35.0 + Syft v0.24.0 + Grant v0.8.0 (.github/grant.yml)",
                     "A3_restore_rto_rpo": "aipof-staging-wsl PG 18.6 PASS (RTO 0.223s, RPO 0)",
                 },
                 "optional_on_demand": [

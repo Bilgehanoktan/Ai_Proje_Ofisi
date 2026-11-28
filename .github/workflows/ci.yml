@@ -51,7 +51,7 @@ jobs:
         run: mkdir -p security-reports
 
       - name: Trivy vulnerability and secret scan (blocking on CRITICAL/HIGH or secret)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.35.0
         with:
           scan-type: "fs"
           scan-ref: "."
@@ -63,16 +63,16 @@ jobs:
           exit-code: "1"
 
       - name: Generate CycloneDX SBOM with Syft
-        uses: anchore/sbom-action@v0.17.8
+        uses: anchore/sbom-action@v0.24.0
         with:
           path: "product"
           format: "cyclonedx-json"
           output-file: "security-reports/sbom-cyclonedx.json"
           upload-artifact: false
 
-      - name: Install Anchore Grant (pinned v0.2.2)
+      - name: Install Anchore Grant (pinned v0.8.0)
         run: |
-          curl -sSfL https://raw.githubusercontent.com/anchore/grant/main/install.sh | sh -s -- -b /usr/local/bin v0.2.2
+          curl -sSfL https://raw.githubusercontent.com/anchore/grant/v0.8.0/install.sh | sudo sh -s -- -b /usr/local/bin v0.8.0
           grant version
 
       - name: Enforce license policy with Grant
